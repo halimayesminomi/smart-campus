@@ -6,7 +6,7 @@
   <title>Smart Campus — University Portal of Bangladesh</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
-<body class="role-guest">
+<body class="role-guest mode-day">
 
   <!-- ================= GUEST VIEWER NOTICE BAR ================= -->
   <div class="guest-bar" id="guestBar">
@@ -214,6 +214,9 @@
         <div class="breadcrumb">Campus <span>/</span> <b id="crumb">Overview</b></div>
 
         <div class="top-actions">
+          <!-- Day / Night Mode Toggle -->
+          <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleDayNightMode()" title="Toggle Day / Night Mode">☀️ Day</button>
+
           <span class="role-pill guest" id="topRolePill">Guest Viewer</span>
           <span class="system-status"><i></i> System online</span>
           
@@ -643,7 +646,7 @@
     <div class="modal">
       <div class="modal-head"><div><div class="eyebrow">CAMPUS CAREER</div><h2 id="applyJobTitle">Apply for Position</h2></div><button class="icon-button" onclick="modalState('applyJobModal', false)">×</button></div>
       <form id="applyJobForm" onsubmit="submitJobApplication(event)">
-        <p style="color:#a9bad5;font-size:12px;margin:0 0 10px;" id="applyJobDetails"></p>
+        <p style="color:var(--muted);font-size:12px;margin:0 0 10px;" id="applyJobDetails"></p>
         <label>Applicant Name <span>*</span><input id="applicantName" required></label>
         <label>Gmail / Contact Email <span>*</span><input id="applicantEmail" type="email" required></label>
         <div class="form-row">
@@ -672,7 +675,7 @@
     <p style="margin-top:6px;">
       <span class="uni-theme-badge" id="copyrightUniBadge">🏛️ Metropolitan University — Sylhet</span>
     </p>
-    <p style="margin-top:6px;font-size:10px;color:#3f5069;">
+    <p style="margin-top:6px;font-size:10px;color:var(--muted);">
       Smart Campus Management System &nbsp;·&nbsp; Multi-University Bangladesh Platform &nbsp;·&nbsp; All Rights Reserved
     </p>
   </footer>

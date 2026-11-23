@@ -151,6 +151,37 @@ function closeSidebar() {
   document.body.style.overflow = '';
 }
 
+// ══════════════════════════════════════════════
+//  DAY & NIGHT MODE CONTROLLER
+// ══════════════════════════════════════════════
+let currentThemeMode = localStorage.getItem('sc_theme_mode') || 'day';
+
+function applyThemeMode(mode) {
+  currentThemeMode = mode;
+  localStorage.setItem('sc_theme_mode', mode);
+  if (mode === 'night') {
+    document.body.classList.remove('mode-day');
+    document.body.classList.add('mode-night');
+    if ($('themeToggleBtn')) {
+      $('themeToggleBtn').innerHTML = '🌙 Night';
+      $('themeToggleBtn').title = 'Current: Night Mode. Click for Day Mode';
+    }
+  } else {
+    document.body.classList.remove('mode-night');
+    document.body.classList.add('mode-day');
+    if ($('themeToggleBtn')) {
+      $('themeToggleBtn').innerHTML = '☀️ Day';
+      $('themeToggleBtn').title = 'Current: Day Mode (White & Orange). Click for Night Mode';
+    }
+  }
+}
+
+function toggleDayNightMode() {
+  const newMode = currentThemeMode === 'night' ? 'day' : 'night';
+  applyThemeMode(newMode);
+  toast(newMode === 'day' ? '☀️ Switched to Day Mode (White & Orange)' : '🌙 Switched to Night Mode');
+}
+
 // Password Eye Toggle
 function togglePasswordVisibility(inputId, btn) {
   const inp = $(inputId);
@@ -245,9 +276,13 @@ function checkAuth() {
 }
 
 function applyUserRole(user) {
+  const roleClasses = ['role-guest', 'role-admin', 'role-student', 'role-teacher', 'role-staff'];
+  document.body.classList.remove(...roleClasses);
+  document.body.classList.add(currentThemeMode === 'night' ? 'mode-night' : 'mode-day');
+
   if (!user) {
     // Guest Viewer Mode
-    document.body.className = 'role-guest';
+    document.body.classList.add('role-guest');
     const topRolePill = $('topRolePill');
     topRolePill.className = 'role-pill guest';
     topRolePill.textContent = 'Guest Viewer';
@@ -268,7 +303,7 @@ function applyUserRole(user) {
   }
 
   const role = (user.role || 'STUDENT').toUpperCase();
-  document.body.className = `role-${role.toLowerCase()}`;
+  document.body.classList.add(`role-${role.toLowerCase()}`);
 
   // Update Topbar
   const topRolePill = $('topRolePill');
@@ -1087,6 +1122,7 @@ async function loadDashboard() {
 pageLoaders['dashboard'] = loadDashboard;
 
 // ── Startup ──────────────────────────────────
+applyThemeMode(currentThemeMode);
 initUniversityStore(currentUniversity);
 updateUniversityUI();
 checkAuth();
