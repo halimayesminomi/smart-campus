@@ -680,34 +680,6 @@ function scheduleCloudPush(key, data) {
   }, 300);
 }
 
-      const updatedTimestamp = Date.now();
-      const payload = {
-        name: 'SmartCampusProductionSync',
-        data: {
-          updatedAt: updatedTimestamp,
-          updatedBy: (currentUser ? currentUser.email : 'Device'),
-          stores: existingStores
-        }
-      };
-
-      const putRes = await fetch(CLOUD_SYNC_ENDPOINT, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      if (putRes.ok) {
-        lastSyncedCloudTime = updatedTimestamp;
-        updateSyncStatusUI('synced', '☁️ Live Sync');
-      }
-    } catch (err) {
-      updateSyncStatusUI('offline', '☁️ Local saved');
-    } finally {
-      isPushingToCloud = false;
-    }
-  }, 350);
-}
-
 function getStore(key) {
   const storageKey = `sc_${currentUniversity}_${key}`;
   const data = localStorage.getItem(storageKey);
