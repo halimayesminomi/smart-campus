@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Smart Campus — University Portal of Bangladesh</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/style.css?v=20261124_0330">
 </head>
 <body class="role-guest mode-day">
 
@@ -258,7 +258,7 @@
 
           <span class="role-pill guest" id="topRolePill">Guest Viewer</span>
           <span class="system-status"><i></i> System online</span>
-          <span class="cloud-sync-status" id="cloudSyncStatus" onclick="pullFromCloud(); toast('☁️ Refreshed cross-device live sync!');" title="Click to sync data with other devices (Phone/Laptop)">☁️ Live Sync</span>
+          <span class="cloud-sync-status" id="cloudSyncStatus" onclick="pullFromCloud(false, true); toast('☁️ Refreshed cross-device live sync!');" title="Click to sync data with other devices (Phone/Laptop)">☁️ Live Sync</span>
           
           <!-- When Logged In -->
           <div class="user-greeting logged-in-only">
@@ -729,6 +729,6 @@
     </p>
   </footer>
 
-  <script src="/js/app.js"></script>
+  <script src="/js/app.js?v=20261124_0330"></script>
 </body>
 </html>

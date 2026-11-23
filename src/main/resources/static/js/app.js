@@ -539,7 +539,7 @@ function initUniversityStore(uniName) {
 //  (Keeps Laptop and Phone 100% in sync in real time)
 // ══════════════════════════════════════════════
 const CLOUD_SYNC_ENDPOINT = 'https://api.restful-api.dev/objects/ff808181a09d98f701a20a4533302b8a';
-let lastSyncedCloudTime = 0;
+let lastSyncedCloudTime = parseInt(localStorage.getItem('sc_last_cloud_time') || '0', 10);
 let cloudPushTimer = null;
 let isPushingToCloud = false;
 let isPullingFromCloud = false;
@@ -570,19 +570,20 @@ function updateDashboardCountsFromStores() {
 }
 
 // Pull latest changes from Cloud (Laptop <-> Phone)
-async function pullFromCloud(silent = false) {
+async function pullFromCloud(silent = false, force = false) {
   if (isPullingFromCloud || isPushingToCloud) return;
   isPullingFromCloud = true;
   if (!silent) updateSyncStatusUI('syncing', '🔄 Syncing...');
 
   try {
-    const res = await fetch(CLOUD_SYNC_ENDPOINT, { cache: 'no-store' });
+    const res = await fetch(CLOUD_SYNC_ENDPOINT + '?_t=' + Date.now(), { cache: 'no-store' });
     if (res.ok) {
       const doc = await res.json();
       if (doc && doc.data && doc.data.stores) {
         const cloudTime = doc.data.updatedAt || 0;
-        if (cloudTime > lastSyncedCloudTime) {
-          const stores = doc.data.stores;
+        const stores = doc.data.stores;
+
+        if (force || cloudTime > lastSyncedCloudTime || lastSyncedCloudTime === 0) {
           let changed = false;
 
           Object.keys(stores).forEach(storageKey => {
@@ -595,8 +596,9 @@ async function pullFromCloud(silent = false) {
           });
 
           lastSyncedCloudTime = cloudTime;
+          localStorage.setItem('sc_last_cloud_time', String(cloudTime));
 
-          if (changed) {
+          if (changed || force) {
             // Re-render currently viewed page to reflect cross-device changes!
             if (typeof currentPage !== 'undefined' && pageLoaders && pageLoaders[currentPage]) {
               try { pageLoaders[currentPage](); } catch (e) {}
@@ -625,7 +627,7 @@ function scheduleCloudPush(key, data) {
       // 1. Fetch latest cloud state first to merge safely
       let existingStores = {};
       try {
-        const getRes = await fetch(CLOUD_SYNC_ENDPOINT, { cache: 'no-store' });
+        const getRes = await fetch(CLOUD_SYNC_ENDPOINT + '?_t=' + Date.now(), { cache: 'no-store' });
         if (getRes.ok) {
           const doc = await getRes.json();
           if (doc && doc.data && doc.data.stores) {
@@ -634,20 +636,49 @@ function scheduleCloudPush(key, data) {
         }
       } catch (e) {}
 
-      // 2. Merge local storage collections into cloud stores
+      // 2. Put specific key/data if passed
       if (key && data) {
         existingStores[key] = data;
       }
-      
-      // Also ensure all current university's modified keys are present
-      const keysToSync = ['students', 'teachers', 'courses', 'jobs', 'library', 'attendance', 'exams', 'fees', 'users'];
-      keysToSync.forEach(k => {
-        const sKey = `sc_${currentUniversity}_${k}`;
-        const val = localStorage.getItem(sKey);
-        if (val) {
-          try { existingStores[sKey] = JSON.parse(val); } catch(e) {}
+
+      // 3. Collect all modified keys from localStorage
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith('sc_') && !k.startsWith('sc_last_cloud_time') && !k.startsWith('sc_theme_mode') && !k.endsWith('_v4')) {
+          try {
+            existingStores[k] = JSON.parse(localStorage.getItem(k));
+          } catch(e) {}
         }
+      }
+
+      const updatedTimestamp = Date.now();
+      const payload = {
+        name: 'SmartCampusProductionSync',
+        data: {
+          updatedAt: updatedTimestamp,
+          updatedBy: (currentUser ? currentUser.email : 'Device'),
+          stores: existingStores
+        }
+      };
+
+      const putRes = await fetch(CLOUD_SYNC_ENDPOINT, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
       });
+
+      if (putRes.ok) {
+        lastSyncedCloudTime = updatedTimestamp;
+        localStorage.setItem('sc_last_cloud_time', String(updatedTimestamp));
+        updateSyncStatusUI('synced', '☁️ Live Sync');
+      }
+    } catch (err) {
+      updateSyncStatusUI('offline', '☁️ Local saved');
+    } finally {
+      isPushingToCloud = false;
+    }
+  }, 300);
+}
 
       const updatedTimestamp = Date.now();
       const payload = {
