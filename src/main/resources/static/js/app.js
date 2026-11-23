@@ -10,24 +10,24 @@ const $ = id => document.getElementById(id);
 let currentUser = null;
 let currentUniversity = localStorage.getItem('sc_university') || 'Metropolitan University';
 
-// University Registry
+// University Registry — with logo emoji and theme class
 const UNIVERSITIES = {
-  'Metropolitan University': { code: 'MU', city: 'Sylhet', campus: 'Bateshwar, Sylhet', title: 'Metropolitan University' },
-  'Shahjalal University of Science and Technology': { code: 'SUST', city: 'Sylhet', campus: 'Kumargaon, Sylhet', title: 'Shahjalal University of Science & Tech' },
-  'University of Dhaka': { code: 'DU', city: 'Dhaka', campus: 'Nilkhet, Dhaka', title: 'University of Dhaka' },
-  'Bangladesh University of Engineering and Technology': { code: 'BUET', city: 'Dhaka', campus: 'Palashi, Dhaka', title: 'BUET' },
-  'Leading University': { code: 'LU', city: 'Sylhet', campus: 'Ragibnagar, Sylhet', title: 'Leading University' },
-  'Sylhet Agricultural University': { code: 'SAU', city: 'Sylhet', campus: 'Tilagarh, Sylhet', title: 'Sylhet Agricultural University' },
-  'North South University': { code: 'NSU', city: 'Dhaka', campus: 'Bashundhara, Dhaka', title: 'North South University' },
-  'BRAC University': { code: 'BRACU', city: 'Dhaka', campus: 'Merul Badda, Dhaka', title: 'BRAC University' },
-  'AIUB': { code: 'AIUB', city: 'Dhaka', campus: 'Kuratoli, Dhaka', title: 'American International University-BD' },
-  'Chittagong University of Engineering & Technology': { code: 'CUET', city: 'Chittagong', campus: 'Raozan, Chittagong', title: 'CUET' },
-  'Rajshahi University': { code: 'RU', city: 'Rajshahi', campus: 'Motihar, Rajshahi', title: 'Rajshahi University' },
-  'Khulna University of Engineering & Technology': { code: 'KUET', city: 'Khulna', campus: 'Teligati, Khulna', title: 'KUET' },
-  'Jahangirnagar University': { code: 'JU', city: 'Savar', campus: 'Savar, Dhaka', title: 'Jahangirnagar University' },
-  'East West University': { code: 'EWU', city: 'Dhaka', campus: 'Aftabnagar, Dhaka', title: 'East West University' },
-  'United International University': { code: 'UIU', city: 'Dhaka', campus: 'Madani Avenue, Dhaka', title: 'United International University' },
-  'Daffodil International University': { code: 'DIU', city: 'Dhaka', campus: 'Ashulia, Dhaka', title: 'Daffodil International University' }
+  'Metropolitan University':                           { code: 'MU',    city: 'Sylhet',      campus: 'Bateshwar, Sylhet',       title: 'Metropolitan University',                   logo: '🏛️', themeClass: 'uni-MU'   },
+  'Shahjalal University of Science and Technology':    { code: 'SUST',  city: 'Sylhet',      campus: 'Kumargaon, Sylhet',       title: 'Shahjalal University of Science & Tech',    logo: '🔬', themeClass: 'uni-SUST' },
+  'University of Dhaka':                               { code: 'DU',    city: 'Dhaka',       campus: 'Nilkhet, Dhaka',          title: 'University of Dhaka',                       logo: '🎓', themeClass: 'uni-DU'   },
+  'Bangladesh University of Engineering and Technology':{ code: 'BUET', city: 'Dhaka',       campus: 'Palashi, Dhaka',          title: 'BUET',                                      logo: '⚙️', themeClass: 'uni-BUET' },
+  'Leading University':                                { code: 'LU',    city: 'Sylhet',      campus: 'Ragibnagar, Sylhet',      title: 'Leading University',                        logo: '🚀', themeClass: 'uni-LU'   },
+  'Sylhet Agricultural University':                    { code: 'SAU',   city: 'Sylhet',      campus: 'Tilagarh, Sylhet',        title: 'Sylhet Agricultural University',            logo: '🌿', themeClass: 'uni-SAU'  },
+  'North South University':                            { code: 'NSU',   city: 'Dhaka',       campus: 'Bashundhara, Dhaka',      title: 'North South University',                    logo: '🌐', themeClass: 'uni-NSU'  },
+  'BRAC University':                                   { code: 'BRACU', city: 'Dhaka',       campus: 'Merul Badda, Dhaka',      title: 'BRAC University',                           logo: '🤝', themeClass: 'uni-BRACU'},
+  'AIUB':                                              { code: 'AIUB',  city: 'Dhaka',       campus: 'Kuratoli, Dhaka',         title: 'American International University-BD',      logo: '🌊', themeClass: 'uni-AIUB' },
+  'Chittagong University of Engineering & Technology': { code: 'CUET',  city: 'Chittagong',  campus: 'Raozan, Chittagong',      title: 'CUET',                                      logo: '🔧', themeClass: 'uni-CUET' },
+  'Rajshahi University':                               { code: 'RU',    city: 'Rajshahi',    campus: 'Motihar, Rajshahi',       title: 'Rajshahi University',                       logo: '💎', themeClass: 'uni-RU'   },
+  'Khulna University of Engineering & Technology':     { code: 'KUET',  city: 'Khulna',      campus: 'Teligati, Khulna',        title: 'KUET',                                      logo: '⚡', themeClass: 'uni-KUET' },
+  'Jahangirnagar University':                          { code: 'JU',    city: 'Savar',       campus: 'Savar, Dhaka',            title: 'Jahangirnagar University',                  logo: '🌸', themeClass: 'uni-JU'   },
+  'East West University':                              { code: 'EWU',   city: 'Dhaka',       campus: 'Aftabnagar, Dhaka',       title: 'East West University',                      logo: '🌅', themeClass: 'uni-EWU'  },
+  'United International University':                   { code: 'UIU',   city: 'Dhaka',       campus: 'Madani Avenue, Dhaka',    title: 'United International University',           logo: '🏆', themeClass: 'uni-UIU'  },
+  'Daffodil International University':                 { code: 'DIU',   city: 'Dhaka',       campus: 'Ashulia, Dhaka',          title: 'Daffodil International University',         logo: '🌼', themeClass: 'uni-DIU'  }
 };
 
 // Base Mock Data for Metropolitan University and others
@@ -166,15 +166,24 @@ function onUniversityChange(newUni) {
 
 function updateUniversityUI() {
   const uni = UNIVERSITIES[currentUniversity] || UNIVERSITIES['Metropolitan University'];
-  
+
+  // ── Apply university theme class to <body> ──
+  const allUniClasses = Object.values(UNIVERSITIES).map(u => u.themeClass);
+  document.body.classList.remove(...allUniClasses);
+  document.body.classList.add(uni.themeClass);
+
   if ($('universitySelector')) $('universitySelector').value = currentUniversity;
-  if ($('guestBarUni')) $('guestBarUni').textContent = `${currentUniversity} (${uni.city})`;
+  if ($('guestBarUni')) $('guestBarUni').textContent = `${uni.logo} ${currentUniversity} (${uni.city})`;
   if ($('brandMarkBadge')) $('brandMarkBadge').textContent = uni.code;
   if ($('brandRoleSubtitle')) $('brandRoleSubtitle').textContent = currentUniversity.toUpperCase();
-  if ($('sidebarCardTitle')) $('sidebarCardTitle').textContent = currentUniversity;
+  if ($('sidebarCardTitle')) $('sidebarCardTitle').textContent = `${uni.logo} ${currentUniversity}`;
   if ($('sidebarCardDesc')) $('sidebarCardDesc').textContent = `${uni.campus}. Smart Academic & Research Suite.`;
-  if ($('authModalUniTitle')) $('authModalUniTitle').textContent = uni.code + ' Smart Campus';
+  if ($('authModalUniTitle')) $('authModalUniTitle').textContent = `${uni.logo} ${uni.code} Smart Campus`;
   if ($('uniNoticeEyebrow')) $('uniNoticeEyebrow').textContent = currentUniversity.toUpperCase();
+
+  // ── Update copyright footer university badge ──
+  const badge = $('copyrightUniBadge');
+  if (badge) badge.textContent = `${uni.logo} ${currentUniversity} — ${uni.city}`;
 
   // Notice text
   if ($('portalNoticeText')) {

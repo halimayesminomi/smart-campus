@@ -1,5 +1,83 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
-:root{--bg:#0b1020;--surface:#111a2e;--surface2:#151f35;--line:#24314a;--text:#edf2ff;--muted:#8d9bb5;--purple:#8b7cff;--purple2:#6e5df2;--green:#36d6a0;--blue:#64a7ff;--orange:#ffb86b;--danger:#ff7185}
+:root{
+  --bg:#0b1020;--surface:#111a2e;--surface2:#151f35;--line:#24314a;
+  --text:#edf2ff;--muted:#8d9bb5;
+  --purple:#8b7cff;--purple2:#6e5df2;
+  --green:#36d6a0;--blue:#64a7ff;--orange:#ffb86b;--danger:#ff7185;
+  /* University Theme Variables (overridden per-university) */
+  --uni-primary:#8b7cff;--uni-primary2:#6e5df2;
+  --uni-accent:#36d6a0;--uni-glow:#8b7cff33;
+  --uni-topbar:#0d1526;--uni-sidebar:#0e1729;
+  --uni-brand-from:#a394ff;--uni-brand-to:#6855ec;
+}
+
+/* ── Per-University CSS Themes ───────────────────────── */
+/* Metropolitan University — Deep Purple (default) */
+body.uni-MU{--uni-primary:#8b7cff;--uni-primary2:#6e5df2;--uni-accent:#36d6a0;--uni-glow:#8b7cff33;--uni-topbar:#0d1526;--uni-sidebar:#0e1729;--uni-brand-from:#a394ff;--uni-brand-to:#6855ec}
+/* SUST — Green Science */
+body.uni-SUST{--uni-primary:#22c55e;--uni-primary2:#16a34a;--uni-accent:#4ade80;--uni-glow:#22c55e33;--uni-topbar:#081808;--uni-sidebar:#091a09;--uni-brand-from:#4ade80;--uni-brand-to:#16a34a}
+/* University of Dhaka — Royal Blue */
+body.uni-DU{--uni-primary:#3b82f6;--uni-primary2:#1d4ed8;--uni-accent:#60a5fa;--uni-glow:#3b82f633;--uni-topbar:#050e1e;--uni-sidebar:#06101f;--uni-brand-from:#93c5fd;--uni-brand-to:#1d4ed8}
+/* BUET — Steel Blue & Orange */
+body.uni-BUET{--uni-primary:#f97316;--uni-primary2:#ea580c;--uni-accent:#fb923c;--uni-glow:#f9731633;--uni-topbar:#1a0d05;--uni-sidebar:#1c0e07;--uni-brand-from:#fdba74;--uni-brand-to:#ea580c}
+/* Leading University — Crimson Red */
+body.uni-LU{--uni-primary:#ef4444;--uni-primary2:#b91c1c;--uni-accent:#fca5a5;--uni-glow:#ef444433;--uni-topbar:#1a0505;--uni-sidebar:#1c0606;--uni-brand-from:#fca5a5;--uni-brand-to:#b91c1c}
+/* SAU — Earth Green */
+body.uni-SAU{--uni-primary:#84cc16;--uni-primary2:#65a30d;--uni-accent:#a3e635;--uni-glow:#84cc1633;--uni-topbar:#0a1402;--uni-sidebar:#0b1503;--uni-brand-from:#bef264;--uni-brand-to:#65a30d}
+/* NSU — Maroon & Gold */
+body.uni-NSU{--uni-primary:#d97706;--uni-primary2:#b45309;--uni-accent:#fbbf24;--uni-glow:#d9770633;--uni-topbar:#1a1005;--uni-sidebar:#1c1106;--uni-brand-from:#fde68a;--uni-brand-to:#b45309}
+/* BRAC University — Orange Red */
+body.uni-BRACU{--uni-primary:#f43f5e;--uni-primary2:#be123c;--uni-accent:#fb7185;--uni-glow:#f43f5e33;--uni-topbar:#1a050c;--uni-sidebar:#1c060e;--uni-brand-from:#fda4af;--uni-brand-to:#be123c}
+/* AIUB — Deep Navy & Cyan */
+body.uni-AIUB{--uni-primary:#06b6d4;--uni-primary2:#0891b2;--uni-accent:#22d3ee;--uni-glow:#06b6d433;--uni-topbar:#02121a;--uni-sidebar:#02131c;--uni-brand-from:#67e8f9;--uni-brand-to:#0891b2}
+/* CUET — Teal Engineering */
+body.uni-CUET{--uni-primary:#14b8a6;--uni-primary2:#0f766e;--uni-accent:#2dd4bf;--uni-glow:#14b8a633;--uni-topbar:#021512;--uni-sidebar:#021614;--uni-brand-from:#5eead4;--uni-brand-to:#0f766e}
+/* Rajshahi University — Sapphire */
+body.uni-RU{--uni-primary:#6366f1;--uni-primary2:#4f46e5;--uni-accent:#818cf8;--uni-glow:#6366f133;--uni-topbar:#08081e;--uni-sidebar:#09091f;--uni-brand-from:#a5b4fc;--uni-brand-to:#4f46e5}
+/* KUET — Dark Gold */
+body.uni-KUET{--uni-primary:#eab308;--uni-primary2:#ca8a04;--uni-accent:#facc15;--uni-glow:#eab30833;--uni-topbar:#1a1600;--uni-sidebar:#1c1700;--uni-brand-from:#fef08a;--uni-brand-to:#ca8a04}
+/* JU — Lavender */
+body.uni-JU{--uni-primary:#a855f7;--uni-primary2:#7e22ce;--uni-accent:#c084fc;--uni-glow:#a855f733;--uni-topbar:#0f0520;--uni-sidebar:#100622;--uni-brand-from:#d8b4fe;--uni-brand-to:#7e22ce}
+/* East West — Sky Blue */
+body.uni-EWU{--uni-primary:#0ea5e9;--uni-primary2:#0369a1;--uni-accent:#38bdf8;--uni-glow:#0ea5e933;--uni-topbar:#02121c;--uni-sidebar:#02131e;--uni-brand-from:#7dd3fc;--uni-brand-to:#0369a1}
+/* UIU — Rose Gold */
+body.uni-UIU{--uni-primary:#ec4899;--uni-primary2:#be185d;--uni-accent:#f9a8d4;--uni-glow:#ec489933;--uni-topbar:#1a0514;--uni-sidebar:#1c0615;--uni-brand-from:#fbcfe8;--uni-brand-to:#be185d}
+/* DIU — Vibrant Green */
+body.uni-DIU{--uni-primary:#10b981;--uni-primary2:#059669;--uni-accent:#34d399;--uni-glow:#10b98133;--uni-topbar:#021811;--uni-sidebar:#021913;--uni-brand-from:#6ee7b7;--uni-brand-to:#059669}
+
+/* Apply theme variables to key UI elements */
+.btn-primary{background:linear-gradient(135deg,var(--uni-primary),var(--uni-primary2))!important;box-shadow:0 6px 18px var(--uni-glow)!important}
+.btn-primary:hover{filter:brightness(1.12);transform:translateY(-1px)}
+.nav-item.active{background:color-mix(in srgb,var(--uni-primary) 18%,#0d1526);color:var(--uni-primary)!important;box-shadow:inset 2px 0 var(--uni-primary)!important}
+.brand-mark{background:linear-gradient(145deg,var(--uni-brand-from),var(--uni-brand-to))!important;box-shadow:0 7px 24px var(--uni-glow)!important}
+.topbar{background:var(--uni-topbar)!important}
+.sidebar{background:var(--uni-sidebar)!important}
+.auth-form input:focus,.auth-form select:focus{border-color:var(--uni-primary)!important;box-shadow:0 0 0 3px var(--uni-glow)!important}
+.auth-tab.active{color:var(--uni-primary)!important}
+.auth-brand .brand-mark{background:linear-gradient(145deg,var(--uni-brand-from),var(--uni-brand-to))!important}
+.modal input:focus,.modal select:focus,.modal textarea:focus{border-color:var(--uni-primary)!important;box-shadow:0 0 0 3px var(--uni-glow)!important}
+.system-status .status-dot{background:var(--uni-accent)!important;box-shadow:0 0 10px var(--uni-glow)!important}
+
+/* ── COPYRIGHT FOOTER ─────────────────────── */
+.copyright-footer{
+  text-align:center;padding:16px 20px 20px;
+  border-top:1px solid #1a2640;margin-top:8px;
+  background:linear-gradient(180deg,transparent,#07101f55);
+}
+.copyright-footer p{
+  margin:0;font-size:11px;color:#5a6e8a;line-height:1.8;
+}
+.copyright-footer .creator{
+  font-weight:700;color:#8b7cff;letter-spacing:.4px;
+  background:linear-gradient(90deg,var(--uni-primary),var(--uni-accent));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.copyright-footer .uni-theme-badge{
+  display:inline-block;margin-top:4px;padding:2px 10px;border-radius:12px;
+  background:color-mix(in srgb,var(--uni-primary) 15%,#0b1020);
+  border:1px solid color-mix(in srgb,var(--uni-primary) 35%,transparent);
+  color:var(--uni-primary);font-size:10px;font-weight:600;letter-spacing:.5px;
+}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px}button,input,select,textarea{font:inherit}button{cursor:pointer}
 
 /* ================= GUEST NOTIFICATION BAR ================= */
