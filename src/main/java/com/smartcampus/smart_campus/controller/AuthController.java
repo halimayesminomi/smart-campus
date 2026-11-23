@@ -115,7 +115,7 @@ public class AuthController {
         }
 
         response.put("success", false);
-        response.put("message", "Invalid Gmail credentials or password. Master Admin: omi / Omi@2026");
+        response.put("message", "Invalid Gmail address or password. Please verify your credentials.");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 

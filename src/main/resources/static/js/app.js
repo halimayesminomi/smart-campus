@@ -1048,10 +1048,10 @@ $('loginForm').addEventListener('submit', async e => {
     const searchKey = inputVal.toLowerCase();
     const isMasterAdmin = (searchKey === 'omi' || searchKey === 'admin' || searchKey === 'halimaomi2002@gmail.com');
 
-    // Strict validation: Must be an authentic @gmail.com address (or master admin 'omi')
+    // Strict validation: Must be an authentic @gmail.com address (or master admin)
     const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
     if (!isMasterAdmin && !gmailRegex.test(searchKey)) {
-      throw new Error('❌ Only real Google Gmail accounts (@gmail.com) are permitted to sign in. Master Admin may use "omi".');
+      throw new Error('❌ Only authentic Google Gmail accounts (@gmail.com) are permitted to sign in.');
     }
 
     let authUser = null;
@@ -1095,7 +1095,7 @@ $('loginForm').addEventListener('submit', async e => {
     }
 
     if (!authUser) {
-      throw new Error(`❌ No account found for Gmail "${inputVal}". Please click "Continue with Google (Gmail)" to sign in or register.`);
+      throw new Error(`❌ Invalid Gmail address or password. Please verify your credentials or register a new personal account.`);
     }
 
     localStorage.setItem('sc_user', JSON.stringify(authUser));
