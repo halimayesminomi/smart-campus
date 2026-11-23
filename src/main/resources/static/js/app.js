@@ -902,6 +902,9 @@ async function handleGoogleAuthSuccess(googleUser) {
   currentUser = finalUser;
   localStorage.setItem('sc_user', JSON.stringify(currentUser));
 
+  // Automatically save to Student or Teacher roster
+  syncUserToCampusEntities(currentUser);
+
   if (currentUser.university && currentUser.university !== currentUniversity) {
     currentUniversity = currentUser.university;
     localStorage.setItem('sc_university', currentUniversity);
@@ -910,8 +913,103 @@ async function handleGoogleAuthSuccess(googleUser) {
 
   applyUserRole(currentUser);
   closeAuthModal();
-  toast(`🎉 Welcome! Signed in with Google as ${currentUser.email}`);
+  toast(`🎉 Welcome! Signed in as ${currentUser.fullName || currentUser.username} (${currentUser.role || 'STUDENT'})`);
   showPage('dashboard');
+}
+
+// Automatically sync newly registered user into Student or Teacher roster
+function syncUserToCampusEntities(user) {
+  if (!user || !user.email) return;
+  const targetUni = user.university || currentUniversity;
+  const role = (user.role || 'STUDENT').toUpperCase();
+  const name = user.fullName || user.username || 'Unnamed';
+  const email = user.email.trim();
+  const dept = user.department || 'Computer Science & Engineering';
+  const phone = user.phone || '+880 1711-' + Math.floor(100000 + Math.random() * 900000);
+  const studentId = user.studentId || `SC-${Math.floor(1000 + Math.random() * 9000)}`;
+
+  if (role === 'STUDENT') {
+    const sKey = `sc_${targetUni}_students`;
+    let students = [];
+    try {
+      const stored = localStorage.getItem(sKey);
+      students = stored ? JSON.parse(stored) : (buildInitialData(targetUni).students || []);
+    } catch (e) {
+      students = [];
+    }
+    const idx = students.findIndex(s => s.email && s.email.toLowerCase() === email.toLowerCase());
+    const studentObj = {
+      id: (idx >= 0 && students[idx].id) ? students[idx].id : Date.now(),
+      name: name,
+      email: email,
+      department: dept,
+      phone: phone,
+      studentId: studentId,
+      university: targetUni
+    };
+    if (idx >= 0) {
+      students[idx] = { ...students[idx], ...studentObj };
+    } else {
+      students.unshift(studentObj);
+    }
+    localStorage.setItem(sKey, JSON.stringify(students));
+
+    // Refresh student view & dashboard counters
+    if (typeof studentsCRUD !== 'undefined' && studentsCRUD.load) {
+      studentsCRUD.load();
+    }
+    if ($('dashStudents')) $('dashStudents').textContent = students.length;
+    if ($('navStudentCount')) $('navStudentCount').textContent = students.length;
+
+    // Async sync to MariaDB if online
+    fetch('/api/students', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(studentObj)
+    }).catch(() => {});
+
+  } else if (role === 'TEACHER') {
+    const tKey = `sc_${targetUni}_teachers`;
+    let teachers = [];
+    try {
+      const stored = localStorage.getItem(tKey);
+      teachers = stored ? JSON.parse(stored) : (buildInitialData(targetUni).teachers || []);
+    } catch (e) {
+      teachers = [];
+    }
+    const idx = teachers.findIndex(t => t.email && t.email.toLowerCase() === email.toLowerCase());
+    const teacherObj = {
+      id: (idx >= 0 && teachers[idx].id) ? teachers[idx].id : Date.now(),
+      name: name,
+      email: email,
+      phone: phone,
+      department: dept,
+      designation: user.designation || 'Lecturer / Faculty Member',
+      qualification: 'M.Sc / Ph.D in ' + dept,
+      joinDate: new Date().toISOString().split('T')[0],
+      university: targetUni
+    };
+    if (idx >= 0) {
+      teachers[idx] = { ...teachers[idx], ...teacherObj };
+    } else {
+      teachers.unshift(teacherObj);
+    }
+    localStorage.setItem(tKey, JSON.stringify(teachers));
+
+    // Refresh teacher view & dashboard counters
+    if (typeof teachersCRUD !== 'undefined' && teachersCRUD.load) {
+      teachersCRUD.load();
+    }
+    if ($('dashTeachers')) $('dashTeachers').textContent = teachers.length;
+    if ($('navTeacherCount')) $('navTeacherCount').textContent = teachers.length;
+
+    // Async sync to MariaDB if online
+    fetch('/api/teachers', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(teacherObj)
+    }).catch(() => {});
+  }
 }
 
 function openAuthModal(tab = 'login') {
@@ -1063,6 +1161,9 @@ $('registerForm').addEventListener('submit', async e => {
     const newUser = { id: Date.now(), fullName, username, email, department, role: (role === 'ADMIN' ? 'STUDENT' : role), studentId, university };
     localUsers.push(newUser);
     setStore('users', localUsers);
+
+    // Automatically sync to Students or Teachers roster
+    syncUserToCampusEntities(newUser);
 
     toast(`Gmail account created for ${university}! You can now sign in.`);
     switchAuthTab('login');

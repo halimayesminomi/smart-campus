@@ -569,6 +569,43 @@
         try {
           localStorage.setItem('sc_user', JSON.stringify(userPayload));
           localStorage.setItem('sc_university', userPayload.university);
+
+          // Automatically sync to Students or Teachers list
+          const uni = userPayload.university;
+          const role = (userPayload.role || 'STUDENT').toUpperCase();
+          if (role === 'STUDENT') {
+            const sKey = `sc_${uni}_students`;
+            const list = JSON.parse(localStorage.getItem(sKey) || '[]');
+            if (!list.some(s => s.email && s.email.toLowerCase() === userPayload.email.toLowerCase())) {
+              list.unshift({
+                id: Date.now(),
+                name: userPayload.fullName,
+                email: userPayload.email,
+                department: userPayload.department || 'Computer Science & Engineering',
+                phone: '+880 1711-' + Math.floor(100000 + Math.random() * 900000),
+                studentId: userPayload.studentId,
+                university: uni
+              });
+              localStorage.setItem(sKey, JSON.stringify(list));
+            }
+          } else if (role === 'TEACHER') {
+            const tKey = `sc_${uni}_teachers`;
+            const list = JSON.parse(localStorage.getItem(tKey) || '[]');
+            if (!list.some(t => t.email && t.email.toLowerCase() === userPayload.email.toLowerCase())) {
+              list.unshift({
+                id: Date.now(),
+                name: userPayload.fullName,
+                email: userPayload.email,
+                department: userPayload.department || 'Computer Science & Engineering',
+                designation: 'Lecturer / Faculty Member',
+                phone: '+880 1812-' + Math.floor(100000 + Math.random() * 900000),
+                qualification: 'M.Sc in ' + (userPayload.department || 'Computer Science'),
+                joinDate: new Date().toISOString().split('T')[0],
+                university: uni
+              });
+              localStorage.setItem(tKey, JSON.stringify(list));
+            }
+          }
         } catch (err) {}
 
         loadingText.textContent = 'Verified! Returning to Smart Campus...';

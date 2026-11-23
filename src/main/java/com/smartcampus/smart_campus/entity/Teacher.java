@@ -17,6 +17,7 @@ public class Teacher {
     private String designation;   // Lecturer, Asst. Prof, Assoc. Prof, Professor
     private String qualification;
     private String joinDate;
+    private String university;
 
     public Teacher() {}
 
@@ -43,4 +44,7 @@ public class Teacher {
 
     public String getJoinDate() { return joinDate; }
     public void setJoinDate(String joinDate) { this.joinDate = joinDate; }
+
+    public String getUniversity() { return university; }
+    public void setUniversity(String university) { this.university = university; }
 }

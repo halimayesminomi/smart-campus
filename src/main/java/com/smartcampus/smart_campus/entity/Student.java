@@ -15,6 +15,8 @@ public class Student {
     private String email;
     private String department;
     private String phone;
+    private String studentId;
+    private String university;
 
     public Student() {
     }
@@ -57,5 +59,21 @@ public class Student {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
+    }
+
+    public String getUniversity() {
+        return university;
+    }
+
+    public void setUniversity(String university) {
+        this.university = university;
     }
 }

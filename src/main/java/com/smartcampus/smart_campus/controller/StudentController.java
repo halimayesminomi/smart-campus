@@ -45,6 +45,8 @@ public class StudentController {
             existingStudent.setEmail(student.getEmail());
             existingStudent.setDepartment(student.getDepartment());
             existingStudent.setPhone(student.getPhone());
+            if (student.getStudentId() != null) existingStudent.setStudentId(student.getStudentId());
+            if (student.getUniversity() != null) existingStudent.setUniversity(student.getUniversity());
             return studentRepository.save(existingStudent);
         }).orElse(null);
     }

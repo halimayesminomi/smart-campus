@@ -1,6 +1,10 @@
 package com.smartcampus.smart_campus.controller;
 
+import com.smartcampus.smart_campus.entity.Student;
+import com.smartcampus.smart_campus.entity.Teacher;
 import com.smartcampus.smart_campus.entity.User;
+import com.smartcampus.smart_campus.repository.StudentRepository;
+import com.smartcampus.smart_campus.repository.TeacherRepository;
 import com.smartcampus.smart_campus.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +21,50 @@ import java.util.Optional;
 public class AuthController {
 
     private final UserRepository userRepository;
+    private final StudentRepository studentRepository;
+    private final TeacherRepository teacherRepository;
 
-    public AuthController(UserRepository userRepository) {
+    public AuthController(UserRepository userRepository, StudentRepository studentRepository, TeacherRepository teacherRepository) {
         this.userRepository = userRepository;
+        this.studentRepository = studentRepository;
+        this.teacherRepository = teacherRepository;
+    }
+
+    // Automatically sync registered user to Student or Teacher tables in database
+    private void syncProfileToCampus(User user, String phone, String designation) {
+        if (user == null || user.getEmail() == null) return;
+        String role = (user.getRole() != null) ? user.getRole().toUpperCase().trim() : "STUDENT";
+        String email = user.getEmail().trim().toLowerCase();
+        String name = (user.getFullName() != null && !user.getFullName().trim().isEmpty()) ? user.getFullName() : user.getUsername();
+        String dept = (user.getDepartment() != null && !user.getDepartment().trim().isEmpty()) ? user.getDepartment() : "Computer Science & Engineering";
+        String uni = (user.getUniversity() != null && !user.getUniversity().trim().isEmpty()) ? user.getUniversity() : "Metropolitan University";
+        String sId = (user.getStudentId() != null && !user.getStudentId().trim().isEmpty()) ? user.getStudentId() : ("SC-" + (1000 + Math.abs(email.hashCode() % 9000)));
+
+        if ("STUDENT".equals(role)) {
+            if (!studentRepository.existsByEmail(email)) {
+                Student s = new Student();
+                s.setName(name);
+                s.setEmail(email);
+                s.setDepartment(dept);
+                s.setPhone(phone != null && !phone.trim().isEmpty() ? phone : "+880 1711-000111");
+                s.setStudentId(sId);
+                s.setUniversity(uni);
+                studentRepository.save(s);
+            }
+        } else if ("TEACHER".equals(role)) {
+            if (!teacherRepository.existsByEmail(email)) {
+                Teacher t = new Teacher();
+                t.setName(name);
+                t.setEmail(email);
+                t.setPhone(phone != null && !phone.trim().isEmpty() ? phone : "+880 1812-334455");
+                t.setDepartment(dept);
+                t.setDesignation(designation != null && !designation.trim().isEmpty() ? designation : "Lecturer / Faculty");
+                t.setQualification("M.Sc / Ph.D in " + dept);
+                t.setJoinDate(java.time.LocalDate.now().toString());
+                t.setUniversity(uni);
+                teacherRepository.save(t);
+            }
+        }
     }
 
     // Login Endpoint (Accepts Master Admin 'omi' OR authentic Gmail addresses)
@@ -123,6 +168,9 @@ public class AuthController {
             user = userRepository.save(user);
         }
 
+        // Automatically create Student/Teacher profile in database
+        syncProfileToCampus(user, null, null);
+
         response.put("success", true);
         response.put("message", "Google authentication successful");
 
@@ -194,6 +242,9 @@ public class AuthController {
         if (user.getEmail() != null) user.setEmail(user.getEmail().trim());
 
         User savedUser = userRepository.save(user);
+
+        // Automatically create Student/Teacher profile in database
+        syncProfileToCampus(savedUser, null, null);
 
         response.put("success", true);
         response.put("message", "Account created successfully. You can now log in with your Gmail or username.");

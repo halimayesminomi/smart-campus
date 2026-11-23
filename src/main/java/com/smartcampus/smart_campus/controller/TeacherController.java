@@ -40,6 +40,7 @@ public class TeacherController {
             existing.setDesignation(teacher.getDesignation());
             existing.setQualification(teacher.getQualification());
             existing.setJoinDate(teacher.getJoinDate());
+            if (teacher.getUniversity() != null) existing.setUniversity(teacher.getUniversity());
             return teacherRepository.save(existing);
         }).orElse(null);
     }
