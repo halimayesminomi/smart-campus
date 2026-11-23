@@ -3,87 +3,110 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Campus — Management System &amp; Portal</title>
+  <title>Smart Campus — University Portal &amp; Management Suite</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
-<body>
+<body class="role-guest">
 
-  <!-- ================= AUTH SCREEN (LOGIN & REGISTER) ================= -->
-  <div class="auth-overlay" id="authOverlay">
+  <!-- ================= GUEST VIEWER NOTICE BAR ================= -->
+  <div class="guest-bar" id="guestBar">
+    <div class="guest-bar-inner">
+      <span>✦ <b>Welcome to Smart Campus!</b> You are currently browsing as a <u>Guest Viewer</u>.</span>
+      <div class="guest-bar-actions">
+        <button class="btn btn-sm btn-primary" onclick="openAuthModal('login')">Sign In</button>
+        <button class="btn btn-sm btn-outline" onclick="openAuthModal('register')">Create Account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= AUTH MODAL (LOGIN & REGISTER) ================= -->
+  <div class="auth-overlay hidden" id="authOverlay">
     <div class="auth-card">
+      <button class="auth-close-btn" onclick="closeAuthModal()" title="Browse as Guest">✕</button>
+
       <div class="auth-brand">
         <span class="brand-mark">SC</span>
         <div>
           <h2>Smart Campus</h2>
-          <small>Java Full-Stack Portal</small>
+          <small id="authSubtitle">Academic Portal &amp; Workspace</small>
         </div>
       </div>
 
       <div class="auth-tabs">
         <button class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Sign In</button>
-        <button class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">Create Account</button>
+        <button class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">Sign Up (New Account)</button>
       </div>
 
       <!-- Sign In Form -->
       <form id="loginForm" class="auth-form">
         <div class="auth-intro">
-          <h3>Welcome back</h3>
-          <p>Sign in to access your campus workspace.</p>
+          <h3>Welcome Back</h3>
+          <p>Login with your Gmail address or username to enter.</p>
         </div>
-        <div class="demo-hints">
-          <small>🔑 <b>Default Accounts:</b></small>
-          <div class="hint-badges">
-            <span onclick="fillLogin('admin','admin123')">Admin: <code>admin</code> / <code>admin123</code></span>
-            <span onclick="fillLogin('student','student123')">Student: <code>student</code> / <code>student123</code></span>
-          </div>
-        </div>
-        <label>Username <span>*</span>
-          <input id="loginUsername" required placeholder="e.g. admin or student">
+
+        <label>Gmail or Username <span>*</span>
+          <input id="loginUsername" required placeholder="e.g. yourname@gmail.com or username">
         </label>
+
         <label>Password <span>*</span>
-          <input id="loginPassword" type="password" required placeholder="••••••••">
+          <div class="password-wrap">
+            <input id="loginPassword" type="password" required placeholder="••••••••">
+            <button type="button" class="eye-toggle" onclick="togglePasswordVisibility('loginPassword', this)" title="Show/Hide Password">👁</button>
+          </div>
         </label>
+
         <div class="form-error hidden" id="loginError"></div>
         <button type="submit" class="btn btn-primary auth-submit" id="loginBtn">Sign In to Campus</button>
+
+        <div class="auth-footer-help">
+          <small>Want to explore first? <a href="#" onclick="closeAuthModal(); return false;">Browse as Viewer</a></small>
+        </div>
       </form>
 
       <!-- Register Form -->
       <form id="registerForm" class="auth-form hidden">
         <div class="auth-intro">
-          <h3>Student / User Registration</h3>
-          <p>Create a new account to access the student portal.</p>
+          <h3>Create an Account</h3>
+          <p>Students, Teachers and Staff can register here.</p>
         </div>
+
         <div class="form-row">
           <label>Full Name <span>*</span>
-            <input id="regFullName" required placeholder="e.g. Sadia Islam">
+            <input id="regFullName" required placeholder="e.g. Nusrat Jahan">
           </label>
-          <label>Username <span>*</span>
-            <input id="regUsername" required placeholder="e.g. sadia24">
+          <label>Choose Username <span>*</span>
+            <input id="regUsername" required placeholder="e.g. nusrat26">
           </label>
         </div>
+
+        <label>Gmail / Email Address <span>*</span>
+          <input id="regEmail" type="email" required placeholder="name@gmail.com">
+        </label>
+
         <div class="form-row">
-          <label>Email Address
-            <input id="regEmail" type="email" placeholder="sadia@example.com">
-          </label>
           <label>Department
             <input id="regDepartment" placeholder="e.g. Computer Science">
           </label>
-        </div>
-        <div class="form-row">
-          <label>Account Role
+          <label>I Am A: <span>*</span>
             <select id="regRole">
               <option value="STUDENT">Student</option>
-              <option value="TEACHER">Teacher</option>
-              <option value="ADMIN">Admin</option>
+              <option value="TEACHER">Teacher / Faculty</option>
+              <option value="STAFF">Campus Staff / Worker</option>
             </select>
           </label>
-          <label>Student/Staff ID
-            <input id="regStudentId" placeholder="e.g. CSE-2026-042">
-          </label>
         </div>
-        <label>Password <span>*</span>
-          <input id="regPassword" type="password" required placeholder="At least 4 characters">
+
+        <label>Student / Staff ID
+          <input id="regStudentId" placeholder="e.g. CSE-2026-089">
         </label>
+
+        <label>Password <span>*</span>
+          <div class="password-wrap">
+            <input id="regPassword" type="password" required placeholder="Choose a secure password">
+            <button type="button" class="eye-toggle" onclick="togglePasswordVisibility('regPassword', this)" title="Show/Hide Password">👁</button>
+          </div>
+        </label>
+
         <div class="form-error hidden" id="regError"></div>
         <button type="submit" class="btn btn-primary auth-submit" id="registerBtn">Create My Account</button>
       </form>
@@ -96,36 +119,36 @@
     <aside class="sidebar" id="sidebar">
       <a class="brand" href="/">
         <span class="brand-mark">SC</span>
-        <span><b>smartcampus</b><small id="brandRoleSubtitle">MANAGEMENT SUITE</small></span>
+        <span><b>smartcampus</b><small id="brandRoleSubtitle">ACADEMIC SUITE</small></span>
       </a>
 
-      <div class="nav-label" id="navWorkspaceLabel">ADMIN WORKSPACE</div>
+      <div class="nav-label" id="navWorkspaceLabel">CAMPUS WORKSPACE</div>
       <nav class="nav">
         <a class="nav-item active" href="#dashboard" data-page="dashboard"><span class="nav-icon">▦</span> Overview</a>
-        <a class="nav-item" href="#students" data-page="students"><span class="nav-icon">♙</span> Students <span class="nav-count" id="navStudentCount">0</span></a>
-        <a class="nav-item" href="#teachers" data-page="teachers"><span class="nav-icon">♧</span> Teachers <span class="nav-count" id="navTeacherCount">0</span></a>
         <a class="nav-item" href="#courses" data-page="courses"><span class="nav-icon">▤</span> Courses <span class="nav-count" id="navCourseCount">0</span></a>
-        <a class="nav-item" href="#attendance" data-page="attendance"><span class="nav-icon">◷</span> Attendance <span class="nav-count" id="navAttendanceCount">0</span></a>
-        <a class="nav-item" href="#exams" data-page="exams"><span class="nav-icon">✎</span> Exams &amp; Results <span class="nav-count" id="navExamCount">0</span></a>
-        <a class="nav-item" href="#fees" data-page="fees"><span class="nav-icon">৳</span> Fees <span class="nav-count" id="navFeeCount">0</span></a>
-        <a class="nav-item" href="#library" data-page="library"><span class="nav-icon">▣</span> Library <span class="nav-count" id="navLibraryCount">0</span></a>
-        <a class="nav-item" href="#jobs" data-page="jobs"><span class="nav-icon">⚑</span> Jobs <span class="nav-count" id="navJobCount">0</span></a>
-        <a class="nav-item admin-only" href="#users" data-page="users"><span class="nav-icon">⚙</span> User Accounts</a>
+        <a class="nav-item" href="#jobs" data-page="jobs"><span class="nav-icon">⚑</span> Jobs &amp; Careers <span class="nav-count" id="navJobCount">0</span></a>
+        <a class="nav-item" href="#library" data-page="library"><span class="nav-icon">▣</span> Library Catalog <span class="nav-count" id="navLibraryCount">0</span></a>
+        <a class="nav-item" href="#teachers" data-page="teachers"><span class="nav-icon">♧</span> Faculty Directory <span class="nav-count" id="navTeacherCount">0</span></a>
+        <a class="nav-item user-or-admin-only" href="#students" data-page="students"><span class="nav-icon">♙</span> Students <span class="nav-count" id="navStudentCount">0</span></a>
+        <a class="nav-item user-or-admin-only" href="#attendance" data-page="attendance"><span class="nav-icon">◷</span> Attendance <span class="nav-count" id="navAttendanceCount">0</span></a>
+        <a class="nav-item user-or-admin-only" href="#exams" data-page="exams"><span class="nav-icon">✎</span> Exams &amp; Results <span class="nav-count" id="navExamCount">0</span></a>
+        <a class="nav-item user-or-admin-only" href="#fees" data-page="fees"><span class="nav-icon">৳</span> Fees &amp; Tuition <span class="nav-count" id="navFeeCount">0</span></a>
+        <a class="nav-item admin-only" href="#users" data-page="users"><span class="nav-icon">⚙</span> Control Panel Users</a>
       </nav>
 
       <div class="sidebar-bottom">
         <div class="campus-card">
           <div class="campus-orb">✦</div>
-          <b id="sidebarCardTitle">Your campus, connected.</b>
-          <p id="sidebarCardDesc">Manage your entire campus from one workspace.</p>
+          <b id="sidebarCardTitle">Connected Campus</b>
+          <p id="sidebarCardDesc">Browse courses, research library and apply for campus jobs.</p>
         </div>
         <div class="profile">
-          <div class="avatar" id="sidebarAvatar">A</div>
+          <div class="avatar" id="sidebarAvatar">G</div>
           <div class="profile-meta">
-            <b id="sidebarUserName">Administrator</b>
-            <small id="sidebarUserRole" class="role-badge">ADMIN</small>
+            <b id="sidebarUserName">Guest Viewer</b>
+            <small id="sidebarUserRole" class="role-badge guest">VIEWER</small>
           </div>
-          <button class="logout-icon-btn" onclick="logout()" title="Logout">⏻</button>
+          <button class="logout-icon-btn logged-in-only" onclick="logout()" title="Sign Out">⏻</button>
         </div>
       </div>
     </aside>
@@ -136,13 +159,19 @@
         <button class="mobile-menu" id="mobileMenu" aria-label="Open menu">☰</button>
         <div class="breadcrumb">Workspace <span>/</span> <b id="crumb">Overview</b></div>
         <div class="top-actions">
-          <span class="role-pill" id="topRolePill">Admin Control Panel</span>
+          <span class="role-pill guest" id="topRolePill">Guest Viewer</span>
           <span class="system-status"><i></i> System online</span>
-          <div class="user-greeting">
+          
+          <!-- When Logged In -->
+          <div class="user-greeting logged-in-only">
             <span class="top-avatar" id="topAvatar">A</span>
             <span class="user-name" id="topUserName">Admin</span>
           </div>
-          <button class="btn btn-outline btn-sm" onclick="logout()">Sign Out</button>
+          <button class="btn btn-outline btn-sm logged-in-only" onclick="logout()">Sign Out</button>
+
+          <!-- When Browsing as Guest -->
+          <button class="btn btn-primary btn-sm guest-only" onclick="openAuthModal('login')">Sign In</button>
+          <button class="btn btn-outline btn-sm guest-only" onclick="openAuthModal('register')">Sign Up</button>
         </div>
       </header>
 
@@ -150,67 +179,98 @@
       <section class="page-content" id="dashboardPage">
         <div class="page-heading">
           <div>
-            <div class="eyebrow" id="dashEyebrow">CAMPUS CONTROL PANEL</div>
-            <h1 id="dashGreeting">Good day, Administrator <span class="wave">✦</span></h1>
-            <p id="dashSubtext">Here's what's happening across your campus today.</p>
+            <div class="eyebrow" id="dashEyebrow">CAMPUS PORTAL</div>
+            <h1 id="dashGreeting">Welcome to Smart Campus <span class="wave">✦</span></h1>
+            <p id="dashSubtext">Explore academic courses, career opportunities and library resources.</p>
           </div>
           <div class="heading-actions admin-only">
             <button class="btn btn-primary" onclick="showPage('students')">＋ Add Record</button>
           </div>
         </div>
 
-        <!-- Stats Grid (Adapts to Role) -->
+        <!-- Stats Grid -->
         <div class="stats-grid" id="dashboardStats">
-          <article class="stat-card"><div class="stat-top"><span>Total Students</span><span class="stat-icon purple">♙</span></div><div class="stat-value" id="dashStudents">—</div><div class="stat-foot"><span class="status-dot"></span> Live records</div></article>
-          <article class="stat-card"><div class="stat-top"><span>Faculty Members</span><span class="stat-icon blue">♧</span></div><div class="stat-value" id="dashTeachers">—</div><div class="stat-foot">Teachers on staff</div></article>
-          <article class="stat-card"><div class="stat-top"><span>Active Courses</span><span class="stat-icon green">▤</span></div><div class="stat-value" id="dashCourses">—</div><div class="stat-foot">Available courses</div></article>
-          <article class="stat-card"><div class="stat-top"><span>Open Jobs</span><span class="stat-icon orange">⚑</span></div><div class="stat-value" id="dashJobs">—</div><div class="stat-foot">Campus career listings</div></article>
-          <article class="stat-card"><div class="stat-top"><span>Library Books</span><span class="stat-icon purple">▣</span></div><div class="stat-value" id="dashLibrary">—</div><div class="stat-foot">Available in library</div></article>
-          <article class="stat-card"><div class="stat-top"><span>Fee Records</span><span class="stat-icon blue">৳</span></div><div class="stat-value" id="dashFees">—</div><div class="stat-foot">Fee payment entries</div></article>
-          <article class="stat-card"><div class="stat-top"><span>Attendance Logs</span><span class="stat-icon green">◷</span></div><div class="stat-value" id="dashAttendance">—</div><div class="stat-foot">Attendance entries</div></article>
-          <article class="stat-card"><div class="stat-top"><span>Exam Results</span><span class="stat-icon orange">✎</span></div><div class="stat-value" id="dashExams">—</div><div class="stat-foot">Published results</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Active Courses</span><span class="stat-icon green">▤</span></div><div class="stat-value" id="dashCourses">—</div><div class="stat-foot">Offered courses</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Open Career Jobs</span><span class="stat-icon orange">⚑</span></div><div class="stat-value" id="dashJobs">—</div><div class="stat-foot">Internships &amp; jobs</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Library Books</span><span class="stat-icon purple">▣</span></div><div class="stat-value" id="dashLibrary">—</div><div class="stat-foot">Books catalogued</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Faculty Members</span><span class="stat-icon blue">♧</span></div><div class="stat-value" id="dashTeachers">—</div><div class="stat-foot">Instructors &amp; teachers</div></article>
+          <article class="stat-card user-or-admin-only"><div class="stat-top"><span>Total Students</span><span class="stat-icon purple">♙</span></div><div class="stat-value" id="dashStudents">—</div><div class="stat-foot"><span class="status-dot"></span> Live records</div></article>
+          <article class="stat-card user-or-admin-only"><div class="stat-top"><span>Fee Records</span><span class="stat-icon blue">৳</span></div><div class="stat-value" id="dashFees">—</div><div class="stat-foot">Payment logs</div></article>
+          <article class="stat-card user-or-admin-only"><div class="stat-top"><span>Attendance Logs</span><span class="stat-icon green">◷</span></div><div class="stat-value" id="dashAttendance">—</div><div class="stat-foot">Class attendance</div></article>
+          <article class="stat-card user-or-admin-only"><div class="stat-top"><span>Exam Results</span><span class="stat-icon orange">✎</span></div><div class="stat-value" id="dashExams">—</div><div class="stat-foot">Published marks</div></article>
         </div>
 
-        <!-- Quick Actions & Announcements -->
+        <!-- Bottom Grid -->
         <div class="bottom-grid">
           <section class="panel quick-panel">
-            <div class="eyebrow" id="quickPanelEyebrow">QUICK ACTIONS</div>
-            <h2 id="quickPanelTitle">Campus Navigator</h2>
+            <div class="eyebrow" id="quickPanelEyebrow">EXPLORE CAMPUS</div>
+            <h2 id="quickPanelTitle">Quick Navigation</h2>
             <div class="quick-actions" id="quickActionsContainer">
-              <button onclick="showPage('courses')"><span class="quick-icon green">▤</span><span><b>Explore Courses</b><small>View semester schedule &amp; credits</small></span><strong>›</strong></button>
-              <button onclick="showPage('jobs')"><span class="quick-icon orange">⚑</span><span><b>Campus Career Portal</b><small>Browse internships &amp; job openings</small></span><strong>›</strong></button>
-              <button onclick="showPage('library')"><span class="quick-icon purple">▣</span><span><b>Library Catalog</b><small>Check book copies &amp; categories</small></span><strong>›</strong></button>
-              <button onclick="showPage('exams')"><span class="quick-icon blue">✎</span><span><b>Exams &amp; Grades</b><small>Check midterm &amp; final results</small></span><strong>›</strong></button>
+              <button onclick="showPage('courses')"><span class="quick-icon green">▤</span><span><b>Academic Courses</b><small>Browse syllabus &amp; schedules</small></span><strong>›</strong></button>
+              <button onclick="showPage('jobs')"><span class="quick-icon orange">⚑</span><span><b>Campus Career Portal</b><small>Apply for student internships &amp; jobs</small></span><strong>›</strong></button>
+              <button onclick="showPage('library')"><span class="quick-icon purple">▣</span><span><b>Library Catalog</b><small>Search books &amp; check availability</small></span><strong>›</strong></button>
+              <button onclick="showPage('teachers')"><span class="quick-icon blue">♧</span><span><b>Faculty Directory</b><small>Find department professors &amp; contacts</small></span><strong>›</strong></button>
             </div>
           </section>
           <section class="panel note-panel">
             <div class="note-symbol">✦</div>
             <div>
-              <div class="eyebrow">PORTAL NOTICE</div>
-              <h2 id="portalNoticeTitle">Role-Based Smart Workspace</h2>
-              <p id="portalNoticeText">Welcome to the Smart Campus System. Administrators have complete CRUD control over students, faculty, and records. Students and general users have tailored access to view courses, track attendance, check grades, and apply for campus jobs.</p>
+              <div class="eyebrow">NOTICE BOARD</div>
+              <h2 id="portalNoticeTitle">Smart Campus Architecture</h2>
+              <p id="portalNoticeText">Public visitors can freely browse courses, job postings, and library resources as a Viewer. Enrolled Students, Faculty, and Staff can sign in with their Gmail accounts to access personal services. The Master Admin has exclusive access to the Control Panel.</p>
             </div>
           </section>
         </div>
         <footer>© 2026 Smart Campus Management System <span>Built with 100% Pure Java (Spring Boot) + MariaDB</span></footer>
       </section>
 
-      <!-- ===== STUDENTS PAGE ===== -->
-      <section class="page-content hidden" id="studentsPage">
+      <!-- ===== COURSES PAGE ===== -->
+      <section class="page-content hidden" id="coursesPage">
         <div class="page-heading">
-          <div><div class="eyebrow">DIRECTORY</div><h1>Students</h1><p id="studentPageDesc">Manage student information and contact details.</p></div>
-          <button class="btn btn-primary admin-only" id="addStudentBtn">＋ Add Student</button>
+          <div><div class="eyebrow">ACADEMICS</div><h1>Courses &amp; Modules</h1><p>Browse university courses, credit hours and class schedules.</p></div>
+          <button class="btn btn-primary admin-only" id="addCourseBtn">＋ Add Course</button>
         </div>
         <section class="panel">
           <div class="table-tools">
-            <div class="search-box"><span>⌕</span><input id="studentSearch" type="search" placeholder="Search name, email, department..."></div>
-            <div class="tool-right">
-              <select id="studentDeptFilter"><option value="">All departments</option></select>
-              <button class="btn btn-outline" id="studentRefresh">↻ Refresh</button>
-            </div>
+            <div class="search-box"><span>⌕</span><input id="courseSearch" type="search" placeholder="Search code, name, department, teacher..."></div>
+            <div class="tool-right"><button class="btn btn-outline" id="courseRefresh">↻ Refresh</button></div>
           </div>
-          <div class="table-wrap"><table><thead><tr><th>STUDENT</th><th>DEPARTMENT</th><th>PHONE</th><th>ID</th><th class="align-right">ACTIONS</th></tr></thead><tbody id="studentRows"><tr><td colspan="5" class="empty-cell">Loading...</td></tr></tbody></table></div>
-          <div class="table-footer"><span id="studentSummary">Loading...</span><span>MariaDB · students table</span></div>
+          <div class="table-wrap"><table><thead><tr><th>COURSE</th><th>DEPARTMENT</th><th>INSTRUCTOR</th><th>CREDITS</th><th>STATUS</th><th class="align-right">ACTIONS</th></tr></thead><tbody id="courseRows"><tr><td colspan="6" class="empty-cell">Loading...</td></tr></tbody></table></div>
+          <div class="table-footer"><span id="courseSummary">Loading...</span><span>MariaDB · courses table</span></div>
+        </section>
+        <footer>© 2026 Smart Campus Management System</footer>
+      </section>
+
+      <!-- ===== JOBS PAGE ===== -->
+      <section class="page-content hidden" id="jobsPage">
+        <div class="page-heading">
+          <div><div class="eyebrow">CAREER OPPORTUNITIES</div><h1>Campus Career &amp; Jobs</h1><p>Student internships, on-campus jobs and company recruitments.</p></div>
+          <button class="btn btn-primary admin-only" id="addJobBtn">＋ Post Job</button>
+        </div>
+        <section class="panel">
+          <div class="table-tools">
+            <div class="search-box"><span>⌕</span><input id="jobSearch" type="search" placeholder="Search job title, company, location..."></div>
+            <div class="tool-right"><button class="btn btn-outline" id="jobRefresh">↻ Refresh</button></div>
+          </div>
+          <div class="table-wrap"><table><thead><tr><th>JOB TITLE</th><th>COMPANY</th><th>LOCATION</th><th>TYPE</th><th>DEADLINE</th><th>STATUS</th><th class="align-right">ACTIONS</th></tr></thead><tbody id="jobRows"><tr><td colspan="7" class="empty-cell">Loading...</td></tr></tbody></table></div>
+          <div class="table-footer"><span id="jobSummary">Loading...</span><span>MariaDB · jobs table</span></div>
+        </section>
+        <footer>© 2026 Smart Campus Management System</footer>
+      </section>
+
+      <!-- ===== LIBRARY PAGE ===== -->
+      <section class="page-content hidden" id="libraryPage">
+        <div class="page-heading">
+          <div><div class="eyebrow">RESOURCE CENTER</div><h1>Library Catalog</h1><p>Search books, check availability and book reservations.</p></div>
+          <button class="btn btn-primary admin-only" id="addBookBtn">＋ Add Book</button>
+        </div>
+        <section class="panel">
+          <div class="table-tools">
+            <div class="search-box"><span>⌕</span><input id="librarySearch" type="search" placeholder="Search title, author, category, ISBN..."></div>
+            <div class="tool-right"><button class="btn btn-outline" id="libraryRefresh">↻ Refresh</button></div>
+          </div>
+          <div class="table-wrap"><table><thead><tr><th>BOOK</th><th>AUTHOR</th><th>CATEGORY</th><th>TOTAL</th><th>AVAILABLE</th><th class="align-right">ACTIONS</th></tr></thead><tbody id="libraryRows"><tr><td colspan="6" class="empty-cell">Loading...</td></tr></tbody></table></div>
+          <div class="table-footer"><span id="librarySummary">Loading...</span><span>MariaDB · library_books table</span></div>
         </section>
         <footer>© 2026 Smart Campus Management System</footer>
       </section>
@@ -232,19 +292,22 @@
         <footer>© 2026 Smart Campus Management System</footer>
       </section>
 
-      <!-- ===== COURSES PAGE ===== -->
-      <section class="page-content hidden" id="coursesPage">
+      <!-- ===== STUDENTS PAGE (USER & ADMIN) ===== -->
+      <section class="page-content hidden" id="studentsPage">
         <div class="page-heading">
-          <div><div class="eyebrow">ACADEMICS</div><h1>Courses &amp; Modules</h1><p>Browse university courses, credit hours and class schedules.</p></div>
-          <button class="btn btn-primary admin-only" id="addCourseBtn">＋ Add Course</button>
+          <div><div class="eyebrow">DIRECTORY</div><h1>Students</h1><p id="studentPageDesc">Manage student information and contact details.</p></div>
+          <button class="btn btn-primary admin-only" id="addStudentBtn">＋ Add Student</button>
         </div>
         <section class="panel">
           <div class="table-tools">
-            <div class="search-box"><span>⌕</span><input id="courseSearch" type="search" placeholder="Search code, name, department, teacher..."></div>
-            <div class="tool-right"><button class="btn btn-outline" id="courseRefresh">↻ Refresh</button></div>
+            <div class="search-box"><span>⌕</span><input id="studentSearch" type="search" placeholder="Search name, email, department..."></div>
+            <div class="tool-right">
+              <select id="studentDeptFilter"><option value="">All departments</option></select>
+              <button class="btn btn-outline" id="studentRefresh">↻ Refresh</button>
+            </div>
           </div>
-          <div class="table-wrap"><table><thead><tr><th>COURSE</th><th>DEPARTMENT</th><th>INSTRUCTOR</th><th>CREDITS</th><th>STATUS</th><th class="align-right">ACTIONS</th></tr></thead><tbody id="courseRows"><tr><td colspan="6" class="empty-cell">Loading...</td></tr></tbody></table></div>
-          <div class="table-footer"><span id="courseSummary">Loading...</span><span>MariaDB · courses table</span></div>
+          <div class="table-wrap"><table><thead><tr><th>STUDENT</th><th>DEPARTMENT</th><th>PHONE</th><th>ID</th><th class="align-right">ACTIONS</th></tr></thead><tbody id="studentRows"><tr><td colspan="5" class="empty-cell">Loading...</td></tr></tbody></table></div>
+          <div class="table-footer"><span id="studentSummary">Loading...</span><span>MariaDB · students table</span></div>
         </section>
         <footer>© 2026 Smart Campus Management System</footer>
       </section>
@@ -300,52 +363,18 @@
         <footer>© 2026 Smart Campus Management System</footer>
       </section>
 
-      <!-- ===== LIBRARY PAGE ===== -->
-      <section class="page-content hidden" id="libraryPage">
-        <div class="page-heading">
-          <div><div class="eyebrow">RESOURCE CENTER</div><h1>Library Catalog</h1><p>Search books, check availability and book reservations.</p></div>
-          <button class="btn btn-primary admin-only" id="addBookBtn">＋ Add Book</button>
-        </div>
-        <section class="panel">
-          <div class="table-tools">
-            <div class="search-box"><span>⌕</span><input id="librarySearch" type="search" placeholder="Search title, author, category, ISBN..."></div>
-            <div class="tool-right"><button class="btn btn-outline" id="libraryRefresh">↻ Refresh</button></div>
-          </div>
-          <div class="table-wrap"><table><thead><tr><th>BOOK</th><th>AUTHOR</th><th>CATEGORY</th><th>TOTAL</th><th>AVAILABLE</th><th class="align-right">ACTIONS</th></tr></thead><tbody id="libraryRows"><tr><td colspan="6" class="empty-cell">Loading...</td></tr></tbody></table></div>
-          <div class="table-footer"><span id="librarySummary">Loading...</span><span>MariaDB · library_books table</span></div>
-        </section>
-        <footer>© 2026 Smart Campus Management System</footer>
-      </section>
-
-      <!-- ===== JOBS PAGE ===== -->
-      <section class="page-content hidden" id="jobsPage">
-        <div class="page-heading">
-          <div><div class="eyebrow">CAREER OPPORTUNITIES</div><h1>Campus Career &amp; Jobs</h1><p>Student internships, on-campus jobs and company recruitments.</p></div>
-          <button class="btn btn-primary admin-only" id="addJobBtn">＋ Post Job</button>
-        </div>
-        <section class="panel">
-          <div class="table-tools">
-            <div class="search-box"><span>⌕</span><input id="jobSearch" type="search" placeholder="Search job title, company, location..."></div>
-            <div class="tool-right"><button class="btn btn-outline" id="jobRefresh">↻ Refresh</button></div>
-          </div>
-          <div class="table-wrap"><table><thead><tr><th>JOB TITLE</th><th>COMPANY</th><th>LOCATION</th><th>TYPE</th><th>DEADLINE</th><th>STATUS</th><th class="align-right">ACTIONS</th></tr></thead><tbody id="jobRows"><tr><td colspan="7" class="empty-cell">Loading...</td></tr></tbody></table></div>
-          <div class="table-footer"><span id="jobSummary">Loading...</span><span>MariaDB · jobs table</span></div>
-        </section>
-        <footer>© 2026 Smart Campus Management System</footer>
-      </section>
-
-      <!-- ===== USERS MANAGEMENT PAGE (ADMIN ONLY) ===== -->
+      <!-- ===== USERS MANAGEMENT PAGE (MASTER ADMIN ONLY) ===== -->
       <section class="page-content hidden" id="usersPage">
         <div class="page-heading">
-          <div><div class="eyebrow">SYSTEM SECURITY</div><h1>User Accounts &amp; Access Control</h1><p>Manage system users, login credentials and portal access roles.</p></div>
-          <button class="btn btn-primary" onclick="openRegisterFromAdmin()">＋ Create User</button>
+          <div><div class="eyebrow">ADMIN CONTROL PANEL</div><h1>User Accounts &amp; Access Control</h1><p>Manage registered teachers, students and staff credentials.</p></div>
+          <button class="btn btn-primary" onclick="openAuthModal('register')">＋ Add New User</button>
         </div>
         <section class="panel">
           <div class="table-tools">
             <div class="search-box"><span>⌕</span><input id="userSearch" type="search" placeholder="Search username, full name, email, role..."></div>
             <div class="tool-right"><button class="btn btn-outline" id="userRefresh" onclick="loadUsers()">↻ Refresh</button></div>
           </div>
-          <div class="table-wrap"><table><thead><tr><th>USER</th><th>USERNAME</th><th>EMAIL</th><th>DEPARTMENT</th><th>ROLE</th><th class="align-right">ACTIONS</th></tr></thead><tbody id="userRows"><tr><td colspan="6" class="empty-cell">Loading users...</td></tr></tbody></table></div>
+          <div class="table-wrap"><table><thead><tr><th>USER</th><th>USERNAME / GMAIL</th><th>ROLE</th><th>DEPARTMENT</th><th>STATUS</th><th class="align-right">ACTIONS</th></tr></thead><tbody id="userRows"><tr><td colspan="6" class="empty-cell">Loading users...</td></tr></tbody></table></div>
           <div class="table-footer"><span id="userSummary">Loading...</span><span>MariaDB · users table</span></div>
         </section>
         <footer>© 2026 Smart Campus Management System</footer>
@@ -362,7 +391,7 @@
       <form id="studentForm">
         <input type="hidden" id="studentId">
         <label>Full Name <span>*</span><input id="studentName" required placeholder="e.g. Ayesha Rahman"></label>
-        <label>Email <span>*</span><input id="studentEmail" type="email" required placeholder="student@example.com"></label>
+        <label>Email <span>*</span><input id="studentEmail" type="email" required placeholder="student@gmail.com"></label>
         <div class="form-row">
           <label>Department <span>*</span><input id="studentDept" required placeholder="e.g. Computer Science"></label>
           <label>Phone<input id="studentPhone" placeholder="+880 1XXXXXXXXX"></label>
@@ -380,7 +409,7 @@
       <form id="teacherForm">
         <input type="hidden" id="teacherId">
         <label>Full Name <span>*</span><input id="teacherName" required placeholder="e.g. Dr. Rahman"></label>
-        <label>Email <span>*</span><input id="teacherEmail" type="email" required placeholder="teacher@university.edu"></label>
+        <label>Email <span>*</span><input id="teacherEmail" type="email" required placeholder="teacher@gmail.com"></label>
         <div class="form-row">
           <label>Department <span>*</span><input id="teacherDept" required placeholder="e.g. CSE"></label>
           <label>Phone<input id="teacherPhone" placeholder="+880 1XXXXXXXXX"></label>
@@ -404,18 +433,18 @@
         <input type="hidden" id="courseId">
         <div class="form-row">
           <label>Course Code <span>*</span><input id="courseCode" required placeholder="e.g. CSE-301"></label>
-          <label>Course Name <span>*</span><input id="courseName" required placeholder="e.g. Data Structures"></label>
+          <label>Course Name <span>*</span><input id="courseName" required placeholder="e.g. Java Programming"></label>
         </div>
         <div class="form-row">
           <label>Department<input id="courseDept" placeholder="e.g. CSE"></label>
-          <label>Teacher Name<input id="courseTeacher" placeholder="e.g. Dr. Ali"></label>
+          <label>Teacher Name<input id="courseTeacher" placeholder="e.g. Dr. Ayesha"></label>
         </div>
         <div class="form-row">
           <label>Credit Hours<input id="courseCredits" placeholder="e.g. 3.0"></label>
-          <label>Semester<input id="courseSemester" placeholder="e.g. Spring 2026"></label>
+          <label>Semester<input id="courseSemester" placeholder="e.g. Fall 2026"></label>
         </div>
         <div class="form-row">
-          <label>Schedule<input id="courseSchedule" placeholder="e.g. Mon/Wed 10:00 AM"></label>
+          <label>Schedule<input id="courseSchedule" placeholder="e.g. Sun/Tue 10:00 AM"></label>
           <label>Status<select id="courseStatus"><option value="Active">Active</option><option value="Inactive">Inactive</option></select></label>
         </div>
         <div class="form-error hidden" id="courseFormError"></div>
@@ -465,7 +494,7 @@
         </div>
         <div class="form-row">
           <label>Grade<input id="examGrade" placeholder="e.g. A+"></label>
-          <label>Semester<input id="examSemester" placeholder="e.g. Spring 2026"></label>
+          <label>Semester<input id="examSemester" placeholder="e.g. Fall 2026"></label>
         </div>
         <label>Exam Date<input id="examDate" type="date"></label>
         <div class="form-error hidden" id="examFormError"></div>
@@ -508,14 +537,14 @@
         <label>Title <span>*</span><input id="bookTitle" required placeholder="Book title"></label>
         <div class="form-row">
           <label>Author <span>*</span><input id="bookAuthor" required placeholder="Author name"></label>
-          <label>ISBN<input id="bookIsbn" placeholder="e.g. 978-3-16..."></label>
+          <label>ISBN<input id="bookIsbn" placeholder="e.g. 978-013..."></label>
         </div>
         <div class="form-row">
           <label>Category<input id="bookCategory" placeholder="e.g. Computer Science"></label>
           <label>Publisher<input id="bookPublisher" placeholder="Publisher name"></label>
         </div>
         <div class="form-row">
-          <label>Publish Year<input id="bookYear" placeholder="e.g. 2023"></label>
+          <label>Publish Year<input id="bookYear" placeholder="e.g. 2024"></label>
           <label>Total Copies<input id="bookTotal" placeholder="e.g. 5"></label>
         </div>
         <div class="form-row">
@@ -561,12 +590,12 @@
       <form id="applyJobForm" onsubmit="submitJobApplication(event)">
         <p style="color:#a9bad5;font-size:12px;margin:0 0 10px;" id="applyJobDetails"></p>
         <label>Applicant Name <span>*</span><input id="applicantName" required></label>
-        <label>Contact Email <span>*</span><input id="applicantEmail" type="email" required></label>
+        <label>Gmail / Contact Email <span>*</span><input id="applicantEmail" type="email" required></label>
         <div class="form-row">
-          <label>Student ID<input id="applicantStudentId" placeholder="e.g. CSE-2024-001"></label>
+          <label>Student/Staff ID<input id="applicantStudentId" placeholder="e.g. CSE-2024-001"></label>
           <label>Phone<input id="applicantPhone" placeholder="+880 1XXXXXXXXX"></label>
         </div>
-        <label>Cover Letter / Note<textarea id="applicantNote" rows="3" placeholder="Explain why you are a good candidate..."></textarea></label>
+        <label>Cover Letter / Qualifications<textarea id="applicantNote" rows="3" placeholder="Briefly describe your relevant skills..."></textarea></label>
         <div class="modal-actions">
           <button type="button" class="btn btn-outline" onclick="modalState('applyJobModal', false)">Cancel</button>
           <button type="submit" class="btn btn-primary" id="submitAppBtn">Submit Application</button>

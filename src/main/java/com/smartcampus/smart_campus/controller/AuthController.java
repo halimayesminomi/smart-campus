@@ -22,21 +22,22 @@ public class AuthController {
         this.userRepository = userRepository;
     }
 
-    // Login Endpoint
+    // Login Endpoint (Accepts Username OR Gmail/Email)
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> credentials) {
-        String username = credentials.get("username");
+        String identifier = credentials.get("username"); // can be username or gmail
         String password = credentials.get("password");
 
         Map<String, Object> response = new HashMap<>();
 
-        if (username == null || password == null) {
+        if (identifier == null || password == null || identifier.trim().isEmpty() || password.trim().isEmpty()) {
             response.put("success", false);
-            response.put("message", "Username and password are required");
+            response.put("message", "Username/Gmail and password are required");
             return ResponseEntity.badRequest().body(response);
         }
 
-        Optional<User> userOpt = userRepository.findByUsername(username.trim());
+        String searchId = identifier.trim();
+        Optional<User> userOpt = userRepository.findByUsernameOrEmail(searchId, searchId);
 
         if (userOpt.isPresent()) {
             User user = userOpt.get();
@@ -44,7 +45,6 @@ public class AuthController {
                 response.put("success", true);
                 response.put("message", "Login successful");
                 
-                // Do not expose password in response
                 Map<String, Object> userData = new HashMap<>();
                 userData.put("id", user.getId());
                 userData.put("username", user.getUsername());
@@ -60,11 +60,11 @@ public class AuthController {
         }
 
         response.put("success", false);
-        response.put("message", "Invalid username or password");
+        response.put("message", "Invalid username/Gmail or password");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 
-    // Register Endpoint
+    // Register Endpoint (For Teachers, Students, Staff)
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>> register(@RequestBody User user) {
         Map<String, Object> response = new HashMap<>();
@@ -89,35 +89,42 @@ public class AuthController {
 
         if (user.getEmail() != null && !user.getEmail().trim().isEmpty() && userRepository.existsByEmail(user.getEmail().trim())) {
             response.put("success", false);
-            response.put("message", "Email is already registered");
+            response.put("message", "This Gmail/Email address is already registered");
             return ResponseEntity.badRequest().body(response);
         }
 
-        // Default role is STUDENT if not provided or invalid
-        if (user.getRole() == null || user.getRole().trim().isEmpty()) {
-            user.setRole("STUDENT");
+        // SECURITY: Public registration CANNOT create an ADMIN account!
+        // Admin is strictly reserved for the owner.
+        String requestedRole = (user.getRole() != null) ? user.getRole().toUpperCase().trim() : "STUDENT";
+        if ("ADMIN".equals(requestedRole)) {
+            user.setRole("STUDENT"); // prevent privilege escalation
+        } else if ("TEACHER".equals(requestedRole) || "STAFF".equals(requestedRole) || "STUDENT".equals(requestedRole)) {
+            user.setRole(requestedRole);
         } else {
-            user.setRole(user.getRole().toUpperCase().trim());
+            user.setRole("STUDENT");
         }
 
         user.setUsername(user.getUsername().trim());
         user.setPassword(user.getPassword().trim());
+        if (user.getEmail() != null) user.setEmail(user.getEmail().trim());
+
         User savedUser = userRepository.save(user);
 
         response.put("success", true);
-        response.put("message", "Registration successful. You can now log in.");
+        response.put("message", "Account created successfully. You can now log in with your Gmail or username.");
         
         Map<String, Object> userData = new HashMap<>();
         userData.put("id", savedUser.getId());
         userData.put("username", savedUser.getUsername());
         userData.put("fullName", savedUser.getFullName());
+        userData.put("email", savedUser.getEmail());
         userData.put("role", savedUser.getRole());
         response.put("user", userData);
 
         return ResponseEntity.ok(response);
     }
 
-    // List all users for Admin
+    // List all users (Only for Admin control panel)
     @GetMapping("/users")
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -127,18 +134,27 @@ public class AuthController {
     @DeleteMapping("/users/{id}")
     public ResponseEntity<Map<String, Object>> deleteUser(@PathVariable Long id) {
         Map<String, Object> response = new HashMap<>();
-        if (!userRepository.existsById(id)) {
+        Optional<User> userOpt = userRepository.findById(id);
+        if (userOpt.isEmpty()) {
             response.put("success", false);
             response.put("message", "User not found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
+
+        User u = userOpt.get();
+        if ("ADMIN".equalsIgnoreCase(u.getRole())) {
+            response.put("success", false);
+            response.put("message", "Master Admin account cannot be deleted");
+            return ResponseEntity.badRequest().body(response);
+        }
+
         userRepository.deleteById(id);
         response.put("success", true);
         response.put("message", "User deleted successfully");
         return ResponseEntity.ok(response);
     }
 
-    // Logout endpoint
+    // Logout
     @PostMapping("/logout")
     public ResponseEntity<Map<String, Object>> logout() {
         Map<String, Object> response = new HashMap<>();

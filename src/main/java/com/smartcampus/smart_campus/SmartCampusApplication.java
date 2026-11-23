@@ -21,25 +21,36 @@ public class SmartCampusApplication {
                                       CourseRepository courseRepository,
                                       JobRepository jobRepository) {
         return args -> {
-            // Seed Admin account if not present
-            if (!userRepository.existsByUsername("admin")) {
-                User admin = new User("admin", "admin123", "System Administrator", "admin@smartcampus.edu", "ADMIN", "Administration", "ADM-001");
+            // Seed Master Admin account (Exclusive control panel access)
+            if (!userRepository.existsByUsername("admin_omi")) {
+                User admin = new User("admin_omi", "Admin@2026#Smart", "Halima Yesmin (Administrator)", "halimaomi2002@gmail.com", "ADMIN", "Administration", "ADM-MASTER-01");
                 userRepository.save(admin);
             }
+            // Backward-compatible admin alias
+            if (!userRepository.existsByUsername("admin")) {
+                User admin2 = new User("admin", "Admin@2026#Smart", "System Admin", "admin@smartcampus.edu", "ADMIN", "Administration", "ADM-001");
+                userRepository.save(admin2);
+            }
 
-            // Seed sample Student account if not present
+            // Seed sample Student account
             if (!userRepository.existsByUsername("student")) {
-                User student = new User("student", "student123", "Tanvir Ahmed", "tanvir@smartcampus.edu", "STUDENT", "Computer Science", "CSE-2024-001");
+                User student = new User("student", "student123", "Tanvir Ahmed", "tanvir.student@gmail.com", "STUDENT", "Computer Science", "CSE-2024-001");
                 userRepository.save(student);
             }
 
-            // Seed sample Teacher account if not present
+            // Seed sample Teacher account
             if (!userRepository.existsByUsername("teacher")) {
-                User teacher = new User("teacher", "teacher123", "Dr. Ayesha Siddiqa", "ayesha@smartcampus.edu", "TEACHER", "Computer Science", "FAC-005");
+                User teacher = new User("teacher", "teacher123", "Dr. Ayesha Siddiqa", "ayesha.teacher@gmail.com", "TEACHER", "Computer Science", "FAC-005");
                 userRepository.save(teacher);
             }
 
-            // Seed sample course if table is empty
+            // Seed sample Staff/Worker account
+            if (!userRepository.existsByUsername("staff")) {
+                User staff = new User("staff", "staff123", "Md. Karim Uddin", "karim.staff@gmail.com", "STAFF", "Campus Operations", "STF-102");
+                userRepository.save(staff);
+            }
+
+            // Sample Course
             if (courseRepository.count() == 0) {
                 Course c1 = new Course();
                 c1.setCode("CSE-301");
@@ -48,7 +59,7 @@ public class SmartCampusApplication {
                 c1.setTeacherName("Dr. Ayesha Siddiqa");
                 c1.setCreditHours("3.0");
                 c1.setSemester("Fall 2026");
-                c1.setSchedule("Sunday & Tuesday 10:00 AM");
+                c1.setSchedule("Sun/Tue 10:00 AM");
                 c1.setStatus("Active");
                 courseRepository.save(c1);
 
@@ -59,12 +70,12 @@ public class SmartCampusApplication {
                 c2.setTeacherName("Prof. Kamal Hossain");
                 c2.setCreditHours("3.0");
                 c2.setSemester("Fall 2026");
-                c2.setSchedule("Monday & Wednesday 11:30 AM");
+                c2.setSchedule("Mon/Wed 11:30 AM");
                 c2.setStatus("Active");
                 courseRepository.save(c2);
             }
 
-            // Seed sample job if table is empty
+            // Sample Job
             if (jobRepository.count() == 0) {
                 Job j1 = new Job();
                 j1.setTitle("Junior Java Developer");

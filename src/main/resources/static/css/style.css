@@ -2,31 +2,45 @@
 :root{--bg:#0b1020;--surface:#111a2e;--surface2:#151f35;--line:#24314a;--text:#edf2ff;--muted:#8d9bb5;--purple:#8b7cff;--purple2:#6e5df2;--green:#36d6a0;--blue:#64a7ff;--orange:#ffb86b;--danger:#ff7185}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px}button,input,select,textarea{font:inherit}button{cursor:pointer}
 
+/* ================= GUEST NOTIFICATION BAR ================= */
+.guest-bar{background:linear-gradient(90deg,#192642,#201e44);border-bottom:1px solid #2d3b5b;padding:8px 24px;font-size:12px;display:none}
+body.role-guest .guest-bar{display:block}
+.guest-bar-inner{max-width:1450px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.guest-bar-inner span{color:#c4d3ec}
+.guest-bar-inner b{color:#fff}
+.guest-bar-actions{display:flex;gap:8px}
+
 /* ================= AUTHENTICATION OVERLAY ================= */
-.auth-overlay{position:fixed;inset:0;background:linear-gradient(135deg,#070b16fa,#0e1529fa);backdrop-filter:blur(8px);z-index:9999;display:grid;place-items:center;padding:20px;overflow-y:auto}
-.auth-card{width:min(460px,100%);background:#121c32;border:1px solid #2b3b57;border-radius:18px;padding:32px 28px;box-shadow:0 30px 90px #000c;animation:authFadeIn .3s ease-out}
-@keyframes authFadeIn{from{opacity:0;transform:translateY(15px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
-.auth-brand{display:flex;align-items:center;gap:14px;margin-bottom:24px}
+.auth-overlay{position:fixed;inset:0;background:linear-gradient(135deg,#070b16f2,#0e1529f2);backdrop-filter:blur(8px);z-index:9999;display:grid;place-items:center;padding:20px;overflow-y:auto}
+.auth-card{position:relative;width:min(460px,100%);background:#121c32;border:1px solid #2b3b57;border-radius:18px;padding:32px 28px;box-shadow:0 30px 90px #000c;animation:authFadeIn .25s ease-out}
+@keyframes authFadeIn{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.auth-close-btn{position:absolute;top:18px;right:18px;background:#1a2742;border:1px solid #304468;border-radius:50%;width:30px;height:30px;display:grid;place-items:center;color:#bac8df;font-size:14px;transition:.2s}
+.auth-close-btn:hover{color:#fff;background:#2b3e64;transform:scale(1.05)}
+.auth-brand{display:flex;align-items:center;gap:14px;margin-bottom:20px}
 .auth-brand h2{font:800 22px Manrope;margin:0;letter-spacing:-.5px}
 .auth-brand small{font-size:10px;color:var(--purple);letter-spacing:1px;font-weight:700}
-.auth-tabs{display:grid;grid-template-columns:1fr 1fr;background:#0c1426;border-radius:10px;padding:4px;gap:4px;margin-bottom:22px;border:1px solid #1f2c44}
+.auth-tabs{display:grid;grid-template-columns:1fr 1fr;background:#0c1426;border-radius:10px;padding:4px;gap:4px;margin-bottom:20px;border:1px solid #1f2c44}
 .auth-tab{background:transparent;border:0;color:var(--muted);padding:9px;border-radius:7px;font-weight:600;font-size:12px;transition:.2s}
 .auth-tab.active{background:#232d4b;color:#fff;box-shadow:0 2px 10px #0004}
-.auth-intro{margin-bottom:16px}
+.auth-intro{margin-bottom:15px}
 .auth-intro h3{font:700 18px Manrope;margin:0 0 4px}
 .auth-intro p{color:var(--muted);font-size:12px;margin:0}
-.demo-hints{background:#16243d;border:1px dashed #304770;border-radius:10px;padding:10px 14px;margin-bottom:18px}
-.demo-hints small{color:#9fb4d4;display:block;margin-bottom:6px}
-.hint-badges{display:flex;flex-wrap:wrap;gap:8px}
-.hint-badges span{background:#0e1729;border:1px solid #283a5a;color:#c0d2f0;padding:4px 9px;border-radius:6px;font-size:11px;cursor:pointer;transition:.15s}
-.hint-badges span:hover{background:#8b7cff22;border-color:var(--purple);color:#fff}
-.hint-badges code{color:var(--purple);font-weight:700}
+
+/* Password Eye Toggle */
+.password-wrap{position:relative;display:flex;align-items:center}
+.password-wrap input{padding-right:42px!important}
+.eye-toggle{position:absolute;right:8px;background:none;border:0;color:#7e93b6;font-size:16px;padding:6px;display:grid;place-items:center;transition:.2s}
+.eye-toggle:hover{color:#d5e2f7;transform:scale(1.1)}
+
 .auth-form{display:grid;gap:13px}
 .auth-form label{display:grid;gap:6px;color:#abb9d1;font-size:11px;font-weight:600}
 .auth-form label span{color:#ff8295;display:inline}
 .auth-form input,.auth-form select{background:#0b1324;border:1px solid #253652;border-radius:8px;padding:11px 13px;color:#fff;outline:0;font-size:13px;width:100%}
 .auth-form input:focus,.auth-form select:focus{border-color:var(--purple);box-shadow:0 0 0 3px #8b7cff22}
-.auth-submit{width:100%;padding:12px;font-size:13px;font-weight:700;margin-top:6px}
+.auth-submit{width:100%;padding:12px;font-size:13px;font-weight:700;margin-top:4px}
+.auth-footer-help{text-align:center;margin-top:14px;color:#8596b1;font-size:11px}
+.auth-footer-help a{color:var(--purple);text-decoration:none;font-weight:600}
+.auth-footer-help a:hover{text-decoration:underline}
 
 /* ================= APP SHELL & NAVIGATION ================= */
 .app-shell{min-height:100vh;display:flex}
@@ -56,6 +70,8 @@
 .role-badge.admin{background:#45283f;color:#ff96ba}
 .role-badge.student{background:#1a3d36;color:#6ae0b9}
 .role-badge.teacher{background:#1f3352;color:#85beff}
+.role-badge.staff{background:#3a2d16;color:#ffbe70}
+.role-badge.guest{background:#232d42;color:#9eb0ce}
 .logout-icon-btn{background:none;border:0;color:#7e8ea7;font-size:16px;padding:4px;border-radius:6px;transition:.2s}
 .logout-icon-btn:hover{color:#ff7185;background:#2d1722}
 
@@ -65,17 +81,19 @@
 .breadcrumb{color:#8795af;font-size:12px}
 .breadcrumb span{padding:0 9px;color:#52617b}
 .breadcrumb b{color:#e6ebf8;font-weight:500}
-.top-actions{display:flex;align-items:center;gap:16px}
+.top-actions{display:flex;align-items:center;gap:14px}
 .role-pill{display:inline-flex;align-items:center;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.4px}
 .role-pill.admin{background:linear-gradient(135deg,#5c2944,#3a1b32);color:#ff9abb;border:1px solid #813961}
 .role-pill.student{background:linear-gradient(135deg,#163932,#112723);color:#6fe5bd;border:1px solid #265d50}
 .role-pill.teacher{background:linear-gradient(135deg,#1b3052,#132238);color:#8bc1ff;border:1px solid #294775}
+.role-pill.staff{background:linear-gradient(135deg,#382914,#241c0e);color:#ffc47c;border:1px solid #63471c}
+.role-pill.guest{background:#172238;color:#9db0cf;border:1px solid #283a5c}
 .system-status{font-size:11px;color:#9cabc3}
 .system-status i,.status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:6px;box-shadow:0 0 10px #36d6a077}
 .user-greeting{display:flex;align-items:center;gap:8px}
 .user-name{font-size:12px;font-weight:600;color:#d8e2f3}
 .mobile-menu{display:none;background:none;border:0;color:white;font-size:20px}
-.btn-sm{padding:6px 11px;font-size:11px}
+.btn-sm{padding:6px 12px;font-size:11px}
 
 /* ================= PAGE CONTENT & HEADINGS ================= */
 .page-content{max-width:1450px;margin:auto;padding:32px 36px 22px}
@@ -176,14 +194,26 @@ footer{display:flex;justify-content:space-between;color:#60718d;font-size:10px;p
 .hidden{display:none!important}
 
 /* ================= ROLE-BASED ACCESS CONTROL (RBAC) ================= */
-/* When logged in as STUDENT: Hide all admin controls */
+
+/* Guest / Public Viewer Mode */
+body.role-guest .logged-in-only{display:none!important}
+body.role-guest .admin-only{display:none!important}
+body.role-guest .user-or-admin-only{display:none!important}
+body.role-guest td .action-btn.delete,
+body.role-guest td .action-btn[data-edit]{display:none!important}
+
+/* Logged-In User (Student / Teacher / Staff) Mode */
+body:not(.role-guest) .guest-only{display:none!important}
 body.role-student .admin-only{display:none!important}
-body.role-student .student-hidden{display:none!important}
+body.role-teacher .admin-only{display:none!important}
+body.role-staff .admin-only{display:none!important}
 body.role-student td .action-btn.delete,
 body.role-student td .action-btn[data-edit]{display:none!important}
+body.role-teacher td .action-btn.delete,
+body.role-staff td .action-btn.delete{display:none!important}
 
-/* When logged in as TEACHER: Hide admin-only master configurations */
-body.role-teacher .admin-only{display:none!important}
+/* Admin Mode: Only role-admin gets control panel items */
+body:not(.role-admin) .admin-only{display:none!important}
 
 /* ================= RESPONSIVE ================= */
 @media(max-width:1050px){.sidebar{width:220px}.page-content{padding:26px 20px}.topbar{padding:0 20px}.stats-grid{grid-template-columns:repeat(2,1fr)}}
