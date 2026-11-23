@@ -1,71 +1,113 @@
 // =============================================
 //  Smart Campus Management System — app.js
 //  Full-stack Java Spring Boot + MariaDB
-//  Guest Viewer Mode + Exclusive Master Admin
+//  Multi-University Bangladesh Architecture
+//  Master Admin: omi / Omi@2026
 // =============================================
 
 const $ = id => document.getElementById(id);
 
 let currentUser = null;
+let currentUniversity = localStorage.getItem('sc_university') || 'Metropolitan University';
 
-// Initial Mock Data for Standalone Preview (e.g. Vercel)
-const DEMO_STORE = {
-  users: [
-    { id: 1, username: 'admin_omi', fullName: 'Halima Yesmin (Master Admin)', email: 'halimaomi2002@gmail.com', role: 'ADMIN', department: 'Administration', studentId: 'ADM-MASTER-01' },
-    { id: 2, username: 'student', fullName: 'Tanvir Ahmed', email: 'tanvir.student@gmail.com', role: 'STUDENT', department: 'Computer Science', studentId: 'CSE-2024-001' },
-    { id: 3, username: 'teacher', fullName: 'Dr. Ayesha Siddiqa', email: 'ayesha.teacher@gmail.com', role: 'TEACHER', department: 'Computer Science', studentId: 'FAC-005' },
-    { id: 4, username: 'staff', fullName: 'Md. Karim Uddin', email: 'karim.staff@gmail.com', role: 'STAFF', department: 'Campus Operations', studentId: 'STF-102' },
-  ],
-  students: [
-    { id: 1, name: 'Ayesha Rahman', email: 'ayesha.student@gmail.com', department: 'Computer Science', phone: '+880 1711-000111' },
-    { id: 2, name: 'Tanvir Ahmed', email: 'tanvir.student@gmail.com', department: 'Computer Science', phone: '+880 1812-222333' },
-    { id: 3, name: 'Nusrat Jahan', email: 'nusrat.student@gmail.com', department: 'Electrical Engineering', phone: '+880 1913-444555' },
-  ],
-  teachers: [
-    { id: 1, name: 'Dr. Ayesha Siddiqa', email: 'ayesha.teacher@gmail.com', department: 'Computer Science', designation: 'Professor', phone: '+880 1712-345678', qualification: 'Ph.D in AI', joinDate: '2019-01-15' },
-    { id: 2, name: 'Prof. Kamal Hossain', email: 'kamal.teacher@gmail.com', department: 'Computer Science', designation: 'Associate Professor', phone: '+880 1813-987654', qualification: 'M.Sc in Software Eng', joinDate: '2021-08-01' },
-  ],
-  courses: [
-    { id: 1, code: 'CSE-301', name: 'Object Oriented Programming with Java', department: 'Computer Science', teacherName: 'Dr. Ayesha Siddiqa', creditHours: '3.0', semester: 'Fall 2026', schedule: 'Sun/Tue 10:00 AM', status: 'Active' },
-    { id: 2, code: 'CSE-305', name: 'Database Management Systems', department: 'Computer Science', teacherName: 'Prof. Kamal Hossain', creditHours: '3.0', semester: 'Fall 2026', schedule: 'Mon/Wed 11:30 AM', status: 'Active' },
-    { id: 3, code: 'EEE-201', name: 'Circuit Analysis', department: 'Electrical Engineering', teacherName: 'Dr. Farhana Yasmin', creditHours: '3.0', semester: 'Fall 2026', schedule: 'Tue/Thu 02:00 PM', status: 'Active' },
-  ],
-  attendance: [
-    { id: 1, studentName: 'Tanvir Ahmed', studentId: 'CSE-2024-001', course: 'CSE-301', date: '2026-11-20', status: 'Present' },
-    { id: 2, studentName: 'Ayesha Rahman', studentId: 'CSE-2024-002', course: 'CSE-301', date: '2026-11-20', status: 'Present' },
-  ],
-  exams: [
-    { id: 1, studentName: 'Tanvir Ahmed', studentId: 'CSE-2024-001', course: 'CSE-301', examType: 'Midterm', totalMarks: '100', obtainedMarks: '92', grade: 'A+', semester: 'Fall 2026', examDate: '2026-10-15' },
-    { id: 2, studentName: 'Ayesha Rahman', studentId: 'CSE-2024-002', course: 'CSE-301', examType: 'Midterm', totalMarks: '100', obtainedMarks: '88', grade: 'A', semester: 'Fall 2026', examDate: '2026-10-15' },
-  ],
-  fees: [
-    { id: 1, studentName: 'Tanvir Ahmed', studentId: 'CSE-2024-001', feeType: 'Tuition', amount: '25,000', dueDate: '2026-12-01', paidDate: '2026-11-10', status: 'Paid' },
-    { id: 2, studentName: 'Ayesha Rahman', studentId: 'CSE-2024-002', feeType: 'Exam Fee', amount: '3,500', dueDate: '2026-12-15', paidDate: '', status: 'Unpaid' },
-  ],
-  library: [
-    { id: 1, title: 'Clean Code: Agile Software Craftsmanship', author: 'Robert C. Martin', isbn: '978-0132350884', category: 'Software Engineering', publisher: 'Prentice Hall', publishYear: '2008', totalCopies: '6', availableCopies: '4', status: 'Available' },
-    { id: 2, title: 'Core Java Volume I — Fundamentals', author: 'Cay S. Horstmann', isbn: '978-0135166307', category: 'Computer Science', publisher: 'Pearson', publishYear: '2022', totalCopies: '5', availableCopies: '2', status: 'Available' },
-    { id: 3, title: 'Spring Boot in Action', author: 'Craig Walls', isbn: '978-1617297571', category: 'Java Frameworks', publisher: 'Manning', publishYear: '2023', totalCopies: '4', availableCopies: '3', status: 'Available' },
-  ],
-  jobs: [
-    { id: 1, title: 'Junior Java Developer', company: 'Brain Station 23', location: 'Dhaka, Bangladesh', type: 'Full-time', salary: '35,000 - 45,000 BDT', deadline: '2026-12-30', status: 'Open', description: 'Seeking a Junior Java Developer with Spring Boot and SQL skills.' },
-    { id: 2, title: 'Campus IT Support Intern', company: 'Smart Campus IT Center', location: 'On-Campus', type: 'Internship', salary: '15,000 BDT', deadline: '2026-12-15', status: 'Open', description: 'Hands-on internship assisting network and computer lab support.' },
-    { id: 3, title: 'Associate Software QA Tester', company: 'Therap BD', location: 'Dhaka', type: 'Full-time', salary: '30,000 - 40,000 BDT', deadline: '2026-12-25', status: 'Open', description: 'Software test preparation and quality assurance.' },
-  ]
+// University Registry
+const UNIVERSITIES = {
+  'Metropolitan University': { code: 'MU', city: 'Sylhet', campus: 'Bateshwar, Sylhet', title: 'Metropolitan University' },
+  'Shahjalal University of Science and Technology': { code: 'SUST', city: 'Sylhet', campus: 'Kumargaon, Sylhet', title: 'Shahjalal University of Science & Tech' },
+  'University of Dhaka': { code: 'DU', city: 'Dhaka', campus: 'Nilkhet, Dhaka', title: 'University of Dhaka' },
+  'Bangladesh University of Engineering and Technology': { code: 'BUET', city: 'Dhaka', campus: 'Palashi, Dhaka', title: 'BUET' },
+  'Leading University': { code: 'LU', city: 'Sylhet', campus: 'Ragibnagar, Sylhet', title: 'Leading University' },
+  'Sylhet Agricultural University': { code: 'SAU', city: 'Sylhet', campus: 'Tilagarh, Sylhet', title: 'Sylhet Agricultural University' },
+  'North South University': { code: 'NSU', city: 'Dhaka', campus: 'Bashundhara, Dhaka', title: 'North South University' },
+  'BRAC University': { code: 'BRACU', city: 'Dhaka', campus: 'Merul Badda, Dhaka', title: 'BRAC University' },
+  'AIUB': { code: 'AIUB', city: 'Dhaka', campus: 'Kuratoli, Dhaka', title: 'American International University-BD' },
+  'Chittagong University of Engineering & Technology': { code: 'CUET', city: 'Chittagong', campus: 'Raozan, Chittagong', title: 'CUET' },
+  'Rajshahi University': { code: 'RU', city: 'Rajshahi', campus: 'Motihar, Rajshahi', title: 'Rajshahi University' },
+  'Khulna University of Engineering & Technology': { code: 'KUET', city: 'Khulna', campus: 'Teligati, Khulna', title: 'KUET' },
+  'Jahangirnagar University': { code: 'JU', city: 'Savar', campus: 'Savar, Dhaka', title: 'Jahangirnagar University' },
+  'East West University': { code: 'EWU', city: 'Dhaka', campus: 'Aftabnagar, Dhaka', title: 'East West University' },
+  'United International University': { code: 'UIU', city: 'Dhaka', campus: 'Madani Avenue, Dhaka', title: 'United International University' },
+  'Daffodil International University': { code: 'DIU', city: 'Dhaka', campus: 'Ashulia, Dhaka', title: 'Daffodil International University' }
 };
 
-// Initialize localStorage with mock data
-Object.keys(DEMO_STORE).forEach(key => {
-  if (!localStorage.getItem(`sc_demo_${key}`)) {
-    localStorage.setItem(`sc_demo_${key}`, JSON.stringify(DEMO_STORE[key]));
-  }
-});
+// Base Mock Data for Metropolitan University and others
+function buildInitialData(uniName) {
+  const uni = UNIVERSITIES[uniName] || UNIVERSITIES['Metropolitan University'];
+  const pfx = uni.code;
 
-function getLocalStore(key) {
-  return JSON.parse(localStorage.getItem(`sc_demo_${key}`) || '[]');
+  return {
+    users: [
+      { id: 1, username: 'omi', fullName: 'Omi (Master Administrator)', email: 'halimaomi2002@gmail.com', role: 'ADMIN', department: 'Administration', studentId: 'ADM-OMI-01', university: uniName },
+      { id: 2, username: 'student', fullName: 'Tanvir Ahmed', email: 'tanvir.student@gmail.com', role: 'STUDENT', department: 'Computer Science & Engineering', studentId: `${pfx}-2024-001`, university: uniName },
+      { id: 3, username: 'teacher', fullName: 'Dr. Ayesha Siddiqa', email: 'ayesha.teacher@gmail.com', role: 'TEACHER', department: 'Computer Science & Engineering', studentId: `FAC-${pfx}-005`, university: uniName },
+      { id: 4, username: 'staff', fullName: 'Md. Karim Uddin', email: 'karim.staff@gmail.com', role: 'STAFF', department: 'Campus Operations', studentId: `STF-${pfx}-102`, university: uniName },
+    ],
+    students: [
+      { id: 1, name: 'Ayesha Rahman', email: 'ayesha.student@gmail.com', department: 'Computer Science & Engineering', phone: '+880 1711-000111', university: uniName },
+      { id: 2, name: 'Tanvir Ahmed', email: 'tanvir.student@gmail.com', department: 'Computer Science & Engineering', phone: '+880 1812-222333', university: uniName },
+      { id: 3, name: 'Nusrat Jahan', email: 'nusrat.student@gmail.com', department: 'Software Engineering', phone: '+880 1913-444555', university: uniName },
+      { id: 4, name: 'Mahmudul Hasan', email: 'mahmud.student@gmail.com', department: 'Business Administration (BBA)', phone: '+880 1514-666777', university: uniName },
+    ],
+    teachers: [
+      { id: 1, name: 'Dr. Ayesha Siddiqa', email: 'ayesha.teacher@gmail.com', department: 'Computer Science & Engineering', designation: 'Professor & Head', phone: '+880 1712-345678', qualification: 'Ph.D in Computer Science', joinDate: '2019-01-15', university: uniName },
+      { id: 2, name: 'Prof. Kamal Hossain', email: 'kamal.teacher@gmail.com', department: 'Computer Science & Engineering', designation: 'Associate Professor', phone: '+880 1813-987654', qualification: 'M.Sc in Software Systems', joinDate: '2021-08-01', university: uniName },
+      { id: 3, name: 'Dr. Mahbubur Rahman', email: 'mahbub.teacher@gmail.com', department: 'Business Administration', designation: 'Assistant Professor', phone: '+880 1612-445566', qualification: 'Ph.D in Finance', joinDate: '2022-03-10', university: uniName },
+    ],
+    courses: [
+      { id: 1, code: 'CSE-301', name: 'Object Oriented Programming with Java', department: 'Computer Science & Engineering', teacherName: 'Dr. Ayesha Siddiqa', creditHours: '3.0', semester: 'Fall 2026', schedule: 'Sun/Tue 10:00 AM (Academic Bldg)', status: 'Active', university: uniName },
+      { id: 2, code: 'CSE-305', name: 'Database Management Systems', department: 'Computer Science & Engineering', teacherName: 'Prof. Kamal Hossain', creditHours: '3.0', semester: 'Fall 2026', schedule: 'Mon/Wed 11:30 AM (Computer Lab 2)', status: 'Active', university: uniName },
+      { id: 3, code: 'SWE-201', name: 'Software Engineering & Design Patterns', department: 'Software Engineering', teacherName: 'Dr. Ayesha Siddiqa', creditHours: '3.0', semester: 'Fall 2026', schedule: 'Sun/Wed 02:00 PM', status: 'Active', university: uniName },
+      { id: 4, code: 'BBA-101', name: 'Principles of Management', department: 'Business Administration', teacherName: 'Dr. Mahbubur Rahman', creditHours: '3.0', semester: 'Fall 2026', schedule: 'Tue/Thu 09:00 AM', status: 'Active', university: uniName },
+    ],
+    attendance: [
+      { id: 1, studentName: 'Tanvir Ahmed', studentId: `${pfx}-2024-001`, course: 'CSE-301', date: '2026-11-20', status: 'Present', university: uniName },
+      { id: 2, studentName: 'Ayesha Rahman', studentId: `${pfx}-2024-002`, course: 'CSE-301', date: '2026-11-20', status: 'Present', university: uniName },
+      { id: 3, studentName: 'Nusrat Jahan', studentId: `${pfx}-2024-003`, course: 'SWE-201', date: '2026-11-21', status: 'Late', university: uniName },
+    ],
+    exams: [
+      { id: 1, studentName: 'Tanvir Ahmed', studentId: `${pfx}-2024-001`, course: 'CSE-301', examType: 'Midterm', totalMarks: '100', obtainedMarks: '94', grade: 'A+', semester: 'Fall 2026', examDate: '2026-10-15', university: uniName },
+      { id: 2, studentName: 'Ayesha Rahman', studentId: `${pfx}-2024-002`, course: 'CSE-301', examType: 'Midterm', totalMarks: '100', obtainedMarks: '89', grade: 'A', semester: 'Fall 2026', examDate: '2026-10-15', university: uniName },
+    ],
+    fees: [
+      { id: 1, studentName: 'Tanvir Ahmed', studentId: `${pfx}-2024-001`, feeType: 'Tuition Fee', amount: '28,000', dueDate: '2026-12-01', paidDate: '2026-11-10', status: 'Paid', university: uniName },
+      { id: 2, studentName: 'Ayesha Rahman', studentId: `${pfx}-2024-002`, feeType: 'Semester Exam Fee', amount: '4,000', dueDate: '2026-12-15', paidDate: '', status: 'Unpaid', university: uniName },
+    ],
+    library: [
+      { id: 1, title: 'Clean Code: A Handbook of Agile Software', author: 'Robert C. Martin', isbn: '978-0132350884', category: 'Software Engineering', publisher: 'Prentice Hall', publishYear: '2020', totalCopies: '8', availableCopies: '5', status: 'Available', university: uniName },
+      { id: 2, title: 'Core Java Volume I — Fundamentals (12th Ed)', author: 'Cay S. Horstmann', isbn: '978-0135166307', category: 'Computer Science', publisher: 'Pearson', publishYear: '2023', totalCopies: '6', availableCopies: '3', status: 'Available', university: uniName },
+      { id: 3, title: 'Spring Boot in Action', author: 'Craig Walls', isbn: '978-1617297571', category: 'Java Frameworks', publisher: 'Manning', publishYear: '2023', totalCopies: '5', availableCopies: '4', status: 'Available', university: uniName },
+      { id: 4, title: 'Database System Concepts (7th Edition)', author: 'Silberschatz & Korth', isbn: '978-0078022159', category: 'Database Systems', publisher: 'McGraw-Hill', publishYear: '2021', totalCopies: '7', availableCopies: '2', status: 'Available', university: uniName },
+    ],
+    jobs: [
+      { id: 1, title: 'Junior Java & Spring Boot Developer', company: 'Brain Station 23', location: `${uni.city} / Dhaka, Bangladesh`, type: 'Full-time', salary: '38,000 - 48,000 BDT', deadline: '2026-12-30', status: 'Open', description: `Exclusive campus recruitment for ${uni.title} graduating seniors with Java & Spring Boot proficiency.`, university: uniName },
+      { id: 2, title: `${uni.code} Campus IT Support Assistant`, company: `${uni.title} IT Center`, location: `${uni.campus}`, type: 'Internship', salary: '16,000 BDT / month', deadline: '2026-12-15', status: 'Open', description: `Hands-on student internship maintaining campus network and computer labs at ${uni.title}.`, university: uniName },
+      { id: 3, title: 'Associate Software QA Engineer', company: 'Therap BD', location: 'Dhaka / Hybrid', type: 'Full-time', salary: '32,000 - 42,000 BDT', deadline: '2026-12-25', status: 'Open', description: 'API test case preparation and automated test scripting.', university: uniName },
+    ]
+  };
 }
-function setLocalStore(key, data) {
-  localStorage.setItem(`sc_demo_${key}`, JSON.stringify(data));
+
+// Initialize Data Store for current university
+function initUniversityStore(uniName) {
+  const store = buildInitialData(uniName);
+  Object.keys(store).forEach(key => {
+    const storageKey = `sc_${uniName}_${key}`;
+    if (!localStorage.getItem(storageKey)) {
+      localStorage.setItem(storageKey, JSON.stringify(store[key]));
+    }
+  });
+}
+
+function getStore(key) {
+  const storageKey = `sc_${currentUniversity}_${key}`;
+  const data = localStorage.getItem(storageKey);
+  if (data) return JSON.parse(data);
+  const store = buildInitialData(currentUniversity);
+  return store[key] || [];
+}
+
+function setStore(key, data) {
+  const storageKey = `sc_${currentUniversity}_${key}`;
+  localStorage.setItem(storageKey, JSON.stringify(data));
 }
 
 // ── Toast notification ──────────────────────
@@ -111,6 +153,42 @@ function togglePasswordVisibility(inputId, btn) {
 }
 
 // ══════════════════════════════════════════════
+//  UNIVERSITY SWITCHER
+// ══════════════════════════════════════════════
+function onUniversityChange(newUni) {
+  currentUniversity = newUni;
+  localStorage.setItem('sc_university', newUni);
+  initUniversityStore(newUni);
+  updateUniversityUI();
+  reloadAllData();
+  toast(`🏛️ Switched to ${newUni} campus database!`);
+}
+
+function updateUniversityUI() {
+  const uni = UNIVERSITIES[currentUniversity] || UNIVERSITIES['Metropolitan University'];
+  
+  if ($('universitySelector')) $('universitySelector').value = currentUniversity;
+  if ($('guestBarUni')) $('guestBarUni').textContent = `${currentUniversity} (${uni.city})`;
+  if ($('brandMarkBadge')) $('brandMarkBadge').textContent = uni.code;
+  if ($('brandRoleSubtitle')) $('brandRoleSubtitle').textContent = currentUniversity.toUpperCase();
+  if ($('sidebarCardTitle')) $('sidebarCardTitle').textContent = currentUniversity;
+  if ($('sidebarCardDesc')) $('sidebarCardDesc').textContent = `${uni.campus}. Smart Academic & Research Suite.`;
+  if ($('authModalUniTitle')) $('authModalUniTitle').textContent = uni.code + ' Smart Campus';
+  if ($('uniNoticeEyebrow')) $('uniNoticeEyebrow').textContent = currentUniversity.toUpperCase();
+
+  // Notice text
+  if ($('portalNoticeText')) {
+    $('portalNoticeText').textContent = `Currently viewing academic database for ${currentUniversity} (${uni.city}, Bangladesh). Students, faculty and staff can login using their credentials or Gmail. Admin Omi holds exclusive Master Control Panel access.`;
+  }
+
+  // Update table university indicators
+  const tags = ['courseTableUniNotice', 'jobsTableUniNotice', 'libraryTableUniNotice', 'teachersTableUniNotice', 'studentsTableUniNotice'];
+  tags.forEach(t => {
+    if ($(t)) $(t).textContent = currentUniversity;
+  });
+}
+
+// ══════════════════════════════════════════════
 //  AUTHENTICATION & ROLE-BASED ACCESS
 // ══════════════════════════════════════════════
 
@@ -147,16 +225,10 @@ function applyUserRole(user) {
     roleBadge.className = 'role-badge guest';
     $('sidebarAvatar').textContent = 'G';
 
-    $('brandRoleSubtitle').textContent = 'ACADEMIC SUITE';
-    $('navWorkspaceLabel').textContent = 'CAMPUS WORKSPACE';
-    $('sidebarCardTitle').textContent = 'Connected Campus';
-    $('sidebarCardDesc').textContent = 'Browse courses, library and job openings.';
-
-    $('dashEyebrow').textContent = 'CAMPUS PUBLIC PORTAL';
-    $('dashGreeting').innerHTML = `Welcome to Smart Campus <span class="wave">✦</span>`;
-    $('dashSubtext').textContent = 'Explore academic courses, career opportunities and library resources.';
+    $('dashEyebrow').textContent = `${currentUniversity.toUpperCase()} PUBLIC PORTAL`;
+    $('dashGreeting').innerHTML = `Welcome to ${esc(currentUniversity)} <span class="wave">✦</span>`;
+    $('dashSubtext').textContent = 'Explore academic courses, career opportunities and library resources in Bangladesh.';
     $('portalNoticeTitle').textContent = 'Public Viewer Mode';
-    $('portalNoticeText').textContent = 'You are currently browsing the public campus portal. You can view all course offerings, job opportunities, and library inventory. To apply for jobs, reserve books, or manage student records, please Sign In or Create an Account.';
     return;
   }
 
@@ -190,28 +262,28 @@ function applyUserRole(user) {
     $('brandRoleSubtitle').textContent = 'ADMIN CONTROL PANEL';
     $('navWorkspaceLabel').textContent = 'ADMIN WORKSPACE';
     $('sidebarCardTitle').textContent = 'Master Control Hub';
-    $('sidebarCardDesc').textContent = 'Exclusive administrator access to control all campus databases.';
-    $('dashEyebrow').textContent = 'ADMIN CONTROL PANEL';
-    $('dashGreeting').innerHTML = `Welcome back, ${esc(user.fullName || user.username)} <span class="wave">✦</span>`;
-    $('dashSubtext').textContent = "Full administrative privileges enabled over all modules & database records.";
+    $('sidebarCardDesc').textContent = 'Exclusive administrator access for Omi to control all campus databases.';
+    $('dashEyebrow').textContent = 'MASTER ADMIN CONTROL PANEL';
+    $('dashGreeting').innerHTML = `Welcome back, Omi <span class="wave">✦</span>`;
+    $('dashSubtext').textContent = `Full administrative privileges active for ${esc(currentUniversity)} and all universities.`;
     $('portalNoticeTitle').textContent = "Administrator Control Center";
-    $('portalNoticeText').textContent = "You are logged in as the Master Administrator. You have exclusive rights to create, edit, and delete student records, faculty profiles, course schedules, exams, tuition fees, library inventory, and campus job listings.";
+    $('portalNoticeText').textContent = "You are logged in as Master Admin Omi. You have exclusive authorization to add, edit, or delete student records, faculty profiles, course schedules, exams, tuition fees, library inventory, and manage registered users.";
   } else {
     const roleTitle = role === 'TEACHER' ? 'Faculty Portal' : (role === 'STAFF' ? 'Staff Portal' : 'Student Portal');
     $('brandRoleSubtitle').textContent = roleTitle.toUpperCase();
     $('navWorkspaceLabel').textContent = 'USER WORKSPACE';
     $('sidebarCardTitle').textContent = `${user.fullName || 'User'} Workspace`;
-    $('sidebarCardDesc').textContent = `Department: ${esc(user.department || 'Campus')}`;
+    $('sidebarCardDesc').textContent = `University: ${esc(user.university || currentUniversity)}`;
     $('dashEyebrow').textContent = roleTitle.toUpperCase();
     $('dashGreeting').innerHTML = `Welcome back, ${esc(user.fullName || user.username)} <span class="wave">✦</span>`;
-    $('dashSubtext').textContent = `Gmail: ${esc(user.email || 'Registered User')} · Role: ${role}`;
+    $('dashSubtext').textContent = `Gmail: ${esc(user.email || 'Registered User')} · Campus: ${esc(user.university || currentUniversity)}`;
     $('portalNoticeTitle').textContent = `${roleTitle} Workspace`;
-    $('portalNoticeText').textContent = `Welcome to your personal smart workspace! You can verify course schedules, check grades, track attendance, browse library books, and apply for campus career jobs.`;
   }
 }
 
 function openAuthModal(tab = 'login') {
   switchAuthTab(tab);
+  if ($('regUniversity')) $('regUniversity').value = currentUniversity;
   $('authOverlay').classList.remove('hidden');
 }
 
@@ -228,7 +300,8 @@ function switchAuthTab(tab) {
   $('regError').classList.add('hidden');
 }
 
-// Login form submit (accepts Username or Gmail)
+// Login form submit (Accepts Username or Gmail)
+// Master Admin: omi / Omi@2026
 $('loginForm').addEventListener('submit', async e => {
   e.preventDefault();
   const username = $('loginUsername').value.trim();
@@ -257,31 +330,42 @@ $('loginForm').addEventListener('submit', async e => {
 
     if (!authUser) {
       // Local fallback for offline / Vercel preview
-      const localUsers = getLocalStore('users');
+      const localUsers = getStore('users');
       const searchKey = username.toLowerCase();
-      const found = localUsers.find(u => 
-        (u.username && u.username.toLowerCase() === searchKey) || 
-        (u.email && u.email.toLowerCase() === searchKey)
-      );
 
-      // Verify passwords
-      if (found) {
-        if (found.role === 'ADMIN' && password === 'Admin@2026#Smart') {
+      // Check for Master Admin: omi / Omi@2026
+      if ((searchKey === 'omi' || searchKey === 'admin' || searchKey === 'halimaomi2002@gmail.com') && password === 'Omi@2026') {
+        authUser = {
+          id: 1,
+          username: 'omi',
+          fullName: 'Omi (Master Administrator)',
+          email: 'halimaomi2002@gmail.com',
+          role: 'ADMIN',
+          department: 'Administration',
+          university: currentUniversity
+        };
+      } else {
+        const found = localUsers.find(u => 
+          (u.username && u.username.toLowerCase() === searchKey) || 
+          (u.email && u.email.toLowerCase() === searchKey)
+        );
+        if (found && (password === 'student123' || password === 'teacher123' || password === 'staff123' || password.length >= 3)) {
           authUser = found;
-        } else if (found.role !== 'ADMIN') {
-          authUser = found; // Demo password matches
         }
-      } else if (searchKey === 'admin_omi' && password === 'Admin@2026#Smart') {
-        authUser = { id: 1, username: 'admin_omi', fullName: 'Halima Yesmin (Master Admin)', email: 'halimaomi2002@gmail.com', role: 'ADMIN', department: 'Administration' };
       }
     }
 
     if (!authUser) {
-      throw new Error('Invalid Gmail/Username or Password. Please try again.');
+      throw new Error('Invalid Gmail/Username or Password. For Admin, use omi / Omi@2026.');
     }
 
     localStorage.setItem('sc_user', JSON.stringify(authUser));
     currentUser = authUser;
+    if (currentUser.university && currentUser.university !== currentUniversity) {
+      currentUniversity = currentUser.university;
+      localStorage.setItem('sc_university', currentUniversity);
+      updateUniversityUI();
+    }
     applyUserRole(currentUser);
     closeAuthModal();
     toast(`Welcome, ${currentUser.fullName || currentUser.username}!`);
@@ -295,9 +379,10 @@ $('loginForm').addEventListener('submit', async e => {
   }
 });
 
-// Register form submit (for Teachers, Students, Staff)
+// Register form submit (Students, Teachers, Staff with University)
 $('registerForm').addEventListener('submit', async e => {
   e.preventDefault();
+  const university = $('regUniversity').value;
   const fullName = $('regFullName').value.trim();
   const username = $('regUsername').value.trim();
   const email = $('regEmail').value.trim();
@@ -318,7 +403,7 @@ $('registerForm').addEventListener('submit', async e => {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fullName, username, email, department, role, studentId, password })
+        body: JSON.stringify({ fullName, username, email, department, role, studentId, password, university })
       });
       if (res.ok) {
         const data = await res.json();
@@ -326,13 +411,13 @@ $('registerForm').addEventListener('submit', async e => {
       }
     } catch (netErr) {}
 
-    // Fallback store
-    const localUsers = getLocalStore('users');
-    const newUser = { id: Date.now(), fullName, username, email, department, role: (role === 'ADMIN' ? 'STUDENT' : role), studentId };
+    // Store in university data
+    const localUsers = getStore('users');
+    const newUser = { id: Date.now(), fullName, username, email, department, role: (role === 'ADMIN' ? 'STUDENT' : role), studentId, university };
     localUsers.push(newUser);
-    setLocalStore('users', localUsers);
+    setStore('users', localUsers);
 
-    toast('Account created successfully! You can now log in.');
+    toast(`Account created for ${university}! You can now sign in.`);
     switchAuthTab('login');
     $('loginUsername').value = email; // prefill Gmail
     $('loginPassword').value = password;
@@ -374,9 +459,8 @@ const pages = {
 const pageLoaders = {};
 
 function showPage(page) {
-  // If guest tries to access private admin pages
   if (page === 'users' && (!currentUser || currentUser.role !== 'ADMIN')) {
-    toast('Access denied. Admin Control Panel is reserved exclusively for the Master Admin.', true);
+    toast('Access denied. Control Panel is reserved exclusively for Master Admin Omi.', true);
     openAuthModal('login');
     return;
   }
@@ -413,7 +497,7 @@ function makeCRUD(config) {
         throw new Error();
       }
     } catch (err) {
-      data = getLocalStore(storeKey);
+      data = getStore(storeKey);
     }
     if (!Array.isArray(data)) data = [];
     if (config.onLoad) config.onLoad(data);
@@ -423,9 +507,9 @@ function makeCRUD(config) {
   function render() {
     const q = $(config.searchId)?.value.trim().toLowerCase() || '';
     const filtered = data.filter(item => config.searchFields(item).toLowerCase().includes(q));
-    $(config.summary).textContent = `Showing ${filtered.length} of ${data.length} record${data.length !== 1 ? 's' : ''}`;
+    $(config.summary).textContent = `Showing ${filtered.length} of ${data.length} records (${currentUniversity})`;
     if (!filtered.length) {
-      $(config.tbody).innerHTML = `<tr><td colspan="${config.cols}" class="empty-cell">${data.length ? 'No records match your search.' : 'No records yet.'}</td></tr>`;
+      $(config.tbody).innerHTML = `<tr><td colspan="${config.cols}" class="empty-cell">${data.length ? 'No records match search.' : `No records yet for ${currentUniversity}.`}</td></tr>`;
       return;
     }
     const isAdmin = currentUser && currentUser.role === 'ADMIN';
@@ -435,7 +519,7 @@ function makeCRUD(config) {
 
   function openAdd() {
     if (!currentUser || currentUser.role !== 'ADMIN') {
-      toast('Permission denied: Only the Master Admin can add records.', true);
+      toast('Permission denied: Only Master Admin Omi can add records.', true);
       return;
     }
     $(config.form).reset();
@@ -449,7 +533,7 @@ function makeCRUD(config) {
 
   function openEdit(id) {
     if (!currentUser || currentUser.role !== 'ADMIN') {
-      toast('Permission denied: Only the Master Admin can edit records.', true);
+      toast('Permission denied: Only Master Admin Omi can edit records.', true);
       return;
     }
     const item = data.find(d => String(d.id) === String(id));
@@ -467,11 +551,12 @@ function makeCRUD(config) {
   async function save(e) {
     e.preventDefault();
     if (!currentUser || currentUser.role !== 'ADMIN') {
-      toast('Permission denied: Only the Master Admin can save modifications.', true);
+      toast('Permission denied: Only Master Admin Omi can save modifications.', true);
       return;
     }
     const id = config.hiddenId ? $(config.hiddenId).value : null;
     const payload = config.getPayload();
+    payload.university = currentUniversity;
     const btn = $(config.saveBtn);
     btn.disabled = true; btn.textContent = 'Saving...';
     try {
@@ -484,7 +569,7 @@ function makeCRUD(config) {
       } catch (e) {}
 
       if (!savedViaApi) {
-        const items = getLocalStore(storeKey);
+        const items = getStore(storeKey);
         if (id) {
           const idx = items.findIndex(x => String(x.id) === String(id));
           if (idx !== -1) items[idx] = { ...items[idx], ...payload };
@@ -492,7 +577,7 @@ function makeCRUD(config) {
           payload.id = Date.now();
           items.push(payload);
         }
-        setLocalStore(storeKey, items);
+        setStore(storeKey, items);
       }
 
       modalState(config.modal, false);
@@ -509,7 +594,7 @@ function makeCRUD(config) {
 
   async function del(id) {
     if (!currentUser || currentUser.role !== 'ADMIN') {
-      toast('Permission denied: Only the Master Admin can delete records.', true);
+      toast('Permission denied: Only Master Admin Omi can delete records.', true);
       return;
     }
     const item = data.find(d => String(d.id) === String(id));
@@ -523,9 +608,9 @@ function makeCRUD(config) {
       } catch (e) {}
 
       if (!deletedViaApi) {
-        let items = getLocalStore(storeKey);
+        let items = getStore(storeKey);
         items = items.filter(x => String(x.id) !== String(id));
-        setLocalStore(storeKey, items);
+        setStore(storeKey, items);
       }
 
       await load();
@@ -556,7 +641,7 @@ function makeCRUD(config) {
 // ══════════════════════════════════════════════
 //  COURSES
 // ══════════════════════════════════════════════
-makeCRUD({
+const coursesCRUD = makeCRUD({
   api: '/api/courses', page: 'courses',
   tbody: 'courseRows', summary: 'courseSummary', cols: 6,
   searchId: 'courseSearch',
@@ -624,14 +709,14 @@ const jobs = makeCRUD({
 
 function handleJobApplyClick(jobId) {
   if (!currentUser) {
-    toast('Please Sign In or Create an Account to apply for campus jobs.');
+    toast(`Please Sign In to apply for campus jobs at ${currentUniversity}.`);
     openAuthModal('login');
     return;
   }
   const jobList = jobs.getData();
   const j = jobList.find(x => x.id === jobId);
   $('applyJobTitle').textContent = `Apply: ${j?.title || 'Job'}`;
-  $('applyJobDetails').textContent = `Company: ${j?.company || 'N/A'} · Location: ${j?.location || 'N/A'} · Type: ${j?.type || 'N/A'}`;
+  $('applyJobDetails').textContent = `Company: ${j?.company || 'N/A'} · Location: ${j?.location || 'N/A'} · Campus: ${currentUniversity}`;
   $('applicantName').value = currentUser?.fullName || '';
   $('applicantEmail').value = currentUser?.email || '';
   $('applicantStudentId').value = currentUser?.studentId || '';
@@ -641,13 +726,13 @@ function handleJobApplyClick(jobId) {
 function submitJobApplication(e) {
   e.preventDefault();
   modalState('applyJobModal', false);
-  toast('Application submitted successfully! Recruiter will contact via Gmail.');
+  toast(`Application submitted successfully to ${currentUniversity} placement office!`);
 }
 
 // ══════════════════════════════════════════════
 //  LIBRARY
 // ══════════════════════════════════════════════
-makeCRUD({
+const libraryCRUD = makeCRUD({
   api: '/api/library', page: 'library',
   tbody: 'libraryRows', summary: 'librarySummary', cols: 6,
   searchId: 'librarySearch',
@@ -678,17 +763,17 @@ makeCRUD({
 
 function handleReserveBookClick() {
   if (!currentUser) {
-    toast('Please Sign In or Create an Account to reserve library books.');
+    toast(`Please Sign In to reserve books from ${currentUniversity} Central Library.`);
     openAuthModal('login');
     return;
   }
-  toast('Book reserved from Campus Library! Pick it up with your ID.');
+  toast(`Book reserved from ${currentUniversity} Central Library!`);
 }
 
 // ══════════════════════════════════════════════
 //  TEACHERS
 // ══════════════════════════════════════════════
-makeCRUD({
+const teachersCRUD = makeCRUD({
   api: '/api/teachers', page: 'teachers',
   tbody: 'teacherRows', summary: 'teacherSummary', cols: 5,
   searchId: 'teacherSearch',
@@ -719,7 +804,7 @@ makeCRUD({
 // ══════════════════════════════════════════════
 //  STUDENTS (User & Admin View)
 // ══════════════════════════════════════════════
-const students = makeCRUD({
+const studentsCRUD = makeCRUD({
   api: '/api/students', page: 'students',
   tbody: 'studentRows', summary: 'studentSummary', cols: 5,
   searchId: 'studentSearch',
@@ -754,12 +839,12 @@ const students = makeCRUD({
   fillForm: s => { $('studentName').value=s.name||'';$('studentEmail').value=s.email||'';$('studentDept').value=s.department||'';$('studentPhone').value=s.phone||''; },
   getPayload: () => ({ name:$('studentName').value.trim(), email:$('studentEmail').value.trim(), department:$('studentDept').value.trim(), phone:$('studentPhone').value.trim() }),
 });
-$('studentDeptFilter').addEventListener('change', () => students.render());
+$('studentDeptFilter').addEventListener('change', () => studentsCRUD.render());
 
 // ══════════════════════════════════════════════
 //  ATTENDANCE
 // ══════════════════════════════════════════════
-makeCRUD({
+const attendanceCRUD = makeCRUD({
   api: '/api/attendance', page: 'attendance',
   tbody: 'attendanceRows', summary: 'attendanceSummary', cols: 5,
   searchId: 'attendanceSearch',
@@ -790,7 +875,7 @@ makeCRUD({
 // ══════════════════════════════════════════════
 //  EXAMS
 // ══════════════════════════════════════════════
-makeCRUD({
+const examsCRUD = makeCRUD({
   api: '/api/exams', page: 'exams',
   tbody: 'examRows', summary: 'examSummary', cols: 6,
   searchId: 'examSearch',
@@ -822,7 +907,7 @@ makeCRUD({
 // ══════════════════════════════════════════════
 //  FEES
 // ══════════════════════════════════════════════
-makeCRUD({
+const feesCRUD = makeCRUD({
   api: '/api/fees', page: 'fees',
   tbody: 'feeRows', summary: 'feeSummary', cols: 6,
   searchId: 'feeSearch',
@@ -852,14 +937,12 @@ makeCRUD({
 });
 
 // ══════════════════════════════════════════════
-//  USER ACCOUNTS CONTROL PANEL (EXCLUSIVE ADMIN ONLY)
+//  USER ACCOUNTS CONTROL PANEL (MASTER ADMIN OMI ONLY)
 // ══════════════════════════════════════════════
 let usersList = [];
 
 async function loadUsers() {
-  if (!currentUser || currentUser.role !== 'ADMIN') {
-    return;
-  }
+  if (!currentUser || currentUser.role !== 'ADMIN') return;
   const tbody = $('userRows');
   tbody.innerHTML = '<tr><td colspan="6" class="empty-cell">Loading registered users...</td></tr>';
   try {
@@ -870,7 +953,7 @@ async function loadUsers() {
       throw new Error();
     }
   } catch (err) {
-    usersList = getLocalStore('users');
+    usersList = getStore('users');
   }
   renderUsers();
 }
@@ -878,10 +961,10 @@ async function loadUsers() {
 function renderUsers() {
   const q = $('userSearch')?.value.trim().toLowerCase() || '';
   const filtered = usersList.filter(u => 
-    [u.username, u.fullName, u.email, u.role, u.department].join(' ').toLowerCase().includes(q)
+    [u.username, u.fullName, u.email, u.role, u.department, u.university].join(' ').toLowerCase().includes(q)
   );
 
-  $('userSummary').textContent = `Showing ${filtered.length} of ${usersList.length} registered accounts`;
+  $('userSummary').textContent = `Showing ${filtered.length} of ${usersList.length} accounts`;
   const tbody = $('userRows');
   if (!filtered.length) {
     tbody.innerHTML = '<tr><td colspan="6" class="empty-cell">No users found.</td></tr>';
@@ -892,12 +975,12 @@ function renderUsers() {
     <tr>
       <td><div class="student-cell"><div class="student-avatar" style="background:#27264d;color:#c7c0ff">${esc(initials(u.fullName || u.username))}</div><div><div class="student-name">${esc(u.fullName || u.username)}</div><div class="student-email">${esc(u.email || 'No email')}</div></div></div></td>
       <td><code>${esc(u.username)}</code></td>
+      <td><span class="dept-pill">${esc(u.university || currentUniversity)}</span></td>
       <td><span class="role-badge ${(u.role||'student').toLowerCase()}">${esc(u.role || 'STUDENT')}</span></td>
       <td><span class="dept-pill">${esc(u.department || 'General')}</span></td>
-      <td><span class="status-pill status-active">Active</span></td>
       <td>
         <div class="row-actions">
-          ${u.role === 'ADMIN' ? `<span style="color:#ff96ba;font-size:10px;font-weight:700">Master Admin</span>` : `<button class="action-btn delete" onclick="deleteUserAccount(${u.id})">Delete User</button>`}
+          ${u.username === 'omi' ? `<span style="color:#ff96ba;font-size:10px;font-weight:700">Master Admin Omi</span>` : `<button class="action-btn delete" onclick="deleteUserAccount(${u.id})">Delete User</button>`}
         </div>
       </td>
     </tr>
@@ -919,7 +1002,7 @@ async function deleteUserAccount(id) {
 
     if (!deleted) {
       usersList = usersList.filter(u => u.id !== id);
-      setLocalStore('users', usersList);
+      setStore('users', usersList);
     }
 
     toast('User account deleted.');
@@ -933,8 +1016,20 @@ $('userSearch')?.addEventListener('input', renderUsers);
 pageLoaders['users'] = loadUsers;
 
 // ══════════════════════════════════════════════
-//  DASHBOARD COUNTS
+//  DASHBOARD COUNTS & RELOAD
 // ══════════════════════════════════════════════
+function reloadAllData() {
+  coursesCRUD.load();
+  jobs.load();
+  libraryCRUD.load();
+  teachersCRUD.load();
+  studentsCRUD.load();
+  attendanceCRUD.load();
+  examsCRUD.load();
+  feesCRUD.load();
+  loadDashboard();
+}
+
 async function loadDashboard() {
   const modules = ['courses', 'jobs', 'library', 'teachers', 'students', 'fees', 'attendance', 'exams'];
   for (const mod of modules) {
@@ -944,7 +1039,7 @@ async function loadDashboard() {
       if (r.ok) list = await r.json();
       else throw new Error();
     } catch (e) {
-      list = getLocalStore(mod);
+      list = getStore(mod);
     }
     const cap = mod.charAt(0).toUpperCase() + mod.slice(1);
     if ($(`dash${cap}`)) $(`dash${cap}`).textContent = list.length;
@@ -957,5 +1052,7 @@ async function loadDashboard() {
 pageLoaders['dashboard'] = loadDashboard;
 
 // ── Startup ──────────────────────────────────
+initUniversityStore(currentUniversity);
+updateUniversityUI();
 checkAuth();
 showPage('dashboard');

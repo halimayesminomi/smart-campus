@@ -25,7 +25,7 @@ public class AuthController {
     // Login Endpoint (Accepts Username OR Gmail/Email)
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> credentials) {
-        String identifier = credentials.get("username"); // can be username or gmail
+        String identifier = credentials.get("username"); // username or email
         String password = credentials.get("password");
 
         Map<String, Object> response = new HashMap<>();
@@ -53,6 +53,7 @@ public class AuthController {
                 userData.put("role", user.getRole());
                 userData.put("department", user.getDepartment());
                 userData.put("studentId", user.getStudentId());
+                userData.put("university", user.getUniversity());
 
                 response.put("user", userData);
                 return ResponseEntity.ok(response);
@@ -64,7 +65,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 
-    // Register Endpoint (For Teachers, Students, Staff)
+    // Register Endpoint
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>> register(@RequestBody User user) {
         Map<String, Object> response = new HashMap<>();
@@ -93,15 +94,18 @@ public class AuthController {
             return ResponseEntity.badRequest().body(response);
         }
 
-        // SECURITY: Public registration CANNOT create an ADMIN account!
-        // Admin is strictly reserved for the owner.
+        // SECURITY: Only pre-seeded omi is Master Admin
         String requestedRole = (user.getRole() != null) ? user.getRole().toUpperCase().trim() : "STUDENT";
         if ("ADMIN".equals(requestedRole)) {
-            user.setRole("STUDENT"); // prevent privilege escalation
+            user.setRole("STUDENT");
         } else if ("TEACHER".equals(requestedRole) || "STAFF".equals(requestedRole) || "STUDENT".equals(requestedRole)) {
             user.setRole(requestedRole);
         } else {
             user.setRole("STUDENT");
+        }
+
+        if (user.getUniversity() == null || user.getUniversity().trim().isEmpty()) {
+            user.setUniversity("Metropolitan University");
         }
 
         user.setUsername(user.getUsername().trim());
@@ -119,18 +123,19 @@ public class AuthController {
         userData.put("fullName", savedUser.getFullName());
         userData.put("email", savedUser.getEmail());
         userData.put("role", savedUser.getRole());
+        userData.put("university", savedUser.getUniversity());
         response.put("user", userData);
 
         return ResponseEntity.ok(response);
     }
 
-    // List all users (Only for Admin control panel)
+    // List all users
     @GetMapping("/users")
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    // Delete a user (Admin control)
+    // Delete a user
     @DeleteMapping("/users/{id}")
     public ResponseEntity<Map<String, Object>> deleteUser(@PathVariable Long id) {
         Map<String, Object> response = new HashMap<>();
@@ -142,7 +147,7 @@ public class AuthController {
         }
 
         User u = userOpt.get();
-        if ("ADMIN".equalsIgnoreCase(u.getRole())) {
+        if ("ADMIN".equalsIgnoreCase(u.getRole()) || "omi".equalsIgnoreCase(u.getUsername())) {
             response.put("success", false);
             response.put("message", "Master Admin account cannot be deleted");
             return ResponseEntity.badRequest().body(response);

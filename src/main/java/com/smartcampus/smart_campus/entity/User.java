@@ -20,14 +20,15 @@ public class User {
     private String email;
 
     @Column(nullable = false)
-    private String role; // "ADMIN", "STUDENT", "TEACHER"
+    private String role; // "ADMIN", "STUDENT", "TEACHER", "STAFF"
 
     private String department;
     private String studentId;
+    private String university;
 
     public User() {}
 
-    public User(String username, String password, String fullName, String email, String role, String department, String studentId) {
+    public User(String username, String password, String fullName, String email, String role, String department, String studentId, String university) {
         this.username = username;
         this.password = password;
         this.fullName = fullName;
@@ -35,6 +36,7 @@ public class User {
         this.role = role;
         this.department = department;
         this.studentId = studentId;
+        this.university = university;
     }
 
     public Long getId() { return id; }
@@ -60,4 +62,7 @@ public class User {
 
     public String getStudentId() { return studentId; }
     public void setStudentId(String studentId) { this.studentId = studentId; }
+
+    public String getUniversity() { return university; }
+    public void setUniversity(String university) { this.university = university; }
 }
