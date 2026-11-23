@@ -16,48 +16,186 @@
    ═══════════════════════════════════════════════════════ */
 
 /* ───────────────────────────────────────────────────────
-   🏛️ METROPOLITAN UNIVERSITY — White + Reddish Orange
-   Official colors: Red-Orange & White
+   🏛️ METROPOLITAN UNIVERSITY
+   Theme: Creamy White + Warm Reddish-Orange — UNIQUE MIX
+   The site feels like a warm sunset — white warmth + red-orange fire
    ─────────────────────────────────────────────────────── */
 body.uni-MU{
-  --uni-primary:#ff3d00;--uni-primary2:#bf2600;
-  --uni-accent:#ffffff;--uni-glow:#ff3d0040;
-  --uni-topbar:#1f0500;--uni-sidebar:#1a0400;
-  --uni-brand-from:#ff6d3d;--uni-brand-to:#bf2600;
-  --bg:#0f0200;--surface:#1c0601;--surface2:#220804;--line:#42150a;
+  --uni-primary:#e8380d;--uni-primary2:#c02c00;
+  --uni-accent:#fff5f0;--uni-glow:#e8380d44;
+  --uni-topbar:#1e0a04;--uni-sidebar:#190805;
+  --uni-brand-from:#ff6b40;--uni-brand-to:#c02c00;
+  /* Warm dark background — dark brownish-red, NOT pure black */
+  --bg:#130500;--surface:#1f0b05;--surface2:#270e07;--line:#4a1a0e;
 }
+
+/* ── Sidebar: dark warm brown + subtle orange left accent ── */
 body.uni-MU .sidebar{
-  background:linear-gradient(180deg,#1a0400 0%,#0f0200 100%)!important;
-  border-right:1px solid #42150a!important;
+  background:linear-gradient(180deg,#190805 0%,#100400 60%,#0d0300 100%)!important;
+  border-right:2px solid #3d1208!important;
 }
+
+/* ── Topbar: dark warm with orange-white gradient stripe ── */
 body.uni-MU .topbar{
-  background:linear-gradient(90deg,#1f0500,#160300)!important;
-  border-bottom:1px solid #42150a!important;
+  background:linear-gradient(135deg,#1e0a04 0%,#180600 50%,#1e0a04 100%)!important;
+  border-bottom:1px solid #4a1a0e!important;
 }
-body.uni-MU .stat-card,body.uni-MU .panel{background:#1c0601;border-color:#42150a}
-body.uni-MU .campus-card{background:linear-gradient(145deg,#2b0a03,#1c0400);border-color:#541a0d}
-body.uni-MU .nav-item:hover{background:#2a0a03;color:#ff9070!important}
-body.uni-MU .search-box{background:#170400;border-color:#3d1308}
-body.uni-MU .modal{background:#1a0601;border-color:#42150a}
-body.uni-MU table td{border-color:#2e0e06}
-body.uni-MU table th{border-color:#3d1308;color:#ff7a5c}
-body.uni-MU tbody tr:hover{background:#220a0405}
-body.uni-MU .brand-mark{box-shadow:0 8px 32px #ff3d0060!important}
+
+/* ── Brand mark: fire gradient + white glow ── */
+body.uni-MU .brand-mark{
+  background:linear-gradient(145deg,#ff7043,#e8380d,#9a1f00)!important;
+  box-shadow:0 6px 28px #e8380d55, 0 0 0 2px #fff2!important;
+}
+
+/* ── Buttons: orange-red with white shine on top ── */
 body.uni-MU .btn-primary{
-  background:linear-gradient(135deg,#ff5c33,#cc2200)!important;
-  box-shadow:0 6px 22px #ff3d0050!important;
+  background:linear-gradient(135deg,#ff5722 0%,#e8380d 50%,#bf2600 100%)!important;
+  box-shadow:0 6px 22px #e8380d55, inset 0 1px 0 #fff3!important;
+  color:#fff!important;
+  border:1px solid #ff7043!important;
 }
-/* White accent highlights for MU */
-body.uni-MU .page-heading h1{color:#fff!important}
-body.uni-MU .stat-value{color:#fff!important}
+body.uni-MU .btn-primary:hover{
+  background:linear-gradient(135deg,#ff6b40,#e8380d,#bf2600)!important;
+  box-shadow:0 8px 28px #e8380d66!important;
+}
+
+/* ── Stat cards: warm dark surface + orange top-border stripe ── */
+body.uni-MU .stat-card{
+  background:linear-gradient(160deg,#260e06,#1c0905)!important;
+  border:1px solid #4a1a0e!important;
+  border-top:3px solid #e8380d!important;
+  box-shadow:0 4px 20px #0004!important;
+}
+
+/* ── Panels: white tinted warm dark ── */
+body.uni-MU .panel{
+  background:linear-gradient(160deg,#220c05,#1a0803)!important;
+  border:1px solid #3d1208!important;
+}
+
+/* ── Campus card in sidebar ── */
+body.uni-MU .campus-card{
+  background:linear-gradient(145deg,#2d1008,#1e0905)!important;
+  border:1px solid #5a2010!important;
+}
+
+/* ── Notice panel: orange warm tint ── */
+body.uni-MU .note-panel{
+  background:linear-gradient(120deg,#2a0f0620,#1f0a0415)!important;
+  border-color:#4a1a0e!important;
+}
+
+/* ── Nav items ── */
+body.uni-MU .nav-item:hover{
+  background:linear-gradient(90deg,#2e0f06,#200900)!important;
+  color:#ff8a65!important;
+}
 body.uni-MU .nav-item.active{
-  background:linear-gradient(90deg,#3d1200,#1a0400)!important;
-  color:#ff7a5c!important;
-  box-shadow:inset 3px 0 #ff3d00!important;
-  border-radius:8px!important;
+  background:linear-gradient(90deg,#3d1500,#280c04)!important;
+  color:#ff8a65!important;
+  box-shadow:inset 3px 0 #e8380d, inset 0 0 20px #e8380d15!important;
+  border-radius:9px!important;
 }
-body.uni-MU .role-pill.admin{background:linear-gradient(135deg,#4a1200,#2a0800);color:#ff9070;border:1px solid #7a2200}
-body.uni-MU .guest-bar{background:linear-gradient(90deg,#1f0500,#260a02)!important;border-color:#42150a!important}
+
+/* ── Search box ── */
+body.uni-MU .search-box{
+  background:#190700!important;
+  border:1px solid #3d1208!important;
+}
+
+/* ── Modal ── */
+body.uni-MU .modal{
+  background:linear-gradient(160deg,#220d05,#190803)!important;
+  border:1px solid #4a1a0e!important;
+}
+
+/* ── Tables ── */
+body.uni-MU table th{border-color:#3d1208!important;color:#ff8a65!important}
+body.uni-MU table td{border-color:#2a0e06!important}
+body.uni-MU tbody tr:hover{background:#2a0e0608!important}
+
+/* ── Guest bar ── */
+body.uni-MU .guest-bar{
+  background:linear-gradient(90deg,#20090305,#2a0e0640)!important;
+  border-color:#4a1a0e!important;
+}
+
+/* ══════════════════════════════════════════════════
+   WHITE + REDDISH-ORANGE MIX — Unique Visual Identity
+   Text, Values, Headings use the WHITE side
+   Borders, Glows, Buttons use REDDISH-ORANGE side
+   ══════════════════════════════════════════════════ */
+
+/* Headings & page titles — pure white */
+body.uni-MU .page-heading h1{
+  color:#fff!important;
+  text-shadow:0 2px 20px #e8380d33!important;
+}
+
+/* Stat values — white with orange glow */
+body.uni-MU .stat-value{
+  color:#fff!important;
+  text-shadow:0 0 20px #e8380d44!important;
+}
+
+/* Nav labels */
+body.uni-MU .nav-label,.uni-MU .eyebrow{color:#ff7043!important}
+
+/* Wave & eyebrow accents */
+body.uni-MU .wave{color:#ff6b40!important}
+
+/* Role pills */
+body.uni-MU .role-pill.admin{
+  background:linear-gradient(135deg,#3d1200,#220900)!important;
+  color:#ff9a7a!important;border:1px solid #6a1e00!important;
+}
+body.uni-MU .role-pill.guest{
+  background:#2a0e06!important;color:#ffa07a!important;border:1px solid #4a1a0e!important;
+}
+
+/* Auth card — warm dark + orange border glow */
+body.uni-MU .auth-card{
+  background:linear-gradient(160deg,#220d05,#160700)!important;
+  border:1px solid #4a1a0e!important;
+  box-shadow:0 30px 90px #000c, 0 0 40px #e8380d18!important;
+}
+
+/* Auth tabs active */
+body.uni-MU .auth-tab.active{
+  background:linear-gradient(135deg,#2d1008,#1e0804)!important;
+  color:#ff8a65!important;border:1px solid #4a1a0e!important;
+}
+
+/* Stat card icons get orange bg */
+body.uni-MU .stat-icon.green{background:#3d1500!important;color:#ff8a65!important}
+body.uni-MU .stat-icon.blue{background:#3a1200!important;color:#ffb090!important}
+body.uni-MU .stat-icon.purple{background:#2d1008!important;color:#ff7043!important}
+body.uni-MU .stat-icon.orange{background:#3d1800!important;color:#ffb870!important}
+
+/* Quick action icons */
+body.uni-MU .quick-icon.green{background:#3a1200!important;color:#ff8a65!important}
+body.uni-MU .quick-icon.blue{background:#3a1200!important;color:#ffb090!important}
+body.uni-MU .quick-icon.purple{background:#2d1008!important;color:#ff7043!important}
+body.uni-MU .quick-icon.orange{background:#3d1800!important;color:#ffb870!important}
+
+/* Copyright footer MU style */
+body.uni-MU .copyright-footer{
+  background:linear-gradient(180deg,transparent,#180700)!important;
+  border-top:1px solid #3d1208!important;
+}
+
+/* Toast */
+body.uni-MU .toast{
+  background:#2d1008!important;border:1px solid #6a2210!important;color:#ffb090!important;
+}
+
+/* System status dot — orange pulse */
+body.uni-MU .status-dot{background:#e8380d!important;box-shadow:0 0 10px #e8380d88!important}
+
+/* Scrollbar (webkit) */
+body.uni-MU ::-webkit-scrollbar-track{background:#130500}
+body.uni-MU ::-webkit-scrollbar-thumb{background:#4a1a0e;border-radius:4px}
+body.uni-MU ::-webkit-scrollbar-thumb:hover{background:#6a2810}
 
 
 /* ───────────────────────────────────────────────────────
