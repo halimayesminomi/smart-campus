@@ -433,6 +433,32 @@ body.mode-night .btn-google-top{
   border-radius:50%;background:var(--green);
   margin-right:6px;box-shadow:0 0 10px rgba(22, 163, 74, 0.4);
 }
+
+/* Cloud Sync Badge (Cross-Device Laptop <-> Phone) */
+.cloud-sync-status{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:11px;font-weight:700;
+  color:var(--text-orange);
+  background:var(--orange-soft);
+  border:1px solid var(--orange-border);
+  padding:4px 9px;border-radius:20px;
+  cursor:pointer;letter-spacing:0.3px;
+  transition:all 0.2s ease;
+  user-select:none;
+}
+.cloud-sync-status:hover{
+  transform:scale(1.05);
+  box-shadow:0 2px 8px var(--orange-glow);
+}
+.cloud-sync-status.syncing{
+  color:#0284c7;background:#e0f2fe;border-color:#bae6fd;
+}
+body.mode-night .cloud-sync-status.syncing{
+  color:#38bdf8;background:#082f49;border-color:#0369a1;
+}
+.cloud-sync-status.offline{
+  color:#dc2626;background:#fee2e2;border-color:#fca5a5;
+}
 .user-greeting{display:flex;align-items:center;gap:8px}
 .user-name{font-size:12px;font-weight:700;color:var(--text-dark)}
 .mobile-menu{

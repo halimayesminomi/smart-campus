@@ -534,6 +534,149 @@ function initUniversityStore(uniName) {
   localStorage.setItem(versionKey, '4.0');
 }
 
+// ══════════════════════════════════════════════
+//  CROSS-DEVICE CLOUD SYNCHRONIZATION ENGINE
+//  (Keeps Laptop and Phone 100% in sync in real time)
+// ══════════════════════════════════════════════
+const CLOUD_SYNC_ENDPOINT = 'https://api.restful-api.dev/objects/ff808181a09d98f701a20a4533302b8a';
+let lastSyncedCloudTime = 0;
+let cloudPushTimer = null;
+let isPushingToCloud = false;
+let isPullingFromCloud = false;
+
+function updateSyncStatusUI(status, label) {
+  const el = $('cloudSyncStatus');
+  if (!el) return;
+  el.className = 'cloud-sync-status ' + (status || '');
+  el.textContent = label;
+}
+
+function updateDashboardCountsFromStores() {
+  const getCount = (k) => {
+    try {
+      const d = localStorage.getItem(`sc_${currentUniversity}_${k}`);
+      return d ? JSON.parse(d).length : 0;
+    } catch(e) { return 0; }
+  };
+  if ($('dashStudents')) $('dashStudents').textContent = getCount('students');
+  if ($('dashTeachers')) $('dashTeachers').textContent = getCount('teachers');
+  if ($('dashCourses')) $('dashCourses').textContent = getCount('courses');
+  if ($('dashJobs')) $('dashJobs').textContent = getCount('jobs');
+  if ($('dashBooks')) $('dashBooks').textContent = getCount('library');
+  if ($('navStudentCount')) $('navStudentCount').textContent = getCount('students');
+  if ($('navTeacherCount')) $('navTeacherCount').textContent = getCount('teachers');
+  if ($('navCourseCount')) $('navCourseCount').textContent = getCount('courses');
+  if ($('navJobCount')) $('navJobCount').textContent = getCount('jobs');
+}
+
+// Pull latest changes from Cloud (Laptop <-> Phone)
+async function pullFromCloud(silent = false) {
+  if (isPullingFromCloud || isPushingToCloud) return;
+  isPullingFromCloud = true;
+  if (!silent) updateSyncStatusUI('syncing', '🔄 Syncing...');
+
+  try {
+    const res = await fetch(CLOUD_SYNC_ENDPOINT, { cache: 'no-store' });
+    if (res.ok) {
+      const doc = await res.json();
+      if (doc && doc.data && doc.data.stores) {
+        const cloudTime = doc.data.updatedAt || 0;
+        if (cloudTime > lastSyncedCloudTime) {
+          const stores = doc.data.stores;
+          let changed = false;
+
+          Object.keys(stores).forEach(storageKey => {
+            const cloudVal = JSON.stringify(stores[storageKey]);
+            const localVal = localStorage.getItem(storageKey);
+            if (cloudVal !== localVal) {
+              localStorage.setItem(storageKey, cloudVal);
+              changed = true;
+            }
+          });
+
+          lastSyncedCloudTime = cloudTime;
+
+          if (changed) {
+            // Re-render currently viewed page to reflect cross-device changes!
+            if (typeof currentPage !== 'undefined' && pageLoaders && pageLoaders[currentPage]) {
+              try { pageLoaders[currentPage](); } catch (e) {}
+            }
+            updateDashboardCountsFromStores();
+          }
+        }
+      }
+      updateSyncStatusUI('synced', '☁️ Live Sync');
+    }
+  } catch (err) {
+    updateSyncStatusUI('offline', '☁️ Offline / Local');
+  } finally {
+    isPullingFromCloud = false;
+  }
+}
+
+// Push local changes to Cloud (Laptop -> Phone or Phone -> Laptop)
+function scheduleCloudPush(key, data) {
+  clearTimeout(cloudPushTimer);
+  updateSyncStatusUI('syncing', '🔄 Saving to cloud...');
+
+  cloudPushTimer = setTimeout(async () => {
+    isPushingToCloud = true;
+    try {
+      // 1. Fetch latest cloud state first to merge safely
+      let existingStores = {};
+      try {
+        const getRes = await fetch(CLOUD_SYNC_ENDPOINT, { cache: 'no-store' });
+        if (getRes.ok) {
+          const doc = await getRes.json();
+          if (doc && doc.data && doc.data.stores) {
+            existingStores = doc.data.stores;
+          }
+        }
+      } catch (e) {}
+
+      // 2. Merge local storage collections into cloud stores
+      if (key && data) {
+        existingStores[key] = data;
+      }
+      
+      // Also ensure all current university's modified keys are present
+      const keysToSync = ['students', 'teachers', 'courses', 'jobs', 'library', 'attendance', 'exams', 'fees', 'users'];
+      keysToSync.forEach(k => {
+        const sKey = `sc_${currentUniversity}_${k}`;
+        const val = localStorage.getItem(sKey);
+        if (val) {
+          try { existingStores[sKey] = JSON.parse(val); } catch(e) {}
+        }
+      });
+
+      const updatedTimestamp = Date.now();
+      const payload = {
+        name: 'SmartCampusProductionSync',
+        data: {
+          updatedAt: updatedTimestamp,
+          updatedBy: (currentUser ? currentUser.email : 'Device'),
+          stores: existingStores
+        }
+      };
+
+      const putRes = await fetch(CLOUD_SYNC_ENDPOINT, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (putRes.ok) {
+        lastSyncedCloudTime = updatedTimestamp;
+        updateSyncStatusUI('synced', '☁️ Live Sync');
+      }
+    } catch (err) {
+      updateSyncStatusUI('offline', '☁️ Local saved');
+    } finally {
+      isPushingToCloud = false;
+    }
+  }, 350);
+}
+
 function getStore(key) {
   const storageKey = `sc_${currentUniversity}_${key}`;
   const data = localStorage.getItem(storageKey);
@@ -545,6 +688,7 @@ function getStore(key) {
 function setStore(key, data) {
   const storageKey = `sc_${currentUniversity}_${key}`;
   localStorage.setItem(storageKey, JSON.stringify(data));
+  scheduleCloudPush(storageKey, data);
 }
 
 // ── Toast notification ──────────────────────
@@ -953,6 +1097,7 @@ function syncUserToCampusEntities(user) {
       students.unshift(studentObj);
     }
     localStorage.setItem(sKey, JSON.stringify(students));
+    scheduleCloudPush(sKey, students);
 
     // Refresh student view & dashboard counters
     if (typeof studentsCRUD !== 'undefined' && studentsCRUD.load) {
@@ -995,6 +1140,7 @@ function syncUserToCampusEntities(user) {
       teachers.unshift(teacherObj);
     }
     localStorage.setItem(tKey, JSON.stringify(teachers));
+    scheduleCloudPush(tKey, teachers);
 
     // Refresh teacher view & dashboard counters
     if (typeof teachersCRUD !== 'undefined' && teachersCRUD.load) {
@@ -1805,3 +1951,15 @@ initUniversityStore(currentUniversity);
 updateUniversityUI();
 checkAuth();
 showPage('dashboard');
+
+// ── Cross-Device Real-Time Cloud Sync ────────
+pullFromCloud();
+
+// When returning to tab on Phone or Laptop
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) pullFromCloud(true);
+});
+window.addEventListener('focus', () => pullFromCloud(true));
+
+// Periodic sync poll every 8 seconds
+setInterval(() => pullFromCloud(true), 8000);
