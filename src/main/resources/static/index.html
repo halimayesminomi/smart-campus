@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Campus — Management System</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="/">
+        <span class="brand-mark">SC</span>
+        <span><b>smartcampus</b><small>MANAGEMENT SUITE</small></span>
+      </a>
+      <div class="nav-label">WORKSPACE</div>
+      <nav class="nav">
+        <a class="nav-item active" href="#dashboard" data-page="dashboard"><span class="nav-icon">▦</span> Overview</a>
+        <a class="nav-item" href="#students" data-page="students"><span class="nav-icon">♙</span> Students <span class="nav-count" id="navStudentCount">0</span></a>
+        <a class="nav-item" href="#teachers" data-page="teachers"><span class="nav-icon">♧</span> Teachers <span class="nav-count" id="navTeacherCount">0</span></a>
+        <a class="nav-item" href="#courses" data-page="courses"><span class="nav-icon">▤</span> Courses <span class="nav-count" id="navCourseCount">0</span></a>
+        <a class="nav-item" href="#attendance" data-page="attendance"><span class="nav-icon">◷</span> Attendance <span class="nav-count" id="navAttendanceCount">0</span></a>
+        <a class="nav-item" href="#exams" data-page="exams"><span class="nav-icon">✎</span> Exams &amp; Results <span class="nav-count" id="navExamCount">0</span></a>
+        <a class="nav-item" href="#fees" data-page="fees"><span class="nav-icon">৳</span> Fees <span class="nav-count" id="navFeeCount">0</span></a>
+        <a class="nav-item" href="#library" data-page="library"><span class="nav-icon">▣</span> Library <span class="nav-count" id="navLibraryCount">0</span></a>
+        <a class="nav-item" href="#jobs" data-page="jobs"><span class="nav-icon">⚑</span> Jobs <span class="nav-count" id="navJobCount">0</span></a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="campus-card"><div class="campus-orb">✦</div><b>Your campus, connected.</b><p>Manage your entire campus from one workspace.</p></div>
+        <div class="profile"><div class="avatar">A</div><div><b>Administrator</b><small>Campus Admin</small></div><span class="dots">•••</span></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenu" aria-label="Open menu">☰</button>
+        <div class="breadcrumb">Workspace <span>/</span> <b id="crumb">Overview</b></div>
+        <div class="top-actions"><span class="system-status"><i></i> System online</span><div class="top-avatar">A</div></div>
+      </header>
+
+      <!-- ===== DASHBOARD PAGE ===== -->
+      <section class="page-content" id="dashboardPage">
+        <div class="page-heading">
+          <div><div class="eyebrow">CAMPUS OVERVIEW</div><h1>Good day, Administrator <span class="wave">✦</span></h1><p>Here's what's happening across your campus today.</p></div>
+        </div>
+        <div class="stats-grid" id="dashboardStats">
+          <article class="stat-card"><div class="stat-top"><span>Total Students</span><span class="stat-icon purple">♙</span></div><div class="stat-value" id="dashStudents">—</div><div class="stat-foot"><span class="status-dot"></span> Live records</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Teachers</span><span class="stat-icon blue">♧</span></div><div class="stat-value" id="dashTeachers">—</div><div class="stat-foot">Faculty members</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Courses</span><span class="stat-icon green">▤</span></div><div class="stat-value" id="dashCourses">—</div><div class="stat-foot">Active courses</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Open Jobs</span><span class="stat-icon orange">⚑</span></div><div class="stat-value" id="dashJobs">—</div><div class="stat-foot">Job listings</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Library Books</span><span class="stat-icon purple">▣</span></div><div class="stat-value" id="dashLibrary">—</div><div class="stat-foot">Total books</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Fee Records</span><span class="stat-icon blue">৳</span></div><div class="stat-value" id="dashFees">—</div><div class="stat-foot">Fee entries</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Attendance</span><span class="stat-icon green">◷</span></div><div class="stat-value" id="dashAttendance">—</div><div class="stat-foot">Records logged</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Exam Results</span><span class="stat-icon orange">✎</span></div><div class="stat-value" id="dashExams">—</div><div class="stat-foot">Results logged</div></article>
+        </div>
+        <div class="bottom-grid">
+          <section class="panel quick-panel"><div class="eyebrow">QUICK ACTIONS</div><h2>Get things done</h2><div class="quick-actions">
+            <button onclick="showPage('students')"><span class="quick-icon purple">♙</span><span><b>Manage Students</b><small>Add or view student records</small></span><strong>›</strong></button>
+            <button onclick="showPage('teachers')"><span class="quick-icon blue">♧</span><span><b>Manage Teachers</b><small>Add or view faculty</small></span><strong>›</strong></button>
+            <button onclick="showPage('jobs')"><span class="quick-icon orange">⚑</span><span><b>Post a Job</b><small>Create job listing</small></span><strong>›</strong></button>
+            <button onclick="showPage('fees')"><span class="quick-icon green">৳</span><span><b>Record Fee</b><small>Add fee payment</small></span><strong>›</strong></button>
+          </div></section>
+          <section class="panel note-panel"><div class="note-symbol">✦</div><div><div class="eyebrow">SMART CAMPUS TIP</div><h2>All modules are live!</h2><p>Students, Teachers, Courses, Attendance, Exams, Fees, Library and Jobs — all connected to your MariaDB database in real time.</p></div></section>
+        </div>
+        <footer>© 2026 Smart Campus Management System <span>Built with Spring Boot + MariaDB</span></footer>
+      </section>
+
+      <!-- ===== STUDENTS PAGE ===== -->
+      <section class="page-content hidden" id="studentsPage">
+        <div class="page-heading">
+          <div><div class="eyebrow">DIRECTORY</div><h1>Students</h1><p>Manage student information and contact details.</p></div>
+          <button class="btn btn-primary" id="addStudentBtn">＋ Add Student</button>
+        </div>
+        <section class="panel">
+          <div class="table-tools"><div class="search-box"><span>⌕</span><input id="studentSearch" type="search" placeholder="Search name, email, department..."></div><div class="tool-right"><select id="studentDeptFilter"><option value="">All departments</option></select><button class="btn btn-outline" id="studentRefresh">↻ Refresh</button></div></div>
+          <div class="table-wrap"><table><thead><tr><th>STUDENT</th><th>DEPARTMENT</th><th>PHONE</th><th>ID</th><th class="align-right">ACTIONS</th></tr></thead><tbody id="studentRows"><tr><td colspan="5" class="empty-cell">Loading...</td></tr></tbody></table></div>
+          <div class="table-footer"><span id="studentSummary">Loading...</span><span>MariaDB · students table</span></div>
+        </section>
+        <footer>© 2026 Smart Campus Management System</footer>
+      </section>
+
+      <!-- ===== TEACHERS PAGE ===== -->
+      <section class="page-content hidden" id="teachersPage">
+        <div class="page-heading">
+          <div><div class="eyebrow">FACULTY</div><h1>Teachers</h1><p>Manage faculty members and their details.</p></div>
+          <button class="btn btn-primary" id="addTeacherBtn">＋ Add Teacher</button>
+        </div>
+        <section class="panel">
+          <div class="table-tools"><div class="search-box"><span>⌕</span><input id="teacherSearch" type="search" placeholder="Search name, email, department..."></div><div class="tool-right"><button class="btn btn-outline" id="teacherRefresh">↻ Refresh</button></div></div>
+          <div class="table-wrap"><table><thead><tr><th>TEACHER</th><th>DEPARTMENT</th><th>DESIGNATION</th><th>PHONE</th><th class="align-right">ACTIONS</th></tr></thead><tbody id="teacherRows"><tr><td colspan="5" class="empty-cell">Loading...</td></tr></tbody></table></div>
+          <div class="table-footer"><span id="teacherSummary">Loading...</span><span>MariaDB · teachers table</span></div>
+        </section>
+        <footer>© 2026 Smart Campus Management System</footer>
+      </section>
+
+      <!-- ===== COURSES PAGE ===== -->
+      <section class="page-content hidden" id="coursesPage">
+        <div class="page-heading">
+          <div><div class="eyebrow">ACADEMICS</div><h1>Courses</h1><p>Manage course offerings and schedules.</p></div>
+          <button class="btn btn-primary" id="addCourseBtn">＋ Add Course</button>
+        </div>
+        <section class="panel">
+          <div class="table-tools"><div class="search-box"><span>⌕</span><input id="courseSearch" type="search" placeholder="Search code, name, department..."></div><div class="tool-right"><button class="btn btn-outline" id="courseRefresh">↻ Refresh</button></div></div>
+          <div class="table-wrap"><table><thead><tr><th>COURSE</th><th>DEPARTMENT</th><th>TEACHER</th><th>CREDITS</th><th>STATUS</th><th class="align-right">ACTIONS</th></tr></thead><tbody id="courseRows"><tr><td colspan="6" class="empty-cell">Loading...</td></tr></tbody></table></div>
+          <div class="table-footer"><span id="courseSummary">Loading...</span><span>MariaDB · courses table</span></div>
+        </section>
+        <footer>© 2026 Smart Campus Management System</footer>
+      </section>
+
+      <!-- ===== ATTENDANCE PAGE ===== -->
+      <section class="page-content hidden" id="attendancePage">
+        <div class="page-heading">
+          <div><div class="eyebrow">ATTENDANCE</div><h1>Attendance</h1><p>Track and manage student attendance records.</p></div>
+          <button class="btn btn-primary" id="addAttendanceBtn">＋ Add Record</button>
+        </div>
+        <section class="panel">
+          <div class="table-tools"><div class="search-box"><span>⌕</span><input id="attendanceSearch" type="search" placeholder="Search student, course..."></div><div class="tool-right"><button class="btn btn-outline" id="attendanceRefresh">↻ Refresh</button></div></div>
+          <div class="table-wrap"><table><thead><tr><th>STUDENT</th><th>COURSE</th><th>DATE</th><th>STATUS</th><th class="align-right">ACTIONS</th></tr></thead><tbody id="attendanceRows"><tr><td colspan="5" class="empty-cell">Loading...</td></tr></tbody></table></div>
+          <div class="table-footer"><span id="attendanceSummary">Loading...</span><span>MariaDB · attendance table</span></div>
+        </section>
+        <footer>© 2026 Smart Campus Management System</footer>
+      </section>
+
+      <!-- ===== EXAMS PAGE ===== -->
+      <section class="page-content hidden" id="examsPage">
+        <div class="page-heading">
+          <div><div class="eyebrow">RESULTS</div><h1>Exams &amp; Results</h1><p>Track exam results and grades.</p></div>
+          <button class="btn btn-primary" id="addExamBtn">＋ Add Result</button>
+        </div>
+        <section class="panel">
+          <div class="table-tools"><div class="search-box"><span>⌕</span><input id="examSearch" type="search" placeholder="Search student, course..."></div><div class="tool-right"><button class="btn btn-outline" id="examRefresh">↻ Refresh</button></div></div>
+          <div class="table-wrap"><table><thead><tr><th>STUDENT</th><th>COURSE</th><th>EXAM TYPE</th><th>MARKS</th><th>GRADE</th><th class="align-right">ACTIONS</th></tr></thead><tbody id="examRows"><tr><td colspan="6" class="empty-cell">Loading...</td></tr></tbody></table></div>
+          <div class="table-footer"><span id="examSummary">Loading...</span><span>MariaDB · exams table</span></div>
+        </section>
+        <footer>© 2026 Smart Campus Management System</footer>
+      </section>
+
+      <!-- ===== FEES PAGE ===== -->
+      <section class="page-content hidden" id="feesPage">
+        <div class="page-heading">
+          <div><div class="eyebrow">FINANCE</div><h1>Fees</h1><p>Track student fee payments.</p></div>
+          <button class="btn btn-primary" id="addFeeBtn">＋ Add Fee</button>
+        </div>
+        <section class="panel">
+          <div class="table-tools"><div class="search-box"><span>⌕</span><input id="feeSearch" type="search" placeholder="Search student, fee type..."></div><div class="tool-right"><button class="btn btn-outline" id="feeRefresh">↻ Refresh</button></div></div>
+          <div class="table-wrap"><table><thead><tr><th>STUDENT</th><th>FEE TYPE</th><th>AMOUNT</th><th>DUE DATE</th><th>STATUS</th><th class="align-right">ACTIONS</th></tr></thead><tbody id="feeRows"><tr><td colspan="6" class="empty-cell">Loading...</td></tr></tbody></table></div>
+          <div class="table-footer"><span id="feeSummary">Loading...</span><span>MariaDB · fees table</span></div>
+        </section>
+        <footer>© 2026 Smart Campus Management System</footer>
+      </section>
+
+      <!-- ===== LIBRARY PAGE ===== -->
+      <section class="page-content hidden" id="libraryPage">
+        <div class="page-heading">
+          <div><div class="eyebrow">LIBRARY</div><h1>Library</h1><p>Manage book inventory and availability.</p></div>
+          <button class="btn btn-primary" id="addBookBtn">＋ Add Book</button>
+        </div>
+        <section class="panel">
+          <div class="table-tools"><div class="search-box"><span>⌕</span><input id="librarySearch" type="search" placeholder="Search title, author, category..."></div><div class="tool-right"><button class="btn btn-outline" id="libraryRefresh">↻ Refresh</button></div></div>
+          <div class="table-wrap"><table><thead><tr><th>BOOK</th><th>AUTHOR</th><th>CATEGORY</th><th>COPIES</th><th>AVAILABLE</th><th class="align-right">ACTIONS</th></tr></thead><tbody id="libraryRows"><tr><td colspan="6" class="empty-cell">Loading...</td></tr></tbody></table></div>
+          <div class="table-footer"><span id="librarySummary">Loading...</span><span>MariaDB · library_books table</span></div>
+        </section>
+        <footer>© 2026 Smart Campus Management System</footer>
+      </section>
+
+      <!-- ===== JOBS PAGE ===== -->
+      <section class="page-content hidden" id="jobsPage">
+        <div class="page-heading">
+          <div><div class="eyebrow">CAREER PORTAL</div><h1>Jobs</h1><p>Manage job postings for students.</p></div>
+          <button class="btn btn-primary" id="addJobBtn">＋ Post Job</button>
+        </div>
+        <section class="panel">
+          <div class="table-tools"><div class="search-box"><span>⌕</span><input id="jobSearch" type="search" placeholder="Search title, company, location..."></div><div class="tool-right"><button class="btn btn-outline" id="jobRefresh">↻ Refresh</button></div></div>
+          <div class="table-wrap"><table><thead><tr><th>JOB TITLE</th><th>COMPANY</th><th>LOCATION</th><th>TYPE</th><th>DEADLINE</th><th>STATUS</th><th class="align-right">ACTIONS</th></tr></thead><tbody id="jobRows"><tr><td colspan="7" class="empty-cell">Loading...</td></tr></tbody></table></div>
+          <div class="table-footer"><span id="jobSummary">Loading...</span><span>MariaDB · jobs table</span></div>
+        </section>
+        <footer>© 2026 Smart Campus Management System</footer>
+      </section>
+    </main>
+  </div>
+
+  <!-- ===== MODALS ===== -->
+
+  <!-- Student Modal -->
+  <div class="modal-backdrop hidden" id="studentModal">
+    <div class="modal">
+      <div class="modal-head"><div><div class="eyebrow" id="studentModalEyebrow">NEW RECORD</div><h2 id="studentModalTitle">Add Student</h2></div><button class="icon-button" id="closeStudentModal">×</button></div>
+      <form id="studentForm">
+        <input type="hidden" id="studentId">
+        <label>Full Name <span>*</span><input id="studentName" required placeholder="e.g. Ayesha Rahman"></label>
+        <label>Email <span>*</span><input id="studentEmail" type="email" required placeholder="student@example.com"></label>
+        <div class="form-row">
+          <label>Department <span>*</span><input id="studentDept" required placeholder="e.g. Computer Science"></label>
+          <label>Phone<input id="studentPhone" placeholder="+880 1XXXXXXXXX"></label>
+        </div>
+        <div class="form-error hidden" id="studentFormError"></div>
+        <div class="modal-actions"><button type="button" class="btn btn-outline" id="cancelStudentModal">Cancel</button><button type="submit" class="btn btn-primary" id="saveStudentBtn">Save Student</button></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Teacher Modal -->
+  <div class="modal-backdrop hidden" id="teacherModal">
+    <div class="modal">
+      <div class="modal-head"><div><div class="eyebrow" id="teacherModalEyebrow">NEW RECORD</div><h2 id="teacherModalTitle">Add Teacher</h2></div><button class="icon-button" id="closeTeacherModal">×</button></div>
+      <form id="teacherForm">
+        <input type="hidden" id="teacherId">
+        <label>Full Name <span>*</span><input id="teacherName" required placeholder="e.g. Dr. Rahman"></label>
+        <label>Email <span>*</span><input id="teacherEmail" type="email" required placeholder="teacher@university.edu"></label>
+        <div class="form-row">
+          <label>Department <span>*</span><input id="teacherDept" required placeholder="e.g. CSE"></label>
+          <label>Phone<input id="teacherPhone" placeholder="+880 1XXXXXXXXX"></label>
+        </div>
+        <div class="form-row">
+          <label>Designation<input id="teacherDesignation" placeholder="e.g. Professor"></label>
+          <label>Qualification<input id="teacherQualification" placeholder="e.g. PhD"></label>
+        </div>
+        <label>Join Date<input id="teacherJoinDate" type="date"></label>
+        <div class="form-error hidden" id="teacherFormError"></div>
+        <div class="modal-actions"><button type="button" class="btn btn-outline" id="cancelTeacherModal">Cancel</button><button type="submit" class="btn btn-primary" id="saveTeacherBtn">Save Teacher</button></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Course Modal -->
+  <div class="modal-backdrop hidden" id="courseModal">
+    <div class="modal">
+      <div class="modal-head"><div><div class="eyebrow" id="courseModalEyebrow">NEW RECORD</div><h2 id="courseModalTitle">Add Course</h2></div><button class="icon-button" id="closeCourseModal">×</button></div>
+      <form id="courseForm">
+        <input type="hidden" id="courseId">
+        <div class="form-row">
+          <label>Course Code <span>*</span><input id="courseCode" required placeholder="e.g. CSE-301"></label>
+          <label>Course Name <span>*</span><input id="courseName" required placeholder="e.g. Data Structures"></label>
+        </div>
+        <div class="form-row">
+          <label>Department<input id="courseDept" placeholder="e.g. CSE"></label>
+          <label>Teacher Name<input id="courseTeacher" placeholder="e.g. Dr. Ali"></label>
+        </div>
+        <div class="form-row">
+          <label>Credit Hours<input id="courseCredits" placeholder="e.g. 3"></label>
+          <label>Semester<input id="courseSemester" placeholder="e.g. Spring 2026"></label>
+        </div>
+        <div class="form-row">
+          <label>Schedule<input id="courseSchedule" placeholder="e.g. Mon/Wed 10-11:30"></label>
+          <label>Status<select id="courseStatus"><option value="Active">Active</option><option value="Inactive">Inactive</option></select></label>
+        </div>
+        <div class="form-error hidden" id="courseFormError"></div>
+        <div class="modal-actions"><button type="button" class="btn btn-outline" id="cancelCourseModal">Cancel</button><button type="submit" class="btn btn-primary" id="saveCourseBtn">Save Course</button></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Attendance Modal -->
+  <div class="modal-backdrop hidden" id="attendanceModal">
+    <div class="modal">
+      <div class="modal-head"><div><div class="eyebrow" id="attModalEyebrow">NEW RECORD</div><h2 id="attModalTitle">Add Attendance</h2></div><button class="icon-button" id="closeAttModal">×</button></div>
+      <form id="attendanceForm">
+        <input type="hidden" id="attId">
+        <div class="form-row">
+          <label>Student Name <span>*</span><input id="attStudentName" required placeholder="Student name"></label>
+          <label>Student ID<input id="attStudentId" placeholder="e.g. #101"></label>
+        </div>
+        <div class="form-row">
+          <label>Course <span>*</span><input id="attCourse" required placeholder="e.g. CSE-301"></label>
+          <label>Date <span>*</span><input id="attDate" type="date" required></label>
+        </div>
+        <label>Status<select id="attStatus"><option value="Present">Present</option><option value="Absent">Absent</option><option value="Late">Late</option></select></label>
+        <div class="form-error hidden" id="attFormError"></div>
+        <div class="modal-actions"><button type="button" class="btn btn-outline" id="cancelAttModal">Cancel</button><button type="submit" class="btn btn-primary" id="saveAttBtn">Save Record</button></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Exam Modal -->
+  <div class="modal-backdrop hidden" id="examModal">
+    <div class="modal">
+      <div class="modal-head"><div><div class="eyebrow" id="examModalEyebrow">NEW RECORD</div><h2 id="examModalTitle">Add Result</h2></div><button class="icon-button" id="closeExamModal">×</button></div>
+      <form id="examForm">
+        <input type="hidden" id="examId">
+        <div class="form-row">
+          <label>Student Name <span>*</span><input id="examStudentName" required placeholder="Student name"></label>
+          <label>Student ID<input id="examStudentId" placeholder="e.g. #101"></label>
+        </div>
+        <div class="form-row">
+          <label>Course <span>*</span><input id="examCourse" required placeholder="e.g. CSE-301"></label>
+          <label>Exam Type<select id="examType"><option value="Midterm">Midterm</option><option value="Final">Final</option><option value="Quiz">Quiz</option></select></label>
+        </div>
+        <div class="form-row">
+          <label>Total Marks<input id="examTotal" placeholder="e.g. 100"></label>
+          <label>Obtained Marks<input id="examObtained" placeholder="e.g. 85"></label>
+        </div>
+        <div class="form-row">
+          <label>Grade<input id="examGrade" placeholder="e.g. A+"></label>
+          <label>Semester<input id="examSemester" placeholder="e.g. Spring 2026"></label>
+        </div>
+        <label>Exam Date<input id="examDate" type="date"></label>
+        <div class="form-error hidden" id="examFormError"></div>
+        <div class="modal-actions"><button type="button" class="btn btn-outline" id="cancelExamModal">Cancel</button><button type="submit" class="btn btn-primary" id="saveExamBtn">Save Result</button></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Fee Modal -->
+  <div class="modal-backdrop hidden" id="feeModal">
+    <div class="modal">
+      <div class="modal-head"><div><div class="eyebrow" id="feeModalEyebrow">NEW RECORD</div><h2 id="feeModalTitle">Add Fee</h2></div><button class="icon-button" id="closeFeeModal">×</button></div>
+      <form id="feeForm">
+        <input type="hidden" id="feeId">
+        <div class="form-row">
+          <label>Student Name <span>*</span><input id="feeStudentName" required placeholder="Student name"></label>
+          <label>Student ID<input id="feeStudentId" placeholder="e.g. #101"></label>
+        </div>
+        <div class="form-row">
+          <label>Fee Type<select id="feeType"><option value="Tuition">Tuition</option><option value="Exam">Exam</option><option value="Library">Library</option><option value="Lab">Lab</option><option value="Transport">Transport</option><option value="Other">Other</option></select></label>
+          <label>Amount (BDT) <span>*</span><input id="feeAmount" required placeholder="e.g. 5000"></label>
+        </div>
+        <div class="form-row">
+          <label>Due Date<input id="feeDueDate" type="date"></label>
+          <label>Paid Date<input id="feePaidDate" type="date"></label>
+        </div>
+        <label>Status<select id="feeStatus"><option value="Unpaid">Unpaid</option><option value="Paid">Paid</option><option value="Partial">Partial</option></select></label>
+        <div class="form-error hidden" id="feeFormError"></div>
+        <div class="modal-actions"><button type="button" class="btn btn-outline" id="cancelFeeModal">Cancel</button><button type="submit" class="btn btn-primary" id="saveFeeBtn">Save Fee</button></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Library Modal -->
+  <div class="modal-backdrop hidden" id="libraryModal">
+    <div class="modal">
+      <div class="modal-head"><div><div class="eyebrow" id="libModalEyebrow">NEW RECORD</div><h2 id="libModalTitle">Add Book</h2></div><button class="icon-button" id="closeLibModal">×</button></div>
+      <form id="libraryForm">
+        <input type="hidden" id="bookId">
+        <label>Title <span>*</span><input id="bookTitle" required placeholder="Book title"></label>
+        <div class="form-row">
+          <label>Author <span>*</span><input id="bookAuthor" required placeholder="Author name"></label>
+          <label>ISBN<input id="bookIsbn" placeholder="e.g. 978-3-16..."></label>
+        </div>
+        <div class="form-row">
+          <label>Category<input id="bookCategory" placeholder="e.g. Computer Science"></label>
+          <label>Publisher<input id="bookPublisher" placeholder="Publisher name"></label>
+        </div>
+        <div class="form-row">
+          <label>Publish Year<input id="bookYear" placeholder="e.g. 2023"></label>
+          <label>Total Copies<input id="bookTotal" placeholder="e.g. 5"></label>
+        </div>
+        <div class="form-row">
+          <label>Available Copies<input id="bookAvailable" placeholder="e.g. 3"></label>
+          <label>Status<select id="bookStatus"><option value="Available">Available</option><option value="Out of Stock">Out of Stock</option></select></label>
+        </div>
+        <div class="form-error hidden" id="libFormError"></div>
+        <div class="modal-actions"><button type="button" class="btn btn-outline" id="cancelLibModal">Cancel</button><button type="submit" class="btn btn-primary" id="saveBookBtn">Save Book</button></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Job Modal -->
+  <div class="modal-backdrop hidden" id="jobModal">
+    <div class="modal">
+      <div class="modal-head"><div><div class="eyebrow" id="jobModalEyebrow">NEW POSTING</div><h2 id="jobModalTitle">Post Job</h2></div><button class="icon-button" id="closeJobModal">×</button></div>
+      <form id="jobForm">
+        <input type="hidden" id="jobId">
+        <label>Job Title <span>*</span><input id="jobTitle" required placeholder="e.g. Software Engineer"></label>
+        <div class="form-row">
+          <label>Company <span>*</span><input id="jobCompany" required placeholder="Company name"></label>
+          <label>Location<input id="jobLocation" placeholder="e.g. Dhaka, Bangladesh"></label>
+        </div>
+        <div class="form-row">
+          <label>Job Type<select id="jobType"><option value="Full-time">Full-time</option><option value="Part-time">Part-time</option><option value="Internship">Internship</option><option value="Contract">Contract</option></select></label>
+          <label>Salary<input id="jobSalary" placeholder="e.g. 30,000 BDT / month"></label>
+        </div>
+        <div class="form-row">
+          <label>Deadline<input id="jobDeadline" type="date"></label>
+          <label>Status<select id="jobStatus"><option value="Open">Open</option><option value="Closed">Closed</option></select></label>
+        </div>
+        <label>Description<textarea id="jobDescription" rows="3" placeholder="Job description, requirements..."></textarea></label>
+        <div class="form-error hidden" id="jobFormError"></div>
+        <div class="modal-actions"><button type="button" class="btn btn-outline" id="cancelJobModal">Cancel</button><button type="submit" class="btn btn-primary" id="saveJobBtn">Save Job</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast hidden" id="toast"></div>
+  <script src="/js/app.js"></script>
+</body>
+</html>
