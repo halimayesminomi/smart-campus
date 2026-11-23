@@ -137,6 +137,20 @@ function modalState(modalId, open) {
   if (el) el.classList.toggle('hidden', !open);
 }
 
+// Mobile Sidebar open/close
+function openSidebar() {
+  const sb = $('sidebar'), ov = $('sidebarOverlay');
+  if (sb) sb.classList.add('open');
+  if (ov) ov.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeSidebar() {
+  const sb = $('sidebar'), ov = $('sidebarOverlay');
+  if (sb) sb.classList.remove('open');
+  if (ov) ov.classList.remove('show');
+  document.body.style.overflow = '';
+}
+
 // Password Eye Toggle
 function togglePasswordVisibility(inputId, btn) {
   const inp = $(inputId);
@@ -174,10 +188,22 @@ function updateUniversityUI() {
 
   if ($('universitySelector')) $('universitySelector').value = currentUniversity;
   if ($('guestBarUni')) $('guestBarUni').textContent = `${uni.logo} ${currentUniversity} (${uni.city})`;
-  if ($('brandMarkBadge')) $('brandMarkBadge').textContent = uni.code;
+
+  // Brand mark — show logo emoji inside
+  if ($('brandLogoEmoji')) $('brandLogoEmoji').textContent = uni.logo;
+  if ($('brandMarkBadge')) $('brandMarkBadge').title = currentUniversity;
   if ($('brandRoleSubtitle')) $('brandRoleSubtitle').textContent = currentUniversity.toUpperCase();
+  if ($('brandMainName')) $('brandMainName').textContent = 'SmartCampus';
+
+  // Sidebar campus card logo
+  if ($('campusOrbEmoji')) $('campusOrbEmoji').textContent = uni.logo;
   if ($('sidebarCardTitle')) $('sidebarCardTitle').textContent = `${uni.logo} ${currentUniversity}`;
   if ($('sidebarCardDesc')) $('sidebarCardDesc').textContent = `${uni.campus}. Smart Academic & Research Suite.`;
+
+  // Topbar uni icon
+  if ($('topbarUniIcon')) $('topbarUniIcon').textContent = uni.logo;
+
+  // Auth modal
   if ($('authModalUniTitle')) $('authModalUniTitle').textContent = `${uni.logo} ${uni.code} Smart Campus`;
   if ($('uniNoticeEyebrow')) $('uniNoticeEyebrow').textContent = currentUniversity.toUpperCase();
 

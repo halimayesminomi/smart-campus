@@ -135,34 +135,40 @@
   </div>
 
   <!-- ================= MAIN APP SHELL ================= -->
+  <!-- Mobile sidebar overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
   <div class="app-shell" id="appShell">
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
       <a class="brand" href="/">
-        <span class="brand-mark" id="brandMarkBadge">MU</span>
+        <!-- MU Logo Badge — changes per university -->
+        <span class="brand-mark" id="brandMarkBadge" title="Metropolitan University">
+          <span id="brandLogoEmoji" style="font-size:19px;line-height:1">🏛️</span>
+        </span>
         <div>
-          <b id="brandMainName">smartcampus</b>
+          <b id="brandMainName">SmartCampus</b>
           <small id="brandRoleSubtitle">METROPOLITAN UNIVERSITY</small>
         </div>
       </a>
 
       <div class="nav-label" id="navWorkspaceLabel">CAMPUS WORKSPACE</div>
       <nav class="nav">
-        <a class="nav-item active" href="#dashboard" data-page="dashboard"><span class="nav-icon">▦</span> Overview</a>
-        <a class="nav-item" href="#courses" data-page="courses"><span class="nav-icon">▤</span> Courses <span class="nav-count" id="navCourseCount">0</span></a>
-        <a class="nav-item" href="#jobs" data-page="jobs"><span class="nav-icon">⚑</span> Jobs &amp; Careers <span class="nav-count" id="navJobCount">0</span></a>
-        <a class="nav-item" href="#library" data-page="library"><span class="nav-icon">▣</span> Library Catalog <span class="nav-count" id="navLibraryCount">0</span></a>
-        <a class="nav-item" href="#teachers" data-page="teachers"><span class="nav-icon">♧</span> Faculty Directory <span class="nav-count" id="navTeacherCount">0</span></a>
-        <a class="nav-item user-or-admin-only" href="#students" data-page="students"><span class="nav-icon">♙</span> Students <span class="nav-count" id="navStudentCount">0</span></a>
-        <a class="nav-item user-or-admin-only" href="#attendance" data-page="attendance"><span class="nav-icon">◷</span> Attendance <span class="nav-count" id="navAttendanceCount">0</span></a>
-        <a class="nav-item user-or-admin-only" href="#exams" data-page="exams"><span class="nav-icon">✎</span> Exams &amp; Results <span class="nav-count" id="navExamCount">0</span></a>
-        <a class="nav-item user-or-admin-only" href="#fees" data-page="fees"><span class="nav-icon">৳</span> Fees &amp; Tuition <span class="nav-count" id="navFeeCount">0</span></a>
-        <a class="nav-item admin-only" href="#users" data-page="users"><span class="nav-icon">⚙</span> Control Panel Users</a>
+        <a class="nav-item active" href="#dashboard" data-page="dashboard" onclick="closeSidebar()"><span class="nav-icon">▦</span> Overview</a>
+        <a class="nav-item" href="#courses" data-page="courses" onclick="closeSidebar()"><span class="nav-icon">▤</span> Courses <span class="nav-count" id="navCourseCount">0</span></a>
+        <a class="nav-item" href="#jobs" data-page="jobs" onclick="closeSidebar()"><span class="nav-icon">⚑</span> Jobs &amp; Careers <span class="nav-count" id="navJobCount">0</span></a>
+        <a class="nav-item" href="#library" data-page="library" onclick="closeSidebar()"><span class="nav-icon">▣</span> Library Catalog <span class="nav-count" id="navLibraryCount">0</span></a>
+        <a class="nav-item" href="#teachers" data-page="teachers" onclick="closeSidebar()"><span class="nav-icon">♧</span> Faculty Directory <span class="nav-count" id="navTeacherCount">0</span></a>
+        <a class="nav-item user-or-admin-only" href="#students" data-page="students" onclick="closeSidebar()"><span class="nav-icon">♙</span> Students <span class="nav-count" id="navStudentCount">0</span></a>
+        <a class="nav-item user-or-admin-only" href="#attendance" data-page="attendance" onclick="closeSidebar()"><span class="nav-icon">◷</span> Attendance <span class="nav-count" id="navAttendanceCount">0</span></a>
+        <a class="nav-item user-or-admin-only" href="#exams" data-page="exams" onclick="closeSidebar()"><span class="nav-icon">✎</span> Exams &amp; Results <span class="nav-count" id="navExamCount">0</span></a>
+        <a class="nav-item user-or-admin-only" href="#fees" data-page="fees" onclick="closeSidebar()"><span class="nav-icon">৳</span> Fees &amp; Tuition <span class="nav-count" id="navFeeCount">0</span></a>
+        <a class="nav-item admin-only" href="#users" data-page="users" onclick="closeSidebar()"><span class="nav-icon">⚙</span> Control Panel Users</a>
       </nav>
 
       <div class="sidebar-bottom">
         <div class="campus-card">
-          <div class="campus-orb">🏛️</div>
+          <div class="campus-orb" id="campusOrbEmoji">🏛️</div>
           <b id="sidebarCardTitle">Metropolitan University</b>
           <p id="sidebarCardDesc">Bateshwar, Sylhet, Bangladesh. Academic &amp; Research Workspace.</p>
         </div>
@@ -180,11 +186,11 @@
     <!-- Main Content Area -->
     <main class="main">
       <header class="topbar">
-        <button class="mobile-menu" id="mobileMenu" aria-label="Open menu">☰</button>
+        <button class="mobile-menu" id="mobileMenu" onclick="openSidebar()" aria-label="Open menu">☰</button>
         
         <!-- University Selector in Topbar -->
         <div class="uni-switcher">
-          <span class="uni-icon">🏛️</span>
+          <span class="uni-icon" id="topbarUniIcon">🏛️</span>
           <select id="universitySelector" onchange="onUniversityChange(this.value)" title="Choose University in Bangladesh">
             <option value="Metropolitan University" selected>Metropolitan University (Sylhet)</option>
             <option value="Shahjalal University of Science and Technology">Shahjalal Univ of Science &amp; Tech (SUST)</option>
