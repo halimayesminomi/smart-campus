@@ -11,59 +11,446 @@
   --uni-brand-from:#a394ff;--uni-brand-to:#6855ec;
 }
 
-/* ── Per-University CSS Themes ───────────────────────── */
-/* Metropolitan University — Signature Red-Orange Fire */
+/* ═══════════════════════════════════════════════════════
+   PER-UNIVERSITY THEMES — Each unique color identity
+   ═══════════════════════════════════════════════════════ */
+
+/* ───────────────────────────────────────────────────────
+   🏛️ METROPOLITAN UNIVERSITY — White + Reddish Orange
+   Official colors: Red-Orange & White
+   ─────────────────────────────────────────────────────── */
 body.uni-MU{
-  --uni-primary:#ff4500;--uni-primary2:#cc2200;
-  --uni-accent:#ff8c42;--uni-glow:#ff450033;
-  --uni-topbar:#1a0800;--uni-sidebar:#1c0900;
-  --uni-brand-from:#ff7043;--uni-brand-to:#cc2200;
-  --bg:#100500;--surface:#1c0c05;--surface2:#221008;--line:#3d1a0a;
+  --uni-primary:#ff3d00;--uni-primary2:#bf2600;
+  --uni-accent:#ffffff;--uni-glow:#ff3d0040;
+  --uni-topbar:#1f0500;--uni-sidebar:#1a0400;
+  --uni-brand-from:#ff6d3d;--uni-brand-to:#bf2600;
+  --bg:#0f0200;--surface:#1c0601;--surface2:#220804;--line:#42150a;
 }
-body.uni-MU .sidebar{background:linear-gradient(180deg,#1c0900,#150500)!important;border-right:1px solid #3d1a0a!important}
-body.uni-MU .topbar{background:linear-gradient(90deg,#1a0800,#120600)!important;border-bottom:1px solid #3d1a0a!important}
-body.uni-MU .stat-card,body.uni-MU .panel{background:#1c0c05;border-color:#3d1a0a}
-body.uni-MU .campus-card{background:linear-gradient(145deg,#2a0e06,#1a0800);border-color:#4a1f10}
-body.uni-MU .note-panel{background:linear-gradient(120deg,#20090302,#1e140302)}
-body.uni-MU .nav-item:hover{background:#2e0f06}
-body.uni-MU .search-box{background:#160700;border-color:#3c1508}
-body.uni-MU .modal{background:#1a0a04;border-color:#3d1a0a}
-body.uni-MU table td{border-color:#2e1208}
-body.uni-MU table th{border-color:#3d1a0a}
-body.uni-MU tbody tr:hover{background:#21100508}
-/* MU Logo glow */
-body.uni-MU .brand-mark{box-shadow:0 7px 28px #ff450055!important}
-body.uni-MU .btn-primary{box-shadow:0 6px 20px #ff450044!important}
-/* SUST — Green Science */
-body.uni-SUST{--uni-primary:#22c55e;--uni-primary2:#16a34a;--uni-accent:#4ade80;--uni-glow:#22c55e33;--uni-topbar:#081808;--uni-sidebar:#091a09;--uni-brand-from:#4ade80;--uni-brand-to:#16a34a}
-/* University of Dhaka — Royal Blue */
-body.uni-DU{--uni-primary:#3b82f6;--uni-primary2:#1d4ed8;--uni-accent:#60a5fa;--uni-glow:#3b82f633;--uni-topbar:#050e1e;--uni-sidebar:#06101f;--uni-brand-from:#93c5fd;--uni-brand-to:#1d4ed8}
-/* BUET — Steel Blue & Orange */
-body.uni-BUET{--uni-primary:#f97316;--uni-primary2:#ea580c;--uni-accent:#fb923c;--uni-glow:#f9731633;--uni-topbar:#1a0d05;--uni-sidebar:#1c0e07;--uni-brand-from:#fdba74;--uni-brand-to:#ea580c}
-/* Leading University — Crimson Red */
-body.uni-LU{--uni-primary:#ef4444;--uni-primary2:#b91c1c;--uni-accent:#fca5a5;--uni-glow:#ef444433;--uni-topbar:#1a0505;--uni-sidebar:#1c0606;--uni-brand-from:#fca5a5;--uni-brand-to:#b91c1c}
-/* SAU — Earth Green */
-body.uni-SAU{--uni-primary:#84cc16;--uni-primary2:#65a30d;--uni-accent:#a3e635;--uni-glow:#84cc1633;--uni-topbar:#0a1402;--uni-sidebar:#0b1503;--uni-brand-from:#bef264;--uni-brand-to:#65a30d}
-/* NSU — Maroon & Gold */
-body.uni-NSU{--uni-primary:#d97706;--uni-primary2:#b45309;--uni-accent:#fbbf24;--uni-glow:#d9770633;--uni-topbar:#1a1005;--uni-sidebar:#1c1106;--uni-brand-from:#fde68a;--uni-brand-to:#b45309}
-/* BRAC University — Orange Red */
-body.uni-BRACU{--uni-primary:#f43f5e;--uni-primary2:#be123c;--uni-accent:#fb7185;--uni-glow:#f43f5e33;--uni-topbar:#1a050c;--uni-sidebar:#1c060e;--uni-brand-from:#fda4af;--uni-brand-to:#be123c}
-/* AIUB — Deep Navy & Cyan */
-body.uni-AIUB{--uni-primary:#06b6d4;--uni-primary2:#0891b2;--uni-accent:#22d3ee;--uni-glow:#06b6d433;--uni-topbar:#02121a;--uni-sidebar:#02131c;--uni-brand-from:#67e8f9;--uni-brand-to:#0891b2}
-/* CUET — Teal Engineering */
-body.uni-CUET{--uni-primary:#14b8a6;--uni-primary2:#0f766e;--uni-accent:#2dd4bf;--uni-glow:#14b8a633;--uni-topbar:#021512;--uni-sidebar:#021614;--uni-brand-from:#5eead4;--uni-brand-to:#0f766e}
-/* Rajshahi University — Sapphire */
-body.uni-RU{--uni-primary:#6366f1;--uni-primary2:#4f46e5;--uni-accent:#818cf8;--uni-glow:#6366f133;--uni-topbar:#08081e;--uni-sidebar:#09091f;--uni-brand-from:#a5b4fc;--uni-brand-to:#4f46e5}
-/* KUET — Dark Gold */
-body.uni-KUET{--uni-primary:#eab308;--uni-primary2:#ca8a04;--uni-accent:#facc15;--uni-glow:#eab30833;--uni-topbar:#1a1600;--uni-sidebar:#1c1700;--uni-brand-from:#fef08a;--uni-brand-to:#ca8a04}
-/* JU — Lavender */
-body.uni-JU{--uni-primary:#a855f7;--uni-primary2:#7e22ce;--uni-accent:#c084fc;--uni-glow:#a855f733;--uni-topbar:#0f0520;--uni-sidebar:#100622;--uni-brand-from:#d8b4fe;--uni-brand-to:#7e22ce}
-/* East West — Sky Blue */
-body.uni-EWU{--uni-primary:#0ea5e9;--uni-primary2:#0369a1;--uni-accent:#38bdf8;--uni-glow:#0ea5e933;--uni-topbar:#02121c;--uni-sidebar:#02131e;--uni-brand-from:#7dd3fc;--uni-brand-to:#0369a1}
-/* UIU — Rose Gold */
-body.uni-UIU{--uni-primary:#ec4899;--uni-primary2:#be185d;--uni-accent:#f9a8d4;--uni-glow:#ec489933;--uni-topbar:#1a0514;--uni-sidebar:#1c0615;--uni-brand-from:#fbcfe8;--uni-brand-to:#be185d}
-/* DIU — Vibrant Green */
-body.uni-DIU{--uni-primary:#10b981;--uni-primary2:#059669;--uni-accent:#34d399;--uni-glow:#10b98133;--uni-topbar:#021811;--uni-sidebar:#021913;--uni-brand-from:#6ee7b7;--uni-brand-to:#059669}
+body.uni-MU .sidebar{
+  background:linear-gradient(180deg,#1a0400 0%,#0f0200 100%)!important;
+  border-right:1px solid #42150a!important;
+}
+body.uni-MU .topbar{
+  background:linear-gradient(90deg,#1f0500,#160300)!important;
+  border-bottom:1px solid #42150a!important;
+}
+body.uni-MU .stat-card,body.uni-MU .panel{background:#1c0601;border-color:#42150a}
+body.uni-MU .campus-card{background:linear-gradient(145deg,#2b0a03,#1c0400);border-color:#541a0d}
+body.uni-MU .nav-item:hover{background:#2a0a03;color:#ff9070!important}
+body.uni-MU .search-box{background:#170400;border-color:#3d1308}
+body.uni-MU .modal{background:#1a0601;border-color:#42150a}
+body.uni-MU table td{border-color:#2e0e06}
+body.uni-MU table th{border-color:#3d1308;color:#ff7a5c}
+body.uni-MU tbody tr:hover{background:#220a0405}
+body.uni-MU .brand-mark{box-shadow:0 8px 32px #ff3d0060!important}
+body.uni-MU .btn-primary{
+  background:linear-gradient(135deg,#ff5c33,#cc2200)!important;
+  box-shadow:0 6px 22px #ff3d0050!important;
+}
+/* White accent highlights for MU */
+body.uni-MU .page-heading h1{color:#fff!important}
+body.uni-MU .stat-value{color:#fff!important}
+body.uni-MU .nav-item.active{
+  background:linear-gradient(90deg,#3d1200,#1a0400)!important;
+  color:#ff7a5c!important;
+  box-shadow:inset 3px 0 #ff3d00!important;
+  border-radius:8px!important;
+}
+body.uni-MU .role-pill.admin{background:linear-gradient(135deg,#4a1200,#2a0800);color:#ff9070;border:1px solid #7a2200}
+body.uni-MU .guest-bar{background:linear-gradient(90deg,#1f0500,#260a02)!important;border-color:#42150a!important}
+
+
+/* ───────────────────────────────────────────────────────
+   🔬 SUST — Deep Forest Green + Gold
+   Official: Green & White
+   ─────────────────────────────────────────────────────── */
+body.uni-SUST{
+  --uni-primary:#16a34a;--uni-primary2:#15803d;
+  --uni-accent:#fbbf24;--uni-glow:#16a34a40;
+  --uni-topbar:#011f0d;--uni-sidebar:#011a0b;
+  --uni-brand-from:#22c55e;--uni-brand-to:#15803d;
+  --bg:#010f06;--surface:#041a0d;--surface2:#062010;--line:#0d3b1e;
+}
+body.uni-SUST .sidebar{background:linear-gradient(180deg,#011a0b,#010c05)!important;border-right:1px solid #0d3b1e!important}
+body.uni-SUST .topbar{background:linear-gradient(90deg,#011f0d,#010e07)!important;border-bottom:1px solid #0d3b1e!important}
+body.uni-SUST .stat-card,body.uni-SUST .panel{background:#041a0d;border-color:#0d3b1e}
+body.uni-SUST .campus-card{background:linear-gradient(145deg,#062416,#011508);border-color:#134d28}
+body.uni-SUST .nav-item:hover{background:#082b13;color:#4ade80!important}
+body.uni-SUST .search-box{background:#021408;border-color:#0d3b1e}
+body.uni-SUST .modal{background:#041a0d;border-color:#0d3b1e}
+body.uni-SUST table td{border-color:#0a2e17}
+body.uni-SUST table th{border-color:#0d3b1e;color:#4ade80}
+body.uni-SUST tbody tr:hover{background:#06231005}
+body.uni-SUST .brand-mark{box-shadow:0 8px 32px #16a34a60!important}
+body.uni-SUST .nav-item.active{background:#0a3018!important;color:#4ade80!important;box-shadow:inset 3px 0 #16a34a!important;border-radius:8px!important}
+body.uni-SUST .stat-value{color:#4ade80!important}
+
+
+/* ───────────────────────────────────────────────────────
+   🎓 UNIVERSITY OF DHAKA — Royal Blue + Gold
+   Official: Blue & White
+   ─────────────────────────────────────────────────────── */
+body.uni-DU{
+  --uni-primary:#1d4ed8;--uni-primary2:#1e3a8a;
+  --uni-accent:#fbbf24;--uni-glow:#1d4ed840;
+  --uni-topbar:#020b1f;--uni-sidebar:#020917;
+  --uni-brand-from:#3b82f6;--uni-brand-to:#1e3a8a;
+  --bg:#010512;--surface:#060f25;--surface2:#08132e;--line:#152040;
+}
+body.uni-DU .sidebar{background:linear-gradient(180deg,#020917,#010510)!important;border-right:1px solid #152040!important}
+body.uni-DU .topbar{background:linear-gradient(90deg,#020b1f,#010614)!important;border-bottom:1px solid #152040!important}
+body.uni-DU .stat-card,body.uni-DU .panel{background:#060f25;border-color:#152040}
+body.uni-DU .campus-card{background:linear-gradient(145deg,#0a1636,#040c20);border-color:#1a2d55}
+body.uni-DU .nav-item:hover{background:#0c1a40;color:#93c5fd!important}
+body.uni-DU .search-box{background:#040c22;border-color:#152040}
+body.uni-DU .modal{background:#060f25;border-color:#152040}
+body.uni-DU table td{border-color:#101d3e}
+body.uni-DU table th{border-color:#152040;color:#93c5fd}
+body.uni-DU tbody tr:hover{background:#0a152e05}
+body.uni-DU .brand-mark{box-shadow:0 8px 32px #1d4ed860!important}
+body.uni-DU .nav-item.active{background:#0d1e48!important;color:#93c5fd!important;box-shadow:inset 3px 0 #3b82f6!important;border-radius:8px!important}
+body.uni-DU .stat-value{color:#93c5fd!important}
+/* Gold accent for DU */
+body.uni-DU .btn-primary{background:linear-gradient(135deg,#2563eb,#1e3a8a)!important}
+body.uni-DU .eyebrow,.uni-DU .nav-label{color:#fbbf24!important}
+
+
+/* ───────────────────────────────────────────────────────
+   ⚙️ BUET — Navy Blue + Bright Orange
+   Official: Blue & Orange
+   ─────────────────────────────────────────────────────── */
+body.uni-BUET{
+  --uni-primary:#ea580c;--uni-primary2:#c2410c;
+  --uni-accent:#60a5fa;--uni-glow:#ea580c40;
+  --uni-topbar:#0d0601;--uni-sidebar:#0a0500;
+  --uni-brand-from:#fb923c;--uni-brand-to:#c2410c;
+  --bg:#08030000;--surface:#140800;--surface2:#1a0c02;--line:#352008;
+}
+body.uni-BUET .sidebar{background:linear-gradient(180deg,#120700,#0a0300)!important;border-right:1px solid #352008!important}
+body.uni-BUET .topbar{background:linear-gradient(90deg,#0f0600,#090300)!important;border-bottom:1px solid #352008!important}
+body.uni-BUET .stat-card,body.uni-BUET .panel{background:#140800;border-color:#352008}
+body.uni-BUET .campus-card{background:linear-gradient(145deg,#201003,#140600);border-color:#451f06}
+body.uni-BUET .nav-item:hover{background:#231000;color:#fb923c!important}
+body.uni-BUET .search-box{background:#110600;border-color:#352008}
+body.uni-BUET .modal{background:#140800;border-color:#352008}
+body.uni-BUET table td{border-color:#2a1506}
+body.uni-BUET table th{border-color:#352008;color:#fb923c}
+body.uni-BUET tbody tr:hover{background:#1c0d0405}
+body.uni-BUET .brand-mark{box-shadow:0 8px 32px #ea580c60!important}
+body.uni-BUET .nav-item.active{background:#2a1200!important;color:#fb923c!important;box-shadow:inset 3px 0 #ea580c!important;border-radius:8px!important}
+body.uni-BUET .stat-value{color:#fb923c!important}
+
+
+/* ───────────────────────────────────────────────────────
+   🚀 LEADING UNIVERSITY — Deep Maroon + Silver White
+   Official: Maroon & White
+   ─────────────────────────────────────────────────────── */
+body.uni-LU{
+  --uni-primary:#9f1239;--uni-primary2:#881337;
+  --uni-accent:#e2e8f0;--uni-glow:#9f123940;
+  --uni-topbar:#1a0208;--uni-sidebar:#160207;
+  --uni-brand-from:#fb7185;--uni-brand-to:#9f1239;
+  --bg:#0d0105;--surface:#1c0509;--surface2:#22060c;--line:#3d0d18;
+}
+body.uni-LU .sidebar{background:linear-gradient(180deg,#160207,#0d0104)!important;border-right:1px solid #3d0d18!important}
+body.uni-LU .topbar{background:linear-gradient(90deg,#1a0208,#110106)!important;border-bottom:1px solid #3d0d18!important}
+body.uni-LU .stat-card,body.uni-LU .panel{background:#1c0509;border-color:#3d0d18}
+body.uni-LU .campus-card{background:linear-gradient(145deg,#280810,#1a0407);border-color:#4e1020}
+body.uni-LU .nav-item:hover{background:#270810;color:#fda4af!important}
+body.uni-LU .search-box{background:#160407;border-color:#3d0d18}
+body.uni-LU .modal{background:#1c0509;border-color:#3d0d18}
+body.uni-LU table td{border-color:#2e0a13}
+body.uni-LU table th{border-color:#3d0d18;color:#fb7185}
+body.uni-LU tbody tr:hover{background:#22060c05}
+body.uni-LU .brand-mark{box-shadow:0 8px 32px #9f123960!important}
+body.uni-LU .nav-item.active{background:#2e0a15!important;color:#fda4af!important;box-shadow:inset 3px 0 #9f1239!important;border-radius:8px!important}
+body.uni-LU .stat-value{color:#fda4af!important}
+
+
+/* ───────────────────────────────────────────────────────
+   🌿 SAU — Olive Green + Earthy Brown
+   Official: Green & Brown
+   ─────────────────────────────────────────────────────── */
+body.uni-SAU{
+  --uni-primary:#65a30d;--uni-primary2:#4d7c0f;
+  --uni-accent:#d97706;--uni-glow:#65a30d40;
+  --uni-topbar:#0a1300;--uni-sidebar:#081000;
+  --uni-brand-from:#a3e635;--uni-brand-to:#4d7c0f;
+  --bg:#050c00;--surface:#0e1a04;--surface2:#111f06;--line:#1f3c0a;
+}
+body.uni-SAU .sidebar{background:linear-gradient(180deg,#081000,#050900)!important;border-right:1px solid #1f3c0a!important}
+body.uni-SAU .topbar{background:linear-gradient(90deg,#0a1300,#060b00)!important;border-bottom:1px solid #1f3c0a!important}
+body.uni-SAU .stat-card,body.uni-SAU .panel{background:#0e1a04;border-color:#1f3c0a}
+body.uni-SAU .campus-card{background:linear-gradient(145deg,#152506,#0c1803);border-color:#2a4e0d}
+body.uni-SAU .nav-item:hover{background:#172707;color:#a3e635!important}
+body.uni-SAU .search-box{background:#0c1703;border-color:#1f3c0a}
+body.uni-SAU .modal{background:#0e1a04;border-color:#1f3c0a}
+body.uni-SAU table td{border-color:#172e09}
+body.uni-SAU table th{border-color:#1f3c0a;color:#a3e635}
+body.uni-SAU tbody tr:hover{background:#112005}
+body.uni-SAU .brand-mark{box-shadow:0 8px 32px #65a30d60!important}
+body.uni-SAU .nav-item.active{background:#17280a!important;color:#a3e635!important;box-shadow:inset 3px 0 #65a30d!important;border-radius:8px!important}
+body.uni-SAU .stat-value{color:#a3e635!important}
+
+
+/* ───────────────────────────────────────────────────────
+   🌐 NSU — Deep Navy + Bright Gold
+   Official: Navy & Gold
+   ─────────────────────────────────────────────────────── */
+body.uni-NSU{
+  --uni-primary:#b45309;--uni-primary2:#92400e;
+  --uni-accent:#fde68a;--uni-glow:#b4530940;
+  --uni-topbar:#14090000;--uni-sidebar:#0f0700;
+  --uni-brand-from:#fbbf24;--uni-brand-to:#92400e;
+  --bg:#0a0500;--surface:#160c00;--surface2:#1c1100;--line:#332200;
+}
+body.uni-NSU .sidebar{background:linear-gradient(180deg,#0f0700,#090500)!important;border-right:1px solid #332200!important}
+body.uni-NSU .topbar{background:linear-gradient(90deg,#140900,#0b0600)!important;border-bottom:1px solid #332200!important}
+body.uni-NSU .stat-card,body.uni-NSU .panel{background:#160c00;border-color:#332200}
+body.uni-NSU .campus-card{background:linear-gradient(145deg,#201400,#160b00);border-color:#422c00}
+body.uni-NSU .nav-item:hover{background:#231600;color:#fbbf24!important}
+body.uni-NSU .search-box{background:#130a00;border-color:#332200}
+body.uni-NSU .modal{background:#160c00;border-color:#332200}
+body.uni-NSU table td{border-color:#281b00}
+body.uni-NSU table th{border-color:#332200;color:#fbbf24}
+body.uni-NSU tbody tr:hover{background:#1c1100}
+body.uni-NSU .brand-mark{box-shadow:0 8px 32px #b4530960!important}
+body.uni-NSU .nav-item.active{background:#281a00!important;color:#fbbf24!important;box-shadow:inset 3px 0 #b45309!important;border-radius:8px!important}
+body.uni-NSU .stat-value{color:#fde68a!important}
+
+
+/* ───────────────────────────────────────────────────────
+   🤝 BRAC UNIVERSITY — Coral Red + Warm White
+   Official: Red & White
+   ─────────────────────────────────────────────────────── */
+body.uni-BRACU{
+  --uni-primary:#e11d48;--uni-primary2:#be123c;
+  --uni-accent:#fda4af;--uni-glow:#e11d4840;
+  --uni-topbar:#1a0209;--uni-sidebar:#160108;
+  --uni-brand-from:#fb7185;--uni-brand-to:#be123c;
+  --bg:#0e0105;--surface:#1e050c;--surface2:#240610;--line:#420a1a;
+}
+body.uni-BRACU .sidebar{background:linear-gradient(180deg,#160108,#0e0105)!important;border-right:1px solid #420a1a!important}
+body.uni-BRACU .topbar{background:linear-gradient(90deg,#1a0209,#110106)!important;border-bottom:1px solid #420a1a!important}
+body.uni-BRACU .stat-card,body.uni-BRACU .panel{background:#1e050c;border-color:#420a1a}
+body.uni-BRACU .campus-card{background:linear-gradient(145deg,#2a0810,#1c0509);border-color:#541020}
+body.uni-BRACU .nav-item:hover{background:#2a0810;color:#fda4af!important}
+body.uni-BRACU .search-box{background:#190408;border-color:#420a1a}
+body.uni-BRACU .modal{background:#1e050c;border-color:#420a1a}
+body.uni-BRACU table td{border-color:#330815}
+body.uni-BRACU table th{border-color:#420a1a;color:#fb7185}
+body.uni-BRACU tbody tr:hover{background:#24061005}
+body.uni-BRACU .brand-mark{box-shadow:0 8px 32px #e11d4860!important}
+body.uni-BRACU .nav-item.active{background:#300918!important;color:#fda4af!important;box-shadow:inset 3px 0 #e11d48!important;border-radius:8px!important}
+body.uni-BRACU .stat-value{color:#fda4af!important}
+
+
+/* ───────────────────────────────────────────────────────
+   🌊 AIUB — Electric Blue + Bright Cyan
+   Official: Blue & White
+   ─────────────────────────────────────────────────────── */
+body.uni-AIUB{
+  --uni-primary:#0284c7;--uni-primary2:#0369a1;
+  --uni-accent:#38bdf8;--uni-glow:#0284c740;
+  --uni-topbar:#020f1c;--uni-sidebar:#010c18;
+  --uni-brand-from:#38bdf8;--uni-brand-to:#0369a1;
+  --bg:#010814;--surface:#04121f;--surface2:#061728;--line:#0e2a40;
+}
+body.uni-AIUB .sidebar{background:linear-gradient(180deg,#010c18,#010710)!important;border-right:1px solid #0e2a40!important}
+body.uni-AIUB .topbar{background:linear-gradient(90deg,#020f1c,#010a14)!important;border-bottom:1px solid #0e2a40!important}
+body.uni-AIUB .stat-card,body.uni-AIUB .panel{background:#04121f;border-color:#0e2a40}
+body.uni-AIUB .campus-card{background:linear-gradient(145deg,#071a2e,#040f1e);border-color:#12354f}
+body.uni-AIUB .nav-item:hover{background:#081a30;color:#38bdf8!important}
+body.uni-AIUB .search-box{background:#030f1a;border-color:#0e2a40}
+body.uni-AIUB .modal{background:#04121f;border-color:#0e2a40}
+body.uni-AIUB table td{border-color:#0b2235}
+body.uni-AIUB table th{border-color:#0e2a40;color:#38bdf8}
+body.uni-AIUB tbody tr:hover{background:#07182805}
+body.uni-AIUB .brand-mark{box-shadow:0 8px 32px #0284c760!important}
+body.uni-AIUB .nav-item.active{background:#082235!important;color:#38bdf8!important;box-shadow:inset 3px 0 #0284c7!important;border-radius:8px!important}
+body.uni-AIUB .stat-value{color:#38bdf8!important}
+
+
+/* ───────────────────────────────────────────────────────
+   🔧 CUET — Engineering Teal + Steel Gray
+   Official: Teal & White
+   ─────────────────────────────────────────────────────── */
+body.uni-CUET{
+  --uni-primary:#0f766e;--uni-primary2:#115e59;
+  --uni-accent:#2dd4bf;--uni-glow:#0f766e40;
+  --uni-topbar:#020f0e;--uni-sidebar:#020c0b;
+  --uni-brand-from:#2dd4bf;--uni-brand-to:#115e59;
+  --bg:#010908;--surface:#041512;--surface2:#061a17;--line:#0c3330;
+}
+body.uni-CUET .sidebar{background:linear-gradient(180deg,#020c0b,#010706)!important;border-right:1px solid #0c3330!important}
+body.uni-CUET .topbar{background:linear-gradient(90deg,#020f0e,#010a09)!important;border-bottom:1px solid #0c3330!important}
+body.uni-CUET .stat-card,body.uni-CUET .panel{background:#041512;border-color:#0c3330}
+body.uni-CUET .campus-card{background:linear-gradient(145deg,#071e1c,#041310);border-color:#0f403d}
+body.uni-CUET .nav-item:hover{background:#082220;color:#2dd4bf!important}
+body.uni-CUET .search-box{background:#031210;border-color:#0c3330}
+body.uni-CUET .modal{background:#041512;border-color:#0c3330}
+body.uni-CUET table td{border-color:#0a2927}
+body.uni-CUET table th{border-color:#0c3330;color:#2dd4bf}
+body.uni-CUET tbody tr:hover{background:#07201e05}
+body.uni-CUET .brand-mark{box-shadow:0 8px 32px #0f766e60!important}
+body.uni-CUET .nav-item.active{background:#0a2a28!important;color:#2dd4bf!important;box-shadow:inset 3px 0 #0f766e!important;border-radius:8px!important}
+body.uni-CUET .stat-value{color:#2dd4bf!important}
+
+
+/* ───────────────────────────────────────────────────────
+   💎 RAJSHAHI UNIVERSITY — Deep Indigo + Violet
+   Official: Blue & White
+   ─────────────────────────────────────────────────────── */
+body.uni-RU{
+  --uni-primary:#4f46e5;--uni-primary2:#3730a3;
+  --uni-accent:#a5b4fc;--uni-glow:#4f46e540;
+  --uni-topbar:#06061a;--uni-sidebar:#050516;
+  --uni-brand-from:#818cf8;--uni-brand-to:#3730a3;
+  --bg:#030312;--surface:#08091e;--surface2:#0b0d25;--line:#181a3f;
+}
+body.uni-RU .sidebar{background:linear-gradient(180deg,#050516,#030310)!important;border-right:1px solid #181a3f!important}
+body.uni-RU .topbar{background:linear-gradient(90deg,#06061a,#040413)!important;border-bottom:1px solid #181a3f!important}
+body.uni-RU .stat-card,body.uni-RU .panel{background:#08091e;border-color:#181a3f}
+body.uni-RU .campus-card{background:linear-gradient(145deg,#0d0f2e,#070827);border-color:#1f2250}
+body.uni-RU .nav-item:hover{background:#0e1035;color:#a5b4fc!important}
+body.uni-RU .search-box{background:#070822;border-color:#181a3f}
+body.uni-RU .modal{background:#08091e;border-color:#181a3f}
+body.uni-RU table td{border-color:#121435}
+body.uni-RU table th{border-color:#181a3f;color:#818cf8}
+body.uni-RU tbody tr:hover{background:#0d0f2805}
+body.uni-RU .brand-mark{box-shadow:0 8px 32px #4f46e560!important}
+body.uni-RU .nav-item.active{background:#101340!important;color:#a5b4fc!important;box-shadow:inset 3px 0 #4f46e5!important;border-radius:8px!important}
+body.uni-RU .stat-value{color:#a5b4fc!important}
+
+
+/* ───────────────────────────────────────────────────────
+   ⚡ KUET — Deep Black + Bright Golden Yellow
+   Official: Gold & Black
+   ─────────────────────────────────────────────────────── */
+body.uni-KUET{
+  --uni-primary:#ca8a04;--uni-primary2:#a16207;
+  --uni-accent:#fde047;--uni-glow:#ca8a0440;
+  --uni-topbar:#120e00;--uni-sidebar:#0f0c00;
+  --uni-brand-from:#fde047;--uni-brand-to:#a16207;
+  --bg:#090700;--surface:#181200;--surface2:#1f1800;--line:#3a2c00;
+}
+body.uni-KUET .sidebar{background:linear-gradient(180deg,#0f0c00,#090700)!important;border-right:1px solid #3a2c00!important}
+body.uni-KUET .topbar{background:linear-gradient(90deg,#120e00,#0b0900)!important;border-bottom:1px solid #3a2c00!important}
+body.uni-KUET .stat-card,body.uni-KUET .panel{background:#181200;border-color:#3a2c00}
+body.uni-KUET .campus-card{background:linear-gradient(145deg,#231a00,#180f00);border-color:#4c3800}
+body.uni-KUET .nav-item:hover{background:#271e00;color:#fde047!important}
+body.uni-KUET .search-box{background:#160f00;border-color:#3a2c00}
+body.uni-KUET .modal{background:#181200;border-color:#3a2c00}
+body.uni-KUET table td{border-color:#2e2200}
+body.uni-KUET table th{border-color:#3a2c00;color:#fde047}
+body.uni-KUET tbody tr:hover{background:#1f180005}
+body.uni-KUET .brand-mark{box-shadow:0 8px 32px #ca8a0460!important}
+body.uni-KUET .nav-item.active{background:#281e00!important;color:#fde047!important;box-shadow:inset 3px 0 #ca8a04!important;border-radius:8px!important}
+body.uni-KUET .stat-value{color:#fde047!important}
+
+
+/* ───────────────────────────────────────────────────────
+   🌸 JAHANGIRNAGAR UNIVERSITY — Lush Purple + Pink
+   Official: Green & White
+   ─────────────────────────────────────────────────────── */
+body.uni-JU{
+  --uni-primary:#7c3aed;--uni-primary2:#6d28d9;
+  --uni-accent:#f0abfc;--uni-glow:#7c3aed40;
+  --uni-topbar:#0c041f;--uni-sidebar:#0a0319;
+  --uni-brand-from:#c084fc;--uni-brand-to:#6d28d9;
+  --bg:#060218;--surface:#100628;--surface2:#14082f;--line:#2a1050;
+}
+body.uni-JU .sidebar{background:linear-gradient(180deg,#0a0319,#060215)!important;border-right:1px solid #2a1050!important}
+body.uni-JU .topbar{background:linear-gradient(90deg,#0c041f,#080318)!important;border-bottom:1px solid #2a1050!important}
+body.uni-JU .stat-card,body.uni-JU .panel{background:#100628;border-color:#2a1050}
+body.uni-JU .campus-card{background:linear-gradient(145deg,#180a35,#0e0526);border-color:#351460}
+body.uni-JU .nav-item:hover{background:#1a0a40;color:#c084fc!important}
+body.uni-JU .search-box{background:#0e0525;border-color:#2a1050}
+body.uni-JU .modal{background:#100628;border-color:#2a1050}
+body.uni-JU table td{border-color:#210d42}
+body.uni-JU table th{border-color:#2a1050;color:#c084fc}
+body.uni-JU tbody tr:hover{background:#14082f05}
+body.uni-JU .brand-mark{box-shadow:0 8px 32px #7c3aed60!important}
+body.uni-JU .nav-item.active{background:#200c45!important;color:#c084fc!important;box-shadow:inset 3px 0 #7c3aed!important;border-radius:8px!important}
+body.uni-JU .stat-value{color:#c084fc!important}
+
+
+/* ───────────────────────────────────────────────────────
+   🌅 EAST WEST UNIVERSITY — Ocean Blue + Bright Sky
+   Official: Blue & Green
+   ─────────────────────────────────────────────────────── */
+body.uni-EWU{
+  --uni-primary:#0369a1;--uni-primary2:#075985;
+  --uni-accent:#7dd3fc;--uni-glow:#0369a140;
+  --uni-topbar:#020d18;--uni-sidebar:#010b14;
+  --uni-brand-from:#38bdf8;--uni-brand-to:#075985;
+  --bg:#010810;--surface:#041220;--surface2:#061627;--line:#0c2a3f;
+}
+body.uni-EWU .sidebar{background:linear-gradient(180deg,#010b14,#010710)!important;border-right:1px solid #0c2a3f!important}
+body.uni-EWU .topbar{background:linear-gradient(90deg,#020d18,#010a14)!important;border-bottom:1px solid #0c2a3f!important}
+body.uni-EWU .stat-card,body.uni-EWU .panel{background:#041220;border-color:#0c2a3f}
+body.uni-EWU .campus-card{background:linear-gradient(145deg,#071a30,#040f22);border-color:#103550}
+body.uni-EWU .nav-item:hover{background:#081a2f;color:#7dd3fc!important}
+body.uni-EWU .search-box{background:#030f1c;border-color:#0c2a3f}
+body.uni-EWU .modal{background:#041220;border-color:#0c2a3f}
+body.uni-EWU table td{border-color:#0a2235}
+body.uni-EWU table th{border-color:#0c2a3f;color:#38bdf8}
+body.uni-EWU tbody tr:hover{background:#07182805}
+body.uni-EWU .brand-mark{box-shadow:0 8px 32px #0369a160!important}
+body.uni-EWU .nav-item.active{background:#092230!important;color:#7dd3fc!important;box-shadow:inset 3px 0 #0369a1!important;border-radius:8px!important}
+body.uni-EWU .stat-value{color:#7dd3fc!important}
+
+
+/* ───────────────────────────────────────────────────────
+   🏆 UIU — Deep Rose + Warm Pink Gold
+   Official: Maroon & Gold
+   ─────────────────────────────────────────────────────── */
+body.uni-UIU{
+  --uni-primary:#be185d;--uni-primary2:#9d174d;
+  --uni-accent:#f9a8d4;--uni-glow:#be185d40;
+  --uni-topbar:#1a0410;--uni-sidebar:#16030e;
+  --uni-brand-from:#f472b6;--uni-brand-to:#9d174d;
+  --bg:#0f020b;--surface:#1e0613;--surface2:#250818;--line:#430e2a;
+}
+body.uni-UIU .sidebar{background:linear-gradient(180deg,#16030e,#0f020b)!important;border-right:1px solid #430e2a!important}
+body.uni-UIU .topbar{background:linear-gradient(90deg,#1a0410,#120309)!important;border-bottom:1px solid #430e2a!important}
+body.uni-UIU .stat-card,body.uni-UIU .panel{background:#1e0613;border-color:#430e2a}
+body.uni-UIU .campus-card{background:linear-gradient(145deg,#2a0a1c,#1c0612);border-color:#551236}
+body.uni-UIU .nav-item:hover{background:#2a0a1c;color:#f9a8d4!important}
+body.uni-UIU .search-box{background:#190510;border-color:#430e2a}
+body.uni-UIU .modal{background:#1e0613;border-color:#430e2a}
+body.uni-UIU table td{border-color:#350b22}
+body.uni-UIU table th{border-color:#430e2a;color:#f472b6}
+body.uni-UIU tbody tr:hover{background:#25081805}
+body.uni-UIU .brand-mark{box-shadow:0 8px 32px #be185d60!important}
+body.uni-UIU .nav-item.active{background:#310d26!important;color:#f9a8d4!important;box-shadow:inset 3px 0 #be185d!important;border-radius:8px!important}
+body.uni-UIU .stat-value{color:#f9a8d4!important}
+
+
+/* ───────────────────────────────────────────────────────
+   🌼 DIU — Vibrant Emerald Green + Lime
+   Official: Green & White
+   ─────────────────────────────────────────────────────── */
+body.uni-DIU{
+  --uni-primary:#059669;--uni-primary2:#047857;
+  --uni-accent:#6ee7b7;--uni-glow:#05966940;
+  --uni-topbar:#011a0e;--uni-sidebar:#01150c;
+  --uni-brand-from:#34d399;--uni-brand-to:#047857;
+  --bg:#010f08;--surface:#041c10;--surface2:#062215;--line:#0c3d24;
+}
+body.uni-DIU .sidebar{background:linear-gradient(180deg,#01150c,#010e08)!important;border-right:1px solid #0c3d24!important}
+body.uni-DIU .topbar{background:linear-gradient(90deg,#011a0e,#010f09)!important;border-bottom:1px solid #0c3d24!important}
+body.uni-DIU .stat-card,body.uni-DIU .panel{background:#041c10;border-color:#0c3d24}
+body.uni-DIU .campus-card{background:linear-gradient(145deg,#072818,#041a0f);border-color:#104d2e}
+body.uni-DIU .nav-item:hover{background:#082c1a;color:#34d399!important}
+body.uni-DIU .search-box{background:#031a0e;border-color:#0c3d24}
+body.uni-DIU .modal{background:#041c10;border-color:#0c3d24}
+body.uni-DIU table td{border-color:#0a311e}
+body.uni-DIU table th{border-color:#0c3d24;color:#34d399}
+body.uni-DIU tbody tr:hover{background:#07221505}
+body.uni-DIU .brand-mark{box-shadow:0 8px 32px #05966960!important}
+body.uni-DIU .nav-item.active{background:#092a1a!important;color:#6ee7b7!important;box-shadow:inset 3px 0 #059669!important;border-radius:8px!important}
+body.uni-DIU .stat-value{color:#6ee7b7!important}
 
 /* Apply theme variables to key UI elements */
 .btn-primary{background:linear-gradient(135deg,var(--uni-primary),var(--uni-primary2))!important;box-shadow:0 6px 18px var(--uni-glow)!important}
