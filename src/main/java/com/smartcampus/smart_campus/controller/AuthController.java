@@ -22,7 +22,7 @@ public class AuthController {
         this.userRepository = userRepository;
     }
 
-    // Login Endpoint (Accepts Username OR Gmail/Email)
+    // Login Endpoint (Accepts Master Admin 'omi' OR authentic Gmail addresses)
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> credentials) {
         String identifier = credentials.get("username"); // username or email
@@ -32,11 +32,20 @@ public class AuthController {
 
         if (identifier == null || password == null || identifier.trim().isEmpty() || password.trim().isEmpty()) {
             response.put("success", false);
-            response.put("message", "Username/Gmail and password are required");
+            response.put("message", "Gmail address and password are required");
             return ResponseEntity.badRequest().body(response);
         }
 
         String searchId = identifier.trim();
+        boolean isMasterAdmin = "omi".equalsIgnoreCase(searchId) || "halimaomi2002@gmail.com".equalsIgnoreCase(searchId);
+
+        // Enforce authentic Gmail address unless Master Admin 'omi'
+        if (!isMasterAdmin && !searchId.toLowerCase().endsWith("@gmail.com")) {
+            response.put("success", false);
+            response.put("message", "Only authentic Google Gmail accounts (@gmail.com) are allowed to sign in.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+
         Optional<User> userOpt = userRepository.findByUsernameOrEmail(searchId, searchId);
 
         if (userOpt.isPresent()) {
@@ -61,14 +70,86 @@ public class AuthController {
         }
 
         response.put("success", false);
-        response.put("message", "Invalid username/Gmail or password");
+        response.put("message", "Invalid Gmail credentials or password. Master Admin: omi / Omi@2026");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 
-    // Register Endpoint
+    // Google OAuth / Gmail Sign-In Endpoint
+    @PostMapping("/google")
+    public ResponseEntity<Map<String, Object>> googleAuth(@RequestBody Map<String, String> payload) {
+        String email = payload.get("email");
+        String fullName = payload.get("fullName");
+        String university = payload.get("university");
+        String role = payload.get("role");
+
+        Map<String, Object> response = new HashMap<>();
+
+        if (email == null || !email.trim().toLowerCase().endsWith("@gmail.com")) {
+            response.put("success", false);
+            response.put("message", "Only authentic Google accounts ending with @gmail.com are supported");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        String searchEmail = email.trim().toLowerCase();
+        Optional<User> existingUser = userRepository.findByEmail(searchEmail);
+        User user;
+
+        if (existingUser.isPresent()) {
+            user = existingUser.get();
+            if (university != null && !university.trim().isEmpty()) {
+                user.setUniversity(university);
+                userRepository.save(user);
+            }
+        } else {
+            user = new User();
+            user.setEmail(searchEmail);
+            String baseUser = searchEmail.split("@")[0].replaceAll("[^a-zA-Z0-9_]", "");
+            if (baseUser.isEmpty()) baseUser = "google_user";
+            String generatedUsername = baseUser;
+            if (userRepository.existsByUsername(generatedUsername)) {
+                generatedUsername = baseUser + "_" + (System.currentTimeMillis() % 10000);
+            }
+            user.setUsername(generatedUsername);
+            user.setFullName((fullName != null && !fullName.trim().isEmpty()) ? fullName.trim() : generatedUsername);
+            user.setPassword("google_auth_secured");
+
+            if ("halimaomi2002@gmail.com".equalsIgnoreCase(searchEmail)) {
+                user.setRole("ADMIN");
+            } else {
+                user.setRole((role != null && !role.trim().isEmpty() && !"ADMIN".equalsIgnoreCase(role)) ? role.toUpperCase() : "STUDENT");
+            }
+
+            user.setUniversity((university != null && !university.trim().isEmpty()) ? university : "Metropolitan University");
+            user = userRepository.save(user);
+        }
+
+        response.put("success", true);
+        response.put("message", "Google authentication successful");
+
+        Map<String, Object> userData = new HashMap<>();
+        userData.put("id", user.getId());
+        userData.put("username", user.getUsername());
+        userData.put("fullName", user.getFullName());
+        userData.put("email", user.getEmail());
+        userData.put("role", user.getRole());
+        userData.put("department", user.getDepartment());
+        userData.put("studentId", user.getStudentId());
+        userData.put("university", user.getUniversity());
+        response.put("user", userData);
+
+        return ResponseEntity.ok(response);
+    }
+
+    // Register Endpoint (Requires authentic Gmail address)
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>> register(@RequestBody User user) {
         Map<String, Object> response = new HashMap<>();
+
+        if (user.getEmail() == null || !user.getEmail().trim().toLowerCase().endsWith("@gmail.com")) {
+            response.put("success", false);
+            response.put("message", "A valid Gmail address (@gmail.com) is strictly required to register");
+            return ResponseEntity.badRequest().body(response);
+        }
 
         if (user.getUsername() == null || user.getUsername().trim().isEmpty()) {
             response.put("success", false);

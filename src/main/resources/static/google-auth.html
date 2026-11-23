@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign in with Google - Smart Campus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background: #f0f4f9;
+      color: #1f1f1f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+    .g-card {
+      background: #ffffff;
+      width: 100%;
+      max-width: 440px;
+      border-radius: 28px;
+      padding: 36px 36px 32px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+    .g-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .g-logo svg {
+      width: 32px;
+      height: 32px;
+    }
+    .g-logo span {
+      font-size: 14px;
+      font-weight: 500;
+      color: #444746;
+      letter-spacing: 0.2px;
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: 400;
+      color: #1f1f1f;
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+    .g-subtitle {
+      font-size: 14px;
+      color: #444746;
+      margin-bottom: 24px;
+      line-height: 1.4;
+    }
+    .g-campus-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #fff3e0;
+      color: #c2410c;
+      border: 1px solid #fed7aa;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+
+    /* Account Chooser List */
+    .account-list {
+      list-style: none;
+      border-top: 1px solid #e0e2ec;
+      border-bottom: 1px solid #e0e2ec;
+      margin-bottom: 20px;
+    }
+    .account-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 6px;
+      cursor: pointer;
+      border-radius: 12px;
+      transition: background 0.15s ease;
+    }
+    .account-item:hover {
+      background: #f2f4f8;
+    }
+    .account-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #1a73e8;
+      color: #ffffff;
+      font-weight: 500;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .account-avatar.admin {
+      background: #ea580c;
+    }
+    .account-avatar.student {
+      background: #0284c7;
+    }
+    .account-avatar.faculty {
+      background: #16a34a;
+    }
+    .account-avatar.add-new {
+      background: #e8eaed;
+      color: #444746;
+    }
+    .account-details {
+      flex: 1;
+      min-width: 0;
+    }
+    .account-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: #1f1f1f;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .account-email {
+      font-size: 12px;
+      color: #444746;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .account-badge {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: #f1f3f4;
+      color: #444746;
+    }
+    .account-badge.admin-badge {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    /* Custom Form */
+    .g-field {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .g-field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: #444746;
+      margin-bottom: 6px;
+    }
+    .g-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #74777f;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #1f1f1f;
+      outline: none;
+      transition: border 0.15s ease, box-shadow 0.15s ease;
+      font-family: inherit;
+    }
+    .g-input:focus {
+      border-color: #0b57d0;
+      box-shadow: 0 0 0 2px rgba(11, 87, 208, 0.2);
+    }
+    .g-input.error {
+      border-color: #b3261e;
+    }
+    .g-select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #74777f;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #1f1f1f;
+      background: #ffffff;
+      outline: none;
+      font-family: inherit;
+    }
+    .g-error-msg {
+      font-size: 12px;
+      color: #b3261e;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .g-error-msg.hidden { display: none; }
+
+    /* Actions */
+    .g-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 24px;
+    }
+    .g-btn-text {
+      background: none;
+      border: none;
+      color: #0b57d0;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 100px;
+      transition: background 0.15s;
+    }
+    .g-btn-text:hover {
+      background: #f0f4f9;
+    }
+    .g-btn-primary {
+      background: #0b57d0;
+      color: #ffffff;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s, box-shadow 0.15s;
+    }
+    .g-btn-primary:hover {
+      background: #0842a0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .g-btn-primary:disabled {
+      background: #c7c7c7;
+      cursor: not-allowed;
+    }
+
+    /* Loading state */
+    .g-loading-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.95);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      border-radius: 28px;
+      text-align: center;
+      padding: 24px;
+    }
+    .g-loading-overlay.hidden { display: none; }
+    .g-spinner {
+      width: 44px;
+      height: 44px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #0b57d0;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 16px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .g-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 20px;
+      font-size: 12px;
+      color: #444746;
+    }
+    .g-footer a {
+      color: #444746;
+      text-decoration: none;
+    }
+    .g-footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="g-card">
+    <!-- Google Brand Header -->
+    <div class="g-logo">
+      <svg viewBox="0 0 24 24">
+        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+      </svg>
+      <span>Google Identity Services</span>
+    </div>
+
+    <h1 id="pageTitle">Sign in with Google</h1>
+    <p class="g-subtitle" id="pageSub">Choose an account to continue to <strong>Smart Campus</strong></p>
+
+    <div class="g-campus-badge">
+      <span>🏛️</span>
+      <span id="targetUniLabel">Metropolitan University</span>
+    </div>
+
+    <!-- VIEW 1: Account Chooser -->
+    <div id="accountChooserView">
+      <ul class="account-list">
+        <!-- Master Admin -->
+        <li class="account-item" onclick="chooseAccount('halimaomi2002@gmail.com', 'Omi (Master Administrator)', 'ADMIN', 'University Central Administration')">
+          <div class="account-avatar admin">O</div>
+          <div class="account-details">
+            <div class="account-name">Omi (Master Administrator)</div>
+            <div class="account-email">halimaomi2002@gmail.com</div>
+          </div>
+          <span class="account-badge admin-badge">Master Admin</span>
+        </li>
+
+        <!-- Student -->
+        <li class="account-item" onclick="chooseAccount('tanvir.student@gmail.com', 'Tanvir Ahmed', 'STUDENT', 'Computer Science & Engineering')">
+          <div class="account-avatar student">T</div>
+          <div class="account-details">
+            <div class="account-name">Tanvir Ahmed</div>
+            <div class="account-email">tanvir.student@gmail.com</div>
+          </div>
+          <span class="account-badge">Student</span>
+        </li>
+
+        <!-- Teacher / Faculty -->
+        <li class="account-item" onclick="chooseAccount('faculty@gmail.com', 'Faculty Member', 'TEACHER', 'Engineering & Technology')">
+          <div class="account-avatar faculty">F</div>
+          <div class="account-details">
+            <div class="account-name">Faculty Member</div>
+            <div class="account-email">faculty@gmail.com</div>
+          </div>
+          <span class="account-badge">Faculty</span>
+        </li>
+
+        <!-- Use another Google Account -->
+        <li class="account-item" onclick="showCustomGmailForm()">
+          <div class="account-avatar add-new">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+            </svg>
+          </div>
+          <div class="account-details">
+            <div class="account-name" style="color: #0b57d0;">Use your own Gmail account</div>
+            <div class="account-email">Sign in with any authentic @gmail.com</div>
+          </div>
+        </li>
+      </ul>
+
+      <div class="g-actions">
+        <button type="button" class="g-btn-text" onclick="window.close()">Cancel</button>
+        <button type="button" class="g-btn-primary" onclick="showCustomGmailForm()">Enter Gmail</button>
+      </div>
+    </div>
+
+    <!-- VIEW 2: Custom Real Gmail Input Form -->
+    <div id="customGmailView" style="display: none;">
+      <form id="googleDirectForm" onsubmit="handleDirectGmailSubmit(event)">
+        <div class="g-field">
+          <label for="customGmail">Enter your real Gmail address <span>*</span></label>
+          <input 
+            type="email" 
+            id="customGmail" 
+            class="g-input" 
+            placeholder="yourname@gmail.com" 
+            required
+            autocomplete="email"
+          >
+          <div class="g-error-msg hidden" id="gmailError">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+            </svg>
+            <span id="gmailErrorText">Please enter a valid @gmail.com address</span>
+          </div>
+        </div>
+
+        <div class="g-field">
+          <label for="customFullName">Full Name (as on Google profile) <span>*</span></label>
+          <input 
+            type="text" 
+            id="customFullName" 
+            class="g-input" 
+            placeholder="e.g. Nusrat Jahan" 
+            required
+          >
+        </div>
+
+        <div class="g-field">
+          <label for="customRole">Campus Role <span>*</span></label>
+          <select id="customRole" class="g-select">
+            <option value="STUDENT">Student</option>
+            <option value="TEACHER">Teacher / Faculty</option>
+            <option value="STAFF">Campus Staff / Worker</option>
+          </select>
+        </div>
+
+        <div class="g-field">
+          <label for="customUni">University in Bangladesh <span>*</span></label>
+          <select id="customUni" class="g-select">
+            <option value="Metropolitan University" selected>Metropolitan University, Sylhet</option>
+            <option value="Shahjalal University of Science and Technology">SUST, Sylhet</option>
+            <option value="University of Dhaka">University of Dhaka (DU)</option>
+            <option value="Bangladesh University of Engineering and Technology">BUET</option>
+            <option value="Leading University">Leading University, Sylhet</option>
+            <option value="Sylhet Agricultural University">SAU, Sylhet</option>
+            <option value="North South University">North South University (NSU)</option>
+            <option value="BRAC University">BRAC University (BRACU)</option>
+            <option value="AIUB">AIUB</option>
+            <option value="Chittagong University of Engineering & Technology">CUET</option>
+            <option value="Rajshahi University">Rajshahi University (RU)</option>
+            <option value="Khulna University of Engineering & Technology">KUET</option>
+            <option value="Jahangirnagar University">Jahangirnagar University (JU)</option>
+            <option value="East West University">East West University (EWU)</option>
+            <option value="United International University">United International University (UIU)</option>
+            <option value="Daffodil International University">DIU</option>
+          </select>
+        </div>
+
+        <div class="g-actions">
+          <button type="button" class="g-btn-text" onclick="showAccountChooser()">Back</button>
+          <button type="submit" class="g-btn-primary" id="confirmGmailBtn">Continue with Google</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="g-loading-overlay hidden" id="loadingOverlay">
+      <div class="g-spinner"></div>
+      <h3 id="loadingText" style="font-size: 16px; font-weight: 500; color: #1f1f1f; margin-bottom: 6px;">Authenticating with Google...</h3>
+      <p style="font-size: 13px; color: #444746;">Connecting to Smart Campus Portal</p>
+    </div>
+
+    <!-- Footer -->
+    <div class="g-footer">
+      <span>English (United States)</span>
+      <div style="display: flex; gap: 12px;">
+        <a href="#" onclick="return false;">Help</a>
+        <a href="#" onclick="return false;">Privacy</a>
+        <a href="#" onclick="return false;">Terms</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Parse URL parameters
+    const params = new URLSearchParams(window.location.search);
+    const mode = params.get('mode') || 'login';
+    const initialUni = params.get('uni') || 'Metropolitan University';
+
+    const targetUniLabel = document.getElementById('targetUniLabel');
+    const customUni = document.getElementById('customUni');
+    if (targetUniLabel) targetUniLabel.textContent = initialUni;
+    if (customUni) customUni.value = initialUni;
+
+    if (mode === 'register') {
+      document.getElementById('pageTitle').textContent = 'Create Account with Google';
+      document.getElementById('pageSub').innerHTML = 'Sign up with your Google Account for <strong>Smart Campus</strong>';
+    }
+
+    function showCustomGmailForm() {
+      document.getElementById('accountChooserView').style.display = 'none';
+      document.getElementById('customGmailView').style.display = 'block';
+      document.getElementById('customGmail').focus();
+    }
+
+    function showAccountChooser() {
+      document.getElementById('customGmailView').style.display = 'none';
+      document.getElementById('accountChooserView').style.display = 'block';
+    }
+
+    // Strictly validate authentic Gmail
+    function isValidGmail(email) {
+      if (!email) return false;
+      const trimmed = email.trim().toLowerCase();
+      // Must end with @gmail.com and contain valid username chars
+      const regex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+      return regex.test(trimmed);
+    }
+
+    function chooseAccount(email, fullName, role, department) {
+      finalizeAuth({
+        email: email,
+        fullName: fullName,
+        role: role,
+        department: department,
+        university: initialUni
+      });
+    }
+
+    function handleDirectGmailSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('customGmail').value.trim();
+      const fullName = document.getElementById('customFullName').value.trim();
+      const role = document.getElementById('customRole').value;
+      const university = document.getElementById('customUni').value;
+
+      const errorEl = document.getElementById('gmailError');
+      const errorText = document.getElementById('gmailErrorText');
+      const inputEl = document.getElementById('customGmail');
+
+      if (!isValidGmail(email)) {
+        inputEl.classList.add('error');
+        errorText.textContent = "Couldn't find your Google Account. Enter a real @gmail.com address.";
+        errorEl.classList.remove('hidden');
+        inputEl.focus();
+        return;
+      }
+
+      inputEl.classList.remove('error');
+      errorEl.classList.add('hidden');
+
+      let department = 'Academic Department';
+      if (role === 'STUDENT') department = 'Undergraduate Studies';
+      else if (role === 'TEACHER') department = 'Faculty Department';
+      else if (role === 'STAFF') department = 'Campus Operations';
+
+      // Master admin check
+      let finalRole = role;
+      if (email.toLowerCase() === 'halimaomi2002@gmail.com') {
+        finalRole = 'ADMIN';
+        department = 'University Central Administration';
+      }
+
+      finalizeAuth({
+        email: email,
+        fullName: fullName,
+        role: finalRole,
+        department: department,
+        university: university
+      });
+    }
+
+    function finalizeAuth(userData) {
+      const loading = document.getElementById('loadingOverlay');
+      const loadingText = document.getElementById('loadingText');
+      loading.classList.remove('hidden');
+      loadingText.textContent = `Signing in as ${userData.email}...`;
+
+      const userPayload = {
+        id: (userData.email.toLowerCase() === 'halimaomi2002@gmail.com') ? 1 : Date.now(),
+        username: userData.email.split('@')[0],
+        fullName: userData.fullName || userData.email.split('@')[0],
+        email: userData.email,
+        role: userData.role || 'STUDENT',
+        department: userData.department || 'Academic Department',
+        studentId: (userData.role === 'ADMIN' ? 'ADM-OMI' : `SC-${Math.floor(1000 + Math.random() * 9000)}`),
+        university: userData.university || initialUni,
+        isGoogleAuth: true
+      };
+
+      setTimeout(() => {
+        // Send message to parent window
+        if (window.opener && !window.opener.closed) {
+          window.opener.postMessage({
+            type: 'SMART_CAMPUS_GOOGLE_AUTH',
+            user: userPayload
+          }, '*');
+        }
+
+        // Also persist in localStorage in case of fallback
+        try {
+          localStorage.setItem('sc_user', JSON.stringify(userPayload));
+          localStorage.setItem('sc_university', userPayload.university);
+        } catch (err) {}
+
+        loadingText.textContent = 'Verified! Returning to Smart Campus...';
+
+        setTimeout(() => {
+          if (window.opener && !window.opener.closed) {
+            window.close();
+          } else {
+            window.location.href = '/';
+          }
+        }, 600);
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
